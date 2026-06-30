@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- ═══ 指南针外圈 ═══ -->
+  <circle cx="512" cy="520" r="260" fill="none" stroke="#FFFFFF" stroke-width="20" opacity="0.85"/>
+  <circle cx="512" cy="520" r="238" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.18"/>
+
+  <!-- ═══ 东西轴线 ═══ -->
+  <line x1="240" y1="520" x2="784" y2="520" stroke="#FFFFFF" stroke-width="3" opacity="0.15"/>
+
+  <!-- ═══ 刻度标记 ═══ -->
+  <!-- 北 -->
+  <rect x="502" y="248" width="20" height="24" rx="6" fill="#FFFFFF"/>
+  <!-- 南 -->
+  <rect x="502" y="768" width="20" height="24" rx="6" fill="#FFFFFF" opacity="0.55"/>
+  <!-- 东 -->
+  <rect x="744" y="510" width="24" height="20" rx="6" fill="#FFFFFF" opacity="0.45"/>
+  <!-- 西 -->
+  <rect x="256" y="510" width="24" height="20" rx="6" fill="#FFFFFF" opacity="0.45"/>
+
+  <!-- ═══ 南指针（传统箭头） ═══ -->
+  <polygon points="512,540 480,730 544,730" fill="#FFFFFF" opacity="0.45"/>
+</svg>

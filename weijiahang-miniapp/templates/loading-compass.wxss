@@ -1,0 +1,53 @@
+/* ═══════════════════════════════════════
+   为家航 · 领航加载组件
+   指南针慢转 + "领航中"
+   ═══════════════════════════════════════ */
+
+/* ── 全屏遮罩模式 ── */
+.lc-fullscreen {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 999;
+  background: rgba(255,255,255,0.92);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+/* ── 内联模式（嵌在页面内容中） ── */
+.lc-inline {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60rpx 0;
+}
+
+/* ── 图标容器 ── */
+.lc-compass {
+  position: relative;
+  width: 120rpx; height: 120rpx;
+}
+/* 底版：房子（静态） */
+.lc-icon {
+  position: relative;
+  width: 100%; height: 100%;
+  z-index: 1;
+  filter: drop-shadow(0 4rpx 12rpx rgba(255,107,53,0.2));
+}
+/* 上层：圆环+指针（持续旋转） */
+.lc-ring {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+  animation: ringSpin 1.8s linear infinite;
+}
+
+@keyframes ringSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── 文案 ── */
+.lc-text {
+  margin-top: 24rpx;
+  font-size: 28rpx; color: #999;
+  letter-spacing: 6rpx;
+}

@@ -1,0 +1,214 @@
+/* ========================================
+   为家航 · 启动页
+   品牌 Logo：指南针 + 房子 + 路
+   2 秒建立第一记忆
+   ======================================== */
+
+page { background: #1A3A4A; height: 100vh; overflow: hidden; }
+
+.stage {
+  width: 100%; height: 100vh;
+  background: linear-gradient(180deg, #1A3A4A 0%, #1F4D63 30%, #235061 50%, #FF6B35 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+/* ── 动态光晕（左下） ── */
+.bg-glow {
+  position: absolute; border-radius: 50%;
+  width: 540rpx; height: 540rpx;
+  top: -12%; left: -18%;
+  background: radial-gradient(circle, rgba(255,107,53,0.35) 0%, transparent 70%);
+  animation: floatA 5s ease-in-out infinite;
+}
+@keyframes floatA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30rpx, -30rpx) scale(1.08); }
+}
+
+/* ── 第二光晕（右上） ── */
+.bg-glow2 {
+  position: absolute; border-radius: 50%;
+  width: 400rpx; height: 400rpx;
+  bottom: 25%; right: -15%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  animation: floatB 6s ease-in-out infinite;
+}
+@keyframes floatB {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20rpx, 20rpx); }
+}
+
+/* ═══ Logo 区 ═══ */
+.logo-stage {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 光晕底座 */
+.logo-halo {
+  position: absolute;
+  width: 260rpx; height: 260rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 40%, transparent 70%);
+  opacity: 0;
+}
+.logo-halo.on {
+  animation: haloIn 0.8s ease-out 0.05s forwards;
+}
+@keyframes haloIn {
+  60% { opacity: 1; transform: scale(1.18); }
+  100% { opacity: 0.7; transform: scale(1.12); }
+}
+
+/* ── 底版图标（背景 + 房子，固定） ── */
+.logo-wrap {
+  position: relative;
+  width: 240rpx; height: 240rpx;
+  opacity: 0; transform: scale(0.5);
+  filter: drop-shadow(0 8rpx 24rpx rgba(0,0,0,0.3));
+  z-index: 1;
+}
+.logo-wrap.pop-in {
+  animation: popIn 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.08s forwards;
+}
+@keyframes popIn {
+  to { opacity: 1; transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; }
+
+/* ── 圆环+指针旋转层（叠在底板上，围房子转） ── */
+.logo-ring-spin {
+  position: absolute;
+  width: 240rpx; height: 240rpx;
+  z-index: 2;
+  opacity: 0; transform: rotate(140deg) scale(0.5);
+}
+.logo-ring-spin.compass-spin {
+  animation: compassSettle 1.35s cubic-bezier(0.25, 0.1, 0.1, 1.0) 0.20s forwards;
+}
+@keyframes compassSettle {
+  0%   { opacity: 1; transform: rotate(140deg) scale(0.5); }
+  6%   { opacity: 1; transform: rotate(140deg) scale(1); }
+  42%  { opacity: 1; transform: rotate(385deg) scale(1); }
+  62%  { opacity: 1; transform: rotate(347deg) scale(1); }
+  80%  { opacity: 1; transform: rotate(362deg) scale(1); }
+  100% { opacity: 1; transform: rotate(360deg) scale(1); }
+}
+.logo-ring-img { width: 100%; height: 100%; }
+
+/* ── 飘浮粒子（品牌橙色 + 白色小点） ── */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,107,53,0.6);
+  opacity: 0;
+}
+.p1 { width: 8rpx; height: 8rpx; top: 15%; left: 20%; animation: particleUp 1.8s ease-out 0.3s forwards; }
+.p2 { width: 6rpx; height: 6rpx; top: 25%; left: 75%; animation: particleUp 2.0s ease-out 0.5s forwards; }
+.p3 { width: 10rpx; height: 10rpx; top: 60%; left: 10%; background: rgba(255,255,255,0.5); animation: particleUp 1.6s ease-out 0.4s forwards; }
+.p4 { width: 5rpx; height: 5rpx; top: 70%; left: 85%; animation: particleUp 2.2s ease-out 0.6s forwards; }
+.p5 { width: 7rpx; height: 7rpx; top: 40%; left: 30%; background: rgba(255,255,255,0.4); animation: particleUp 1.9s ease-out 0.35s forwards; }
+.p6 { width: 9rpx; height: 9rpx; top: 80%; left: 45%; animation: particleUp 2.1s ease-out 0.55s forwards; }
+.p7 { width: 4rpx; height: 4rpx; top: 10%; left: 55%; background: rgba(255,255,255,0.6); animation: particleUp 1.7s ease-out 0.45s forwards; }
+.p8 { width: 6rpx; height: 6rpx; top: 50%; left: 65%; animation: particleUp 2.3s ease-out 0.65s forwards; }
+
+@keyframes particleUp {
+  0%   { opacity: 0; transform: translateY(0) scale(0); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-320rpx) scale(1.8); }
+}
+
+/* ── 指北光点（指南针稳定后在顶部出现） ── */
+.north-dot {
+  position: absolute;
+  top: -8rpx; left: 50%; transform: translateX(-50%);
+  width: 12rpx; height: 12rpx;
+  border-radius: 50%;
+  background: #FF6B35;
+  box-shadow: 0 0 20rpx #FF6B35, 0 0 40rpx rgba(255,107,53,0.5);
+  opacity: 0;
+  z-index: 10;
+}
+.north-dot.north-glow {
+  animation: northPulse 0.9s ease-out 1.55s forwards;
+}
+@keyframes northPulse {
+  0%   { opacity: 0; transform: translateX(-50%) scale(0.3); }
+  50%  { opacity: 1; transform: translateX(-50%) scale(1.6); }
+  100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+}
+
+/* ── 加载进度条 ── */
+.progress-track {
+  margin-top: 48rpx;
+  width: 200rpx; height: 4rpx;
+  border-radius: 2rpx;
+  background: rgba(255,255,255,0.12);
+  opacity: 0;
+}
+.progress-track.show {
+  animation: fadeIn 0.3s ease-out 1.6s forwards;
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  border-radius: 2rpx;
+  background: linear-gradient(90deg, #FF6B35, #FF8C5A);
+}
+.progress-fill.run {
+  animation: progressRun 1.4s ease-in-out 1.65s forwards;
+}
+@keyframes progressRun {
+  0%   { width: 0%; }
+  50%  { width: 65%; }
+  100% { width: 100%; }
+}
+
+/* ═══ 品牌文字 ═══ */
+.brand-name {
+  margin-top: 44rpx;
+  font-size: 56rpx; font-weight: 900; color: #fff;
+  letter-spacing: 18rpx;
+  opacity: 0; transform: translateY(30rpx);
+}
+.brand-name.fade-up {
+  animation: fadeUp 0.7s ease-out 1.20s forwards;
+}
+
+.brand-motto {
+  margin-top: 12rpx;
+  font-size: 34rpx; font-weight: 600; color: rgba(255,255,255,0.85);
+  letter-spacing: 8rpx;
+  opacity: 0; transform: translateY(20rpx);
+}
+.brand-motto.fade-up {
+  animation: fadeUp 0.6s ease-out 1.40s forwards;
+}
+
+.brand-tagline {
+  margin-top: 28rpx;
+  font-size: 30rpx; color: rgba(255,255,255,0.65);
+  letter-spacing: 4rpx;
+  opacity: 0; transform: translateY(20rpx);
+}
+.brand-tagline.fade-up {
+  animation: fadeUp 0.6s ease-out 1.55s forwards;
+}
+
+.brand-foot {
+  position: absolute; bottom: 80rpx;
+  font-size: 24rpx; color: rgba(255,255,255,0.4);
+  letter-spacing: 4rpx;
+  opacity: 0;
+}
+.brand-foot.fade-in {
+  animation: fadeIn 0.6s ease-out 1.75s forwards;
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}

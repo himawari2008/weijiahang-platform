@@ -1,0 +1,589 @@
+/* ============================================
+   为家航领航员 — 排行榜
+   设计规范：CSS 变量（--bg/--card/--text 等）
+   品牌色 #FF6B35 · 触控 ≥ 88rpx · 字号 ≥ 28rpx
+   ============================================ */
+
+.page {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* ══════════════════════════════════════════════
+   Period 标签栏 — 本周 / 本月
+   ══════════════════════════════════════════════ */
+.period-bar {
+  display: flex;
+  gap: 16rpx;
+  padding: 20rpx 30rpx;
+  background: var(--card);
+}
+
+.period-btn {
+  flex: 1;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  color: var(--text2);
+  background: #F5F5F5;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.period-btn.on {
+  background: #FF6B35;
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(255, 107, 53, 0.25);
+}
+
+.period-btn:active {
+  opacity: 0.75;
+}
+
+/* ══════════════════════════════════════════════
+   Type 横向滚动标签 — 收入榜 / 好评榜 / 效率榜
+   ══════════════════════════════════════════════ */
+.type-bar {
+  white-space: nowrap;
+  padding: 0 24rpx 16rpx;
+  background: var(--card);
+  border-bottom: 1rpx solid var(--border);
+}
+
+.type-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72rpx;
+  padding: 14rpx 36rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: var(--text2);
+  background: #F5F5F5;
+  margin-right: 12rpx;
+  font-weight: 500;
+}
+
+.type-btn.on {
+  background: #FFF0EB;
+  color: #FF6B35;
+  font-weight: 600;
+}
+
+.type-btn:active {
+  opacity: 0.75;
+}
+
+/* ══════════════════════════════════════════════
+   我的排名条 — position: sticky
+   ══════════════════════════════════════════════ */
+.my-rank-bar {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: linear-gradient(135deg, #FFF0EB, #FFE4D6);
+  border-bottom: 1rpx solid #FFD4BE;
+  min-height: 88rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.mrb-left {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.mrb-label {
+  font-size: 24rpx;
+  color: var(--text2);
+}
+
+.mrb-rank-num {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #FF6B35;
+}
+
+.mrb-center {
+  flex: 1;
+  margin: 0 16rpx;
+  min-width: 0;
+}
+
+.mrb-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+  display: block;
+}
+
+.mrb-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  margin-top: 4rpx;
+}
+
+/* CSS 四角星（旋转 45deg 方块 = 菱形星星） */
+.mrb-star {
+  width: 16rpx;
+  height: 16rpx;
+  background: #FF6B35;
+  transform: rotate(45deg);
+  border-radius: 2rpx;
+  flex-shrink: 0;
+}
+
+.mrb-rating {
+  font-size: 22rpx;
+  color: var(--text3);
+}
+
+.mrb-value {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #FF6B35;
+  flex-shrink: 0;
+  margin-left: 8rpx;
+}
+
+/* ══════════════════════════════════════════════
+   领奖台（Top 3）
+   ══════════════════════════════════════════════ */
+.podium-wrap {
+  margin: 24rpx 20rpx 8rpx;
+}
+
+.podium {
+  display: flex;
+  align-items: flex-end;
+  background: var(--card);
+  border-radius: 20rpx;
+  padding: 36rpx 16rpx 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.pi {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* 第 2、3 名靠下留空 */
+.pi-2,
+.pi-3 {
+  padding-top: 36rpx;
+}
+
+/* 第 1 名抬高 */
+.pi-1 {
+  padding-bottom: 16rpx;
+}
+
+/* ---- 排名圆形徽章 ---- */
+.pi-badge {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14rpx;
+  position: relative;
+}
+
+/* 金牌（第 1 名） */
+.badge-gold {
+  width: 76rpx;
+  height: 76rpx;
+  background: linear-gradient(135deg, #FFD700, #FF8C00);
+  box-shadow: 0 4rpx 24rpx rgba(255, 165, 0, 0.45);
+}
+
+/* 银牌（第 2 名） */
+.badge-silver {
+  background: linear-gradient(135deg, #E0E0E0, #A0A0A0);
+  box-shadow: 0 4rpx 16rpx rgba(160, 160, 160, 0.35);
+}
+
+/* 铜牌（第 3 名） */
+.badge-bronze {
+  background: linear-gradient(135deg, #E8C8A0, #CD7F32);
+  box-shadow: 0 4rpx 16rpx rgba(205, 127, 50, 0.3);
+}
+
+.pib-num {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 第 1 名皇冠（CSS 纯代码绘制） */
+.pib-crown {
+  position: absolute;
+  top: -22rpx;
+  width: 0;
+  height: 0;
+  border-left: 16rpx solid transparent;
+  border-right: 16rpx solid transparent;
+  border-bottom: 20rpx solid #FFD700;
+  filter: drop-shadow(0 2rpx 4rpx rgba(255, 215, 0, 0.5));
+}
+
+.pib-crown::after {
+  content: '';
+  position: absolute;
+  top: 8rpx;
+  left: -10rpx;
+  width: 20rpx;
+  height: 10rpx;
+  background: #FFD700;
+  border-radius: 0 0 4rpx 4rpx;
+}
+
+/* ---- 头像 ---- */
+.pi-avatar {
+  margin-bottom: 10rpx;
+}
+
+.pia-circle {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #F0F0F0;
+  border: 3rpx solid #E0E0E0;
+}
+
+/* 第 1 名头像更大 + 金色边框 */
+.pi-avatar.gold .pia-circle {
+  width: 92rpx;
+  height: 92rpx;
+  border-color: #FFD700;
+  border-width: 4rpx;
+  box-shadow: 0 0 28rpx rgba(255, 215, 0, 0.35);
+}
+
+.pi-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6rpx;
+  max-width: 160rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pi-val {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #FF6B35;
+}
+
+/* 第 1 名数值放大 */
+.pi-1 .pi-val {
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+/* ══════════════════════════════════════════════
+   排名列表头部
+   ══════════════════════════════════════════════ */
+.rl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 30rpx 12rpx;
+}
+
+.rlh-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rlh-count {
+  font-size: 24rpx;
+  color: var(--text3);
+}
+
+/* ══════════════════════════════════════════════
+   排名列表
+   ══════════════════════════════════════════════ */
+.rank-list {
+  padding: 0 20rpx 20rpx;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  padding: 22rpx 24rpx;
+  margin-bottom: 10rpx;
+  border-radius: 16rpx;
+  min-height: 88rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 当前用户高亮 */
+.rank-item.highlight {
+  background: linear-gradient(135deg, #FFF8F0, #FFF0EB);
+  border: 2rpx solid #FFD4BE;
+}
+
+/* ---- 排名数字圆形徽章 ---- */
+.ri-badge {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  background: #F0F0F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+}
+
+.rib-num {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.rank-item.highlight .ri-badge {
+  background: #FF6B35;
+}
+
+.rank-item.highlight .rib-num {
+  color: #FFFFFF;
+}
+
+/* ---- 头像 ---- */
+.ri-avatar {
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.ria-circle {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: #F5F5F5;
+  border: 2rpx solid #E8E8E8;
+}
+
+/* ---- 信息区 ---- */
+.ri-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ri-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text);
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.ri-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+/* CSS 四角星（菱形 = 旋转 45deg 方块） */
+.rir-star {
+  width: 14rpx;
+  height: 14rpx;
+  background: #FF6B35;
+  transform: rotate(45deg);
+  border-radius: 2rpx;
+  flex-shrink: 0;
+}
+
+.rir-text {
+  font-size: 24rpx;
+  color: var(--text3);
+}
+
+/* ---- 排行值 ---- */
+.ri-value {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #FF6B35;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.rank-item.highlight .ri-value {
+  font-size: 32rpx;
+}
+
+/* ══════════════════════════════════════════════
+   骨架屏
+   ══════════════════════════════════════════════ */
+.sk-section {
+  padding: 20rpx;
+}
+
+.sk-podium {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.sk-pi {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14rpx;
+  padding: 24rpx 0;
+  background: var(--card);
+  border-radius: 16rpx;
+}
+
+.skp-badge {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #F0F0F0;
+}
+
+.skp-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #F0F0F0;
+}
+
+.skp-line {
+  height: 20rpx;
+  border-radius: 10rpx;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E0E0E0 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.5s infinite ease-in-out;
+}
+
+.skp-line.w40 { width: 40%; }
+.skp-line.w60 { width: 60%; }
+
+.sk-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 24rpx;
+  background: var(--card);
+  margin-bottom: 10rpx;
+  border-radius: 16rpx;
+}
+
+.ski-badge {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  background: #F0F0F0;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.ski-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: #F0F0F0;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.ski-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ski-line {
+  height: 20rpx;
+  border-radius: 10rpx;
+  margin-bottom: 10rpx;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E0E0E0 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.5s infinite ease-in-out;
+}
+
+.ski-line:last-child {
+  margin-bottom: 0;
+}
+
+.ski-line.w35 { width: 35%; }
+.ski-line.w60 { width: 60%; }
+
+.ski-value {
+  width: 80rpx;
+  height: 28rpx;
+  border-radius: 14rpx;
+  background: #F0F0F0;
+  margin-left: 12rpx;
+  flex-shrink: 0;
+}
+
+@keyframes sk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ══════════════════════════════════════════════
+   空态
+   ══════════════════════════════════════════════ */
+.empty-box {
+  text-align: center;
+  padding: 180rpx 60rpx 80rpx;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin: 0 auto 28rpx;
+  border-radius: 50%;
+  background: #F5F5F5;
+  position: relative;
+}
+
+/* 放大镜 CSS 图标 */
+.empty-icon::before {
+  content: '';
+  position: absolute;
+  top: 30rpx;
+  left: 30rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border: 4rpx solid #D9D9D9;
+  border-radius: 50%;
+}
+
+.empty-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 24rpx;
+  right: 26rpx;
+  width: 4rpx;
+  height: 34rpx;
+  background: #D9D9D9;
+  border-radius: 2rpx;
+  transform: rotate(45deg);
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--text3);
+}

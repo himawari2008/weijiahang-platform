@@ -1,0 +1,100 @@
+<view class="page">
+  <!-- 顶部标题区 -->
+  <view class="header">
+    <view class="header-row">
+      <text class="header-title">{{headerTitle}}</text>
+      <view class="header-count">
+        <text class="header-count-num">已通过 {{passedCount}}/{{totalCount}} 门</text>
+      </view>
+    </view>
+    <text class="header-desc">{{headerDescription}}</text>
+  </view>
+
+  <!-- 分类标签栏 -->
+  <scroll-view class="tab-bar" scroll-x enhanced show-scrollbar="{{false}}">
+    <view
+      wx:for="{{categoryOptions}}"
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'tab-item-active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="onTabTap"
+    >
+      <text class="tab-label">{{item.label}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 课程列表 -->
+  <view class="course-list">
+    <view
+      wx:for="{{currentList}}"
+      wx:key="id"
+      class="course-card"
+      data-id="{{course.id}}"
+      data-name="{{course.title}}"
+      bindtap="onCourseTap"
+    >
+      <!-- 左侧：视频图标 -->
+      <view class="course-left">
+        <view class="video-icon-circle">
+          <view class="play-triangle"></view>
+        </view>
+      </view>
+
+      <!-- 右侧：课程信息 -->
+      <view class="course-right">
+        <!-- 标题 -->
+        <text class="course-title">{{course.title}}</text>
+
+        <!-- 时长 -->
+        <text class="course-duration">{{course.durationText}}</text>
+
+        <!-- 进度条 -->
+        <view class="progress-wrap">
+          <view class="progress-bg">
+            <view class="progress-fill progress-fill-{{course.status}}" style="width:{{course.progressPercent}}"></view>
+          </view>
+        </view>
+
+        <!-- 底部状态行 -->
+        <view class="course-footer">
+          <text class="status-tag status-tag-{{course.status}}">{{course.statusText}}</text>
+          <view wx:if="{{course.hasScore}}" class="score-badge">{{course.scoreBadge}}</view>
+        </view>
+
+        <!-- 操作按钮 -->
+        <view class="action-row">
+          <button
+            wx:if="{{course.status === 'in_progress'}}"
+            class="action-btn action-btn-continue"
+            data-id="{{course.id}}"
+            data-name="{{course.title}}"
+            catchtap="onActionTap"
+          >
+            继续学习
+          </button>
+          <button
+            wx:elif="{{course.status === 'not_started'}}"
+            class="action-btn action-btn-start"
+            data-id="{{course.id}}"
+            data-name="{{course.title}}"
+            catchtap="onActionTap"
+          >
+            开始学习
+          </button>
+          <view wx:elif="{{course.status === 'completed'}}" class="completed-label">
+            <text class="completed-check">✓</text>
+            <text class="completed-text">已完成</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空态：筛选结果无课程 -->
+    <view wx:if="{{currentList.length === 0}}" class="empty-state">
+      <view class="empty-icon">
+        <view class="empty-book"></view>
+      </view>
+      <text class="empty-text">该分类暂无课程</text>
+    </view>
+  </view>
+</view>

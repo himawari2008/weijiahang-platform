@@ -1,0 +1,34 @@
+<view class="page">
+  <!-- Tab -->
+  <view class="tab-bar">
+    <view class="tab {{activeTab === 'unused' ? 'on' : ''}}" bindtap="onTab" data-tab="unused">未使用</view>
+    <view class="tab {{activeTab === 'used' ? 'on' : ''}}" bindtap="onTab" data-tab="used">已使用</view>
+    <view class="tab {{activeTab === 'expired' ? 'on' : ''}}" bindtap="onTab" data-tab="expired">已过期</view>
+  </view>
+
+  <!-- 优惠券列表 -->
+  <scroll-view scroll-y class="coupon-list" enhanced show-scrollbar="{{false}}">
+    <view class="coupon-card {{item.status === 'expired' || item.status === 'used' ? 'disabled' : ''}}"
+          wx:for="{{coupons}}" wx:key="id">
+      <view class="cc-left">
+        <text class="cc-amount">¥{{item.amount}}</text>
+        <text class="cc-type">{{item.type}}</text>
+      </view>
+      <view class="cc-right">
+        <view class="cc-name">{{item.name}}</view>
+        <view class="cc-desc">{{item.desc || ''}}</view>
+        <view class="cc-condition" wx:if="{{item.minAmount > 0}}">满{{item.minAmount}}元可用</view>
+        <view class="cc-shop" wx:if="{{item.shopName}}">限{{item.shopName}}使用</view>
+        <view class="cc-date">{{item.validFrom}} ~ {{item.validTo}}</view>
+      </view>
+      <view class="cc-action" wx:if="{{item.status === 'unused' || !item.status}}"
+            bindtap="onUseCoupon" data-id="{{item.id}}" data-amount="{{item.amount}}" data-minamount="{{item.minAmount}}">
+        去使用
+      </view>
+    </view>
+
+    <view wx:if="{{isEmpty && !loading}}" class="empty">
+      <text class="empty-text">暂无{{activeTab === 'unused' ? '可用' : activeTab === 'used' ? '已使用' : '已过期'}}优惠券</text>
+    </view>
+  </scroll-view>
+</view>

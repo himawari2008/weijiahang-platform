@@ -1,0 +1,164 @@
+<!--
+  为家航 · 首页
+  极简设计 · 材质纹理视觉语言
+  单一信息流，无图标，无装饰
+-->
+<import src="/templates/loading-compass.wxml" />
+
+<template wx:if="{{loading}}" is="loading-compass" data="{{fullscreen: true}}" />
+
+<view class="page" wx:else>
+
+  <!-- ═══ 1. 固定头部 ═══ -->
+  <view class="sticky-top">
+    <view class="top-bar">
+      <view class="tb-city" bindtap="onCityTap">
+        <text class="tbc-name">{{currentCity}}</text>
+        <view class="tbc-arrow"></view>
+      </view>
+      <text class="tb-slogan">买建材，先领航</text>
+    </view>
+  </view>
+
+  <!-- ═══ 2. 内容区 ═══ -->
+  <view class="content-area">
+
+    <!-- 2a. 搜索条 -->
+    <view class="search-bar" bindtap="onSearchTap">
+      <text class="sb-text">搜瓷砖、地板、卫浴、店铺…</text>
+    </view>
+
+    <!-- 2b. 导航芯片栏：精选好货 | 装修灵感 | 限时特惠 -->
+    <view class="nav-chips-wrap">
+      <scroll-view scroll-x class="nav-chips" enhanced show-scrollbar="{{false}}">
+        <view class="nc-chip" bindtap="onChipTap" data-type="goods">
+          <view class="nc-icon nc-icon-goods"></view>
+          <text class="nc-label">精选好货</text>
+        </view>
+        <view class="nc-chip" bindtap="onChipTap" data-type="inspo">
+          <view class="nc-icon nc-icon-inspo"></view>
+          <text class="nc-label">装修灵感</text>
+        </view>
+        <view class="nc-chip" bindtap="onChipTap" data-type="flash">
+          <view class="nc-icon nc-icon-flash"></view>
+          <text class="nc-label">限时特惠</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 2c. 材质纹理分类入口（4列，CSS纹理+文字） -->
+    <view class="texture-cates">
+      <view class="tc-item" wx:for="{{textureCates}}" wx:key="key"
+            bindtap="onTextureCateTap" data-key="{{item.key}}">
+        <view class="tc-block tc-{{item.texture}}"></view>
+        <text class="tc-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 2d. Banner 轮播 -->
+    <view class="banner-wrap" wx:if="{{banners.length > 0}}">
+      <swiper class="banner-swiper" indicator-dots indicator-color="rgba(255,255,255,0.5)"
+              indicator-active-color="#fff" autoplay interval="4000" circular>
+        <swiper-item wx:for="{{banners}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}" data-index="{{index}}">
+          <view class="banner-slide" style="background:{{item.bg}};">
+            <view class="bn-text">
+              <view class="bn-title">{{item.title}}</view>
+              <view class="bn-desc">{{item.desc}}</view>
+              <view class="bn-btn">去看看</view>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <!-- 2e. 附近建材市场（横滑卡片） -->
+    <view class="section" wx:if="{{markets.length > 0 && cityCovered}}">
+      <view class="sec-head">
+        <text class="sec-title">附近建材市场</text>
+        <text class="sec-more" bindtap="onAllMarkets">全部</text>
+      </view>
+      <scroll-view scroll-x class="market-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="market-card" wx:for="{{markets}}" wx:key="id"
+              bindtap="onMarketTap" data-id="{{item.id}}">
+          <view class="mc-top" style="background:{{item.bgColor}};">
+            <text class="mc-name">{{item.name}}</text>
+            <text class="mc-dist">{{item.distance}}km</text>
+          </view>
+          <view class="mc-body">
+            <text class="mc-stores">{{item.storeCount}}家店铺</text>
+            <text class="mc-cates">{{item.cateCount}}个品类</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 2f. 未覆盖城市提示 -->
+    <view class="section" wx:if="{{!cityCovered && currentCity !== '定位中…'}}">
+      <view class="no-city-card">
+        <view class="ncc-title">为家航暂未覆盖 {{currentCity}}</view>
+        <view class="ncc-desc">我们正在努力拓展中，敬请期待</view>
+        <view class="ncc-action" bindtap="onCityTap">切换城市</view>
+      </view>
+    </view>
+
+    <!-- 2g. 保障条 -->
+    <view class="trust-strip">
+      <text class="ts-badge">平台保障</text>
+      <text class="ts-flow">商家拍照留底 · 领航员逐店验货 · 你收货确认</text>
+    </view>
+
+    <!-- 2h. 精选好货（主内容区） -->
+    <view class="section">
+      <view class="sec-head">
+        <text class="sec-title">精选好货</text>
+        <view class="sec-tabs">
+          <text class="st-tab {{feedTab === 'hot' ? 'on' : ''}}"
+                bindtap="onFeedTab" data-tab="hot">热销</text>
+          <text class="st-tab {{feedTab === 'new' ? 'on' : ''}}"
+                bindtap="onFeedTab" data-tab="new">新品</text>
+          <text class="st-tab {{feedTab === 'cheap' ? 'on' : ''}}"
+                bindtap="onFeedTab" data-tab="cheap">性价比</text>
+        </view>
+      </view>
+
+      <view class="no-city-compact" wx:if="{{!cityCovered && currentCity !== '定位中…'}}">
+        <text>当前城市暂未覆盖</text>
+        <view class="ncp-btn" bindtap="onCityTap">切换城市</view>
+      </view>
+
+      <view class="goods-grid" wx:else>
+        <view class="goods-card" wx:for="{{goodsList}}" wx:key="id"
+              bindtap="onGoodsTap" data-id="{{item.id}}" data-name="{{item.name}}"
+              data-price="{{item.price}}" data-spec="{{item.spec}}" data-shop="{{item.shopName}}"
+              data-shop-id="{{item.shopId}}" data-sales="{{item.sales}}">
+          <view class="gc-img-wrap gc-texture-{{item.texture}}">
+            <image class="gc-img" src="{{item.image || ''}}" mode="aspectFill" lazy-load />
+            <view class="gc-img-tag" wx:if="{{item.isNew}}">新品</view>
+            <view class="gc-img-tag hot" wx:if="{{item.isHot}}">热销</view>
+          </view>
+          <view class="gc-info">
+            <view class="gc-name">{{item.name}}</view>
+            <view class="gc-spec" wx:if="{{item.spec}}">{{item.spec}}</view>
+            <view class="gc-price-row">
+              <view class="gc-price">
+                <text class="gcp-sym">¥</text>
+                <text class="gcp-num">{{item.price}}</text>
+                <text class="gcp-unit">/{{item.unit || '㎡'}}</text>
+              </view>
+              <view class="gc-cart-btn" catchtap="onQuickAddCart" data-id="{{item.id}}">
+                <text class="gccb-plus">+</text>
+              </view>
+            </view>
+            <view class="gc-shop-row">
+              <text class="gcs-rating">{{item.shopRating > 0 ? item.shopRating + '分' : ''}}</text>
+              <text class="gcs-name">{{item.shopName}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-safe"></view>
+  </view>
+
+</view>

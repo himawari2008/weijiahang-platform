@@ -1,0 +1,43 @@
+<view class="page">
+  <view class="header">纠纷申诉</view>
+  <view class="card">
+    <view class="form-group">
+      <view class="fg-label">关联订单</view>
+      <picker mode="selector" range="{{orderList}}" bindchange="onOrderPick">
+        <view class="picker-val">{{selectedOrder || '选择订单'}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <view class="fg-label">问题类型</view>
+      <view class="type-row">
+        <view class="type-tag {{issueType === 'damage' ? 'on' : ''}}" bindtap="onType" data-type="damage">货物破损</view>
+        <view class="type-tag {{issueType === 'wrong' ? 'on' : ''}}" bindtap="onType" data-type="wrong">货不对板</view>
+        <view class="type-tag {{issueType === 'shortage' ? 'on' : ''}}" bindtap="onType" data-type="shortage">数量缺少</view>
+        <view class="type-tag {{issueType === 'service' ? 'on' : ''}}" bindtap="onType" data-type="service">服务问题</view>
+      </view>
+    </view>
+    <view class="form-group">
+      <view class="fg-label">详细描述</view>
+      <textarea placeholder="请描述具体问题，上传相关照片…" value="{{desc}}" bindinput="onDesc" maxlength="500" />
+    </view>
+    <view class="form-group">
+      <view class="fg-label">上传凭证（选填）</view>
+      <view class="upload-area" bindtap="onUpload">
+        <view class="ua-add" wx:if="{{!uploadedImg}}">+ 添加照片</view>
+        <image class="ua-preview" wx:if="{{uploadedImg}}" src="{{uploadedImg}}" mode="aspectFill" />
+      </view>
+    </view>
+  </view>
+
+  <view class="card" style="background:#FFFBE6;border:1px solid #FFE58F;">
+    <view class="dispute-note">
+      <text>提交申诉后：</text>
+      <text>1. 平台冻结该笔订单款项</text>
+      <text>2. 客服1个工作日内介入调查</text>
+      <text>3. 核实属实 → 免费换货/退款 + 降低商家/领航员评分</text>
+      <text>4. 核实不属实 → 驳回申诉，订单正常结算</text>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="onSubmit" disabled="{{!issueType}}">提交申诉</button>
+</view>

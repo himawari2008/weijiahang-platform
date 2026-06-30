@@ -1,0 +1,179 @@
+<!-- AI 材料计算器 -->
+<view class="page">
+  <!-- 步骤指示器 -->
+  <view class="steps">
+    <view class="step {{currentStep >= 0 ? 'active' : ''}}">
+      <view class="step-num">1</view><view class="step-label">选模式</view>
+    </view>
+    <view class="step-line {{currentStep >= 1 ? 'active' : ''}}"></view>
+    <view class="step {{currentStep >= 1 ? 'active' : ''}}">
+      <view class="step-num">2</view><view class="step-label">{{calcMode === 'photo' ? '拍照' : '填量'}}</view>
+    </view>
+    <view class="step-line {{currentStep >= 2 ? 'active' : ''}}"></view>
+    <view class="step {{currentStep >= 2 ? 'active' : ''}}">
+      <view class="step-num">3</view><view class="step-label">出结果</view>
+    </view>
+  </view>
+
+  <!-- Step 1: 选择计算模式 -->
+  <view wx:if="{{currentStep === 0}}" class="step-content">
+    <view class="step-title">你想怎么算？</view>
+
+    <view class="mode-card {{calcMode === 'photo' ? 'active' : ''}}" bindtap="onModeTap" data-mode="photo">
+      <view class="mc-icon">拍照</view>
+      <view class="mc-body">
+        <view class="mc-name">拍照识图</view>
+        <view class="mc-desc">拍户型图/设计图，AI自动识别空间和面积</view>
+      </view>
+    </view>
+
+    <view class="mode-card {{calcMode === 'whole' ? 'active' : ''}}" bindtap="onModeTap" data-mode="whole">
+      <view class="mc-icon">全屋</view>
+      <view class="mc-body">
+        <view class="mc-name">全屋计算</view>
+        <view class="mc-desc">选空间→填面积→出全套材料清单</view>
+      </view>
+    </view>
+
+    <view class="mode-card {{calcMode === 'single' ? 'active' : ''}}" bindtap="onModeTap" data-mode="single">
+      <view class="mc-icon">单品</view>
+      <view class="mc-body">
+        <view class="mc-name">单品类速算</view>
+        <view class="mc-desc">只买一种材料（如瓷砖/地板），直接算用量和预算</view>
+      </view>
+    </view>
+
+    <button class="btn-primary full-btn" bindtap="onNextStep" disabled="{{!calcMode}}">下一步</button>
+  </view>
+
+  <!-- Step 2A: 拍照模式 -->
+  <view wx:if="{{currentStep === 1 && calcMode === 'photo'}}" class="step-content">
+    <view class="step-title">上传户型图或设计图</view>
+    <view class="photo-upload" bindtap="onUploadPhoto">
+      <image class="pu-preview" wx:if="{{uploadedImage}}" src="{{uploadedImage}}" mode="aspectFit" />
+      <view class="pu-placeholder" wx:else>
+        <view class="pu-icon">点击上传</view>
+        <view class="pu-text">点击拍照或从相册选择</view>
+      </view>
+    </view>
+    <view class="step-footer">
+      <button class="btn-outline" bindtap="onPrevStep">上一步</button>
+      <button class="btn-primary" bindtap="onCalc" loading="{{calculating}}" disabled="{{!uploadedImage}}">
+        识别并计算
+      </button>
+    </view>
+  </view>
+
+  <!-- Step 2B: 全屋模式选空间+面积 -->
+  <view wx:if="{{currentStep === 1 && calcMode === 'whole'}}" class="step-content">
+    <view class="step-title">哪些空间要装修？</view>
+    <view class="space-grid">
+      <view class="space-item {{item.selected ? 'selected' : ''}}"
+            wx:for="{{spaces}}" wx:key="name"
+            bindtap="onSpaceToggle" data-index="{{index}}">
+        <view class="space-icon space-letter">{{item.icon}}</view>
+        <view class="space-name">{{item.name}}</view>
+        <view class="space-check" wx:if="{{item.selected}}">✓</view>
+      </view>
+    </view>
+
+    <!-- 选中空间的面积 -->
+    <view class="area-list" wx:if="{{selectedSpaces.length > 0}}">
+      <view class="area-item" wx:for="{{selectedSpaces}}" wx:key="name">
+        <view class="area-label">{{item.name}}</view>
+        <view class="area-input-wrap">
+          <input class="area-input" type="digit" value="{{item.area}}"
+                 bindinput="onAreaInput" data-index="{{index}}" placeholder="㎡" />
+          <text class="area-unit">㎡</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="style-select">
+      <view class="style-label">风格（可选）</view>
+      <view class="style-options">
+        <view class="style-tag {{style === 'modern' ? 'active' : ''}}" bindtap="onStyleTap" data-style="modern">现代</view>
+        <view class="style-tag {{style === 'nordic' ? 'active' : ''}}" bindtap="onStyleTap" data-style="nordic">北欧</view>
+        <view class="style-tag {{style === 'chinese' ? 'active' : ''}}" bindtap="onStyleTap" data-style="chinese">新中式</view>
+      </view>
+    </view>
+
+    <view class="step-footer">
+      <button class="btn-outline" bindtap="onPrevStep">上一步</button>
+      <button class="btn-primary" bindtap="onCalc" loading="{{calculating}}" disabled="{{selectedSpaces.length === 0}}">
+        生成材料清单
+      </button>
+    </view>
+  </view>
+
+  <!-- Step 2C: 单品类模式 -->
+  <view wx:if="{{currentStep === 1 && calcMode === 'single'}}" class="step-content">
+    <view class="step-title">你要买什么材料？</view>
+    <view class="single-cat-grid">
+      <view class="scat-item {{singleCategory === item.name ? 'active' : ''}}"
+            wx:for="{{singleCategories}}" wx:key="name"
+            bindtap="onSingleCatTap" data-cat="{{item.name}}">
+        <view class="scat-icon scat-letter">{{item.icon}}</view>
+        <view class="scat-name">{{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="single-inputs" wx:if="{{singleCategory}}">
+      <view class="si-row">
+        <view class="si-label">用途/位置</view>
+        <input class="si-input" placeholder="如：客厅地面、厨房墙面…" value="{{singleUsage}}" bindinput="onSingleUsage" />
+      </view>
+      <view class="si-row">
+        <view class="si-label">面积（㎡）</view>
+        <input class="si-input" type="digit" placeholder="大致面积" value="{{singleArea}}" bindinput="onSingleArea" />
+      </view>
+      <view class="si-row">
+        <view class="si-label">预算</view>
+        <input class="si-input" type="digit" placeholder="每㎡预算（选填）" value="{{singleBudget}}" bindinput="onSingleBudget" />
+      </view>
+    </view>
+
+    <view class="step-footer">
+      <button class="btn-outline" bindtap="onPrevStep">上一步</button>
+      <button class="btn-primary" bindtap="onCalc" loading="{{calculating}}" disabled="{{!singleCategory || !singleArea}}">
+        计算用量
+      </button>
+    </view>
+  </view>
+
+  <!-- Step 3: 结果页 -->
+  <view wx:if="{{currentStep === 2}}" class="step-content result-page">
+    <view class="result-header">
+      <view class="result-title">{{calcMode === 'single' ? '材料用量估算' : '装修材料清单'}}</view>
+      <view class="result-meta">{{spacesSummary}} · 约{{totalArea}}㎡</view>
+    </view>
+
+    <view class="material-list">
+      <view class="material-group" wx:for="{{materials}}" wx:key="category">
+        <view class="mg-header">
+          <text class="mg-icon">{{item.category}}</text>
+          <text class="mg-name">{{item.category}}</text>
+        </view>
+        <view class="mg-item" wx:for="{{item.items}}" wx:key="name" wx:for-item="mi">
+          <view class="mg-item-left">
+            <view class="mg-item-name">{{mi.name}}</view>
+            <view class="mg-item-spec">{{mi.spec || '标准规格'}} · 约{{mi.qty}}{{mi.unit || '㎡'}}</view>
+          </view>
+          <view class="mg-item-right">¥{{mi.priceRange.min}}-{{mi.priceRange.max}}</view>
+        </view>
+        <view class="mg-subtotal">小计：¥{{item.totalMin}}-{{item.totalMax}}</view>
+      </view>
+    </view>
+
+    <view class="result-total card">
+      <view class="total-label">估算总预算</view>
+      <view class="total-price">¥{{totalMin}}-{{totalMax}}</view>
+      <view class="total-tip">比装修公司报价预估节省 20%-30%</view>
+    </view>
+
+    <view class="result-actions">
+      <button class="btn-outline" bindtap="onSaveList">保存</button>
+      <button class="btn-primary" bindtap="onFindShops">去市场找货</button>
+    </view>
+  </view>
+</view>

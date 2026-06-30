@@ -1,0 +1,76 @@
+/* ========================================
+   为家航 · 骨架屏样式
+   配合 /templates/skeleton.wxml 使用
+   ======================================== */
+
+.sk-wrap { padding: 0 24rpx; }
+
+/* 闪烁动画 */
+.sk-anim {
+  background: linear-gradient(90deg, #EEE 25%, #F6F6F6 50%, #EEE 75%);
+  background-size: 200% 100%;
+  animation: skShimmer 1.5s ease-in-out infinite;
+}
+@keyframes skShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── 首页骨架 ── */
+
+/* 品类宫格 */
+.sk-cate-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx 4rpx;
+  padding: 8rpx 0 4rpx;
+}
+.sk-cate {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14rpx 0 10rpx;
+}
+.sk-circle {
+  width: 72rpx; height: 72rpx; border-radius: 50%;
+}
+.sk-line {
+  height: 18rpx; border-radius: 9rpx; margin-top: 10rpx;
+}
+
+/* Banner */
+.sk-banner {
+  height: 220rpx; border-radius: 16rpx;
+  margin: 8rpx 0 16rpx;
+}
+
+/* 商品网格 */
+.sk-goods-grid {
+  display: flex; flex-wrap: wrap; gap: 12rpx;
+}
+.sk-goods {
+  width: calc(50% - 6rpx);
+  background: #fff; border-radius: 14rpx;
+  overflow: hidden;
+  padding-bottom: 18rpx;
+}
+.sk-gimg {
+  width: 100%; height: 300rpx;
+}
+.sk-gname {
+  height: 20rpx; border-radius: 10rpx;
+  margin: 14rpx 16rpx 0;
+}
+.sk-gprice {
+  height: 28rpx; border-radius: 14rpx;
+  margin: 10rpx 16rpx 0;
+}
+
+/* ── 列表骨架 ── */
+.sk-list-item {
+  display: flex; gap: 20rpx;
+  padding: 24rpx; background: #fff;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+.sk-avatar {
+  width: 96rpx; height: 96rpx; border-radius: 50%;
+  flex-shrink: 0;
+}
+.sk-content { flex: 1; }

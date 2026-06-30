@@ -1,0 +1,181 @@
+/* ========================================
+   为家航 · 首次引导页
+   3张卡片，3秒建立价值认知
+   ======================================== */
+
+page { background: #fff; height: 100vh; overflow: hidden; }
+
+.stage {
+  width: 100%; height: 100vh;
+  display: flex; flex-direction: column;
+}
+
+/* ═══════════════════════════════════════
+   Swiper
+   ═══════════════════════════════════════ */
+.swiper { flex: 1; }
+
+.slide {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 120rpx 40rpx 0;
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════
+   插图区（3种不同风格）
+   ═══════════════════════════════════════ */
+.illu-wrap {
+  width: 480rpx; height: 380rpx;
+  border-radius: 32rpx;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; margin-bottom: 40rpx;
+}
+
+/* 第1页：地图导航 */
+.illu-1 {
+  background: linear-gradient(160deg, #EBF5FF, #D6ECFB);
+}
+.illu-map {
+  width: 280rpx; height: 240rpx;
+  background: #fff; border-radius: 20rpx;
+  position: relative; overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.06);
+}
+.im-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(#EEE 1rpx, transparent 1rpx),
+    linear-gradient(90deg, #EEE 1rpx, transparent 1rpx);
+  background-size: 60rpx 60rpx;
+}
+.im-pin { position: absolute; font-size: 32rpx; }
+.im-pin-a { top: 30rpx; left: 40rpx; }
+.im-pin-b { bottom: 50rpx; right: 50rpx; }
+.im-route {
+  position: absolute; top: 54rpx; left: 56rpx;
+  width: 180rpx; height: 3rpx;
+  background: #FF6B35; border-radius: 2rpx;
+  transform: rotate(40deg);
+  transform-origin: left center;
+}
+.illu-1 .illu-icon {
+  position: absolute; bottom: 40rpx; right: 50rpx;
+  font-size: 56rpx;
+}
+
+/* 第2页：三道关 */
+.illu-2 {
+  background: linear-gradient(160deg, #F6FFF0, #E8F5E0);
+}
+.check-flow {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 30rpx;
+}
+.cf-step {
+  display: flex; flex-direction: column; align-items: center; gap: 10rpx;
+  padding: 20rpx 18rpx; border-radius: 16rpx;
+  background: rgba(255,255,255,0.7);
+}
+.cf-step.active { background: #fff; box-shadow: 0 4rpx 16rpx rgba(45,139,74,0.15); }
+.cf-icon { font-size: 40rpx; }
+.cf-step text { font-size: 20rpx; color: #666; }
+.cf-step.active text { color: #2D8B4A; font-weight: 600; }
+.cf-arrow { font-size: 32rpx; color: #2D8B4A; }
+
+/* 第3页：送货到家 */
+.illu-3 {
+  background: linear-gradient(160deg, #FFF8F5, #FFE8DC);
+}
+.deliver-scene {
+  display: flex; align-items: center; gap: 20rpx;
+  font-size: 52rpx;
+}
+.ds-arrow { font-size: 32rpx; color: #FF6B35; }
+.deliver-person {
+  position: absolute; bottom: 30rpx;
+  display: flex; align-items: center; gap: 8rpx;
+  background: #fff; padding: 10rpx 24rpx; border-radius: 28rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+}
+.dp-mascot { width: 60rpx; height: 60rpx; }
+
+.ars-mascot {
+  width: 44rpx; height: 44rpx;
+}
+.dp-label { font-size: 24rpx; color: #FF6B35; font-weight: 600; }
+
+/* ═══════════════════════════════════════
+   文案区
+   ═══════════════════════════════════════ */
+.slide-text {
+  text-align: center; padding: 0 20rpx;
+}
+.st-badge {
+  display: inline-block;
+  padding: 6rpx 22rpx; border-radius: 16rpx;
+  background: #EBF5FF; color: #1890FF;
+  font-size: 22rpx; font-weight: 600; margin-bottom: 16rpx;
+}
+.st-badge.green { background: #EBFFF0; color: #2D8B4A; }
+.st-badge.orange { background: #FFF0EB; color: #FF6B35; }
+.st-title {
+  font-size: 44rpx; font-weight: 800; color: #1A1A1A;
+  line-height: 1.3; margin-bottom: 16rpx;
+}
+.st-hl { color: #FF6B35; }
+.st-desc {
+  font-size: 28rpx; color: #999; line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════
+   底部控制区
+   ═══════════════════════════════════════ */
+.bottom-zone {
+  padding: 40rpx 40rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+}
+.dots { display: flex; justify-content: center; gap: 16rpx; margin-bottom: 36rpx; }
+.dot {
+  width: 12rpx; height: 12rpx; border-radius: 50%;
+  background: #DDD; transition: all 0.3s;
+}
+.dot.on { width: 36rpx; border-radius: 6rpx; background: #FF6B35; }
+
+/* 按钮 */
+.action-row { display: flex; justify-content: space-between; align-items: center; }
+.ar-skip { font-size: 30rpx; color: #BBB; padding: 16rpx; }
+
+.ar-next {
+  padding: 18rpx 56rpx; background: #FF6B35; color: #fff;
+  border-radius: 48rpx; font-size: 30rpx; font-weight: 600;
+  box-shadow: 0 6rpx 20rpx rgba(255,107,53,0.3);
+}
+
+.ar-start {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 12rpx;
+  padding: 22rpx 0; background: linear-gradient(135deg, #FF6B35, #E55A2B);
+  color: #fff; border-radius: 48rpx;
+  font-size: 32rpx; font-weight: 700;
+  box-shadow: 0 8rpx 28rpx rgba(255,107,53,0.35);
+}
+
+/* ═══════════════════════════════════════
+   CSS图标（替换emoji）
+   ═══════════════════════════════════════ */
+.o-icon {
+  width: 60rpx; height: 60rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: 700;
+}
+.o-icon.pin { background: #FF4D4F; color: #fff; }
+.o-icon.block { background: #8C8C8C; color: #fff; border-radius: 12rpx; }
+.o-icon.nav { background: #FF6B35; color: #fff; }
+.o-icon.cam { background: #1890FF; color: #fff; }
+.o-icon.search { background: #52C41A; color: #fff; }
+.o-icon.ok { background: #52C41A; color: #fff; }
+.o-icon.shop { background: #FF6B35; color: #fff; }
+.o-icon.truck { background: #1677FF; color: #fff; }
+.o-icon.home { background: #FF6B35; color: #fff; }
+

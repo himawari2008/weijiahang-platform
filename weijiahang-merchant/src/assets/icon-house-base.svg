@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bgGrad" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0%" stop-color="#FF8C5A"/>
+      <stop offset="35%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#D94E20"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.35" cy="0.25" r="0.6">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 圆角方形底 -->
+  <rect width="1024" height="1024" rx="230" fill="url(#bgGrad)"/>
+  <rect width="1024" height="1024" rx="230" fill="url(#glow)"/>
+
+  <!-- ═══ 房子（北指针，固定不动） ═══ -->
+  <!-- 屋顶 -->
+  <polygon points="512,160 395,440 629,440" fill="#FFFFFF"/>
+  <!-- 房身 -->
+  <rect x="410" y="440" width="204" height="140" rx="12" fill="#FFFFFF"/>
+  <!-- 门（品牌橙） -->
+  <rect x="486" y="490" width="52" height="90" rx="26" fill="#FF6B35"/>
+
+  <!-- 中心圆点 -->
+  <circle cx="512" cy="540" r="18" fill="#FFFFFF"/>
+</svg>

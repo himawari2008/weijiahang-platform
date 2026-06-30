@@ -1,0 +1,81 @@
+<view class="page">
+
+  <!-- ═══ Logo ═══ -->
+  <view class="mine-logo-bar">
+    <logo-icon size="80" show-text="{{true}}"></logo-icon>
+  </view>
+
+  <!-- 头部信息卡片 -->
+  <view class="m-header">
+    <view class="mh-avatar-wrap">
+      <view class="mh-avatar {{navInfo && navInfo.avatar ? 'has-img' : 'default'}}">
+        <image wx:if="{{navInfo && navInfo.avatar}}" src="{{navInfo.avatar}}" mode="aspectFill" class="mh-avatar-img"></image>
+        <view wx:else class="mh-avatar-default">{{navInfo ? navInfo.nameInitial || '领' : '领'}}</view>
+      </view>
+    </view>
+    <view class="mh-info">
+      <view class="mh-name">
+        <text>{{navInfo ? navInfo.name : '领航员'}}</text>
+        <view wx:if="{{navInfo && navInfo.verified}}" class="mh-badge">已认证</view>
+      </view>
+      <view class="mh-stat-row">
+        <text class="mh-stat">评分 {{navInfo ? navInfo.rating : '--'}}分</text>
+        <text class="mh-stat-divider"></text>
+        <text class="mh-stat">已完成 {{navInfo ? navInfo.totalOrders : '--'}}单</text>
+        <text class="mh-stat-divider"></text>
+        <text class="mh-stat">{{navInfo ? navInfo.exp : '--'}}年经验</text>
+      </view>
+    </view>
+    <view class="mh-balance-row">
+      <view class="mhb-item">
+        <text class="mhb-val">¥{{balanceText}}</text>
+        <text class="mhb-lbl">可提现余额</text>
+      </view>
+      <view class="mhb-divider"></view>
+      <view class="mhb-item">
+        <text class="mhb-val">¥{{todayEarnText}}</text>
+        <text class="mhb-lbl">今日收入</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 接单开关卡片 -->
+  <view class="online-card">
+    <view class="oc-left">
+      <view class="oc-icon sw-icon"></view>
+      <view class="oc-text">
+        <text class="oc-label">接单状态</text>
+        <text class="oc-desc">{{isOnline ? '已开启，等待派单' : '已关闭，暂不接单'}}</text>
+      </view>
+    </view>
+    <switch class="oc-switch" checked="{{isOnline}}" color="#FF6B35" bindchange="onToggleOnline" />
+  </view>
+
+  <!-- 功能菜单分组 -->
+  <view class="menu-groups">
+    <block wx:for="{{menuGroups}}" wx:key="title" wx:for-item="group">
+      <view class="mg-section">
+        <view class="mg-title">{{group.title}}</view>
+        <view class="mg-items">
+          <view
+            class="mg-item"
+            wx:for="{{group.items}}"
+            wx:key="id"
+            wx:for-item="item"
+            data-id="{{item.id}}"
+            bindtap="{{item.isSwitch ? '' : 'onMenuTap'}}"
+          >
+            <view class="mgi-icon mgi-icon-{{item.icon}}"></view>
+            <text class="mgi-label">{{item.label}}</text>
+            <text wx:if="{{item.value}}" class="mgi-value">{{item.value}}</text>
+            <view wx:if="{{!item.isSwitch}}" class="mgi-arrow"></view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-btn" bindtap="onLogout">退出登录</view>
+
+</view>

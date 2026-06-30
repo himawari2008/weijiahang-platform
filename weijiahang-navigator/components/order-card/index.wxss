@@ -1,0 +1,135 @@
+/* 订单卡片 — 通用组件样式 */
+
+.order-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin: 16rpx 0;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+  position: relative;
+}
+
+/* ---- 头部 ---- */
+.oc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.oc-type-tag {
+  font-size: 24rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  color: #fff;
+}
+
+/* 材质色彩复用 */
+.oc-type-tag.tc-ceramic { background: #FF6B35; }
+.oc-type-tag.tc-wood { background: #8B5E3C; }
+.oc-type-tag.tc-stone { background: #7B8C7B; }
+
+/* ---- 倒计时 ---- */
+.oc-countdown {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #FF6B35;
+}
+
+.oc-countdown.urgent {
+  color: #E84A1B;
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 1; }
+  to { opacity: 0.6; }
+}
+
+.oc-countdown-ring {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid #eee;
+  border-top-color: #FF6B35;
+  border-radius: 50%;
+  margin-right: 8rpx;
+  animation: spin 2s linear infinite;
+}
+
+.urgent .oc-countdown-ring {
+  border-top-color: #E84A1B;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- 状态标签 ---- */
+.oc-status {
+  font-size: 24rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+}
+
+.oc-status.s-accepted { background: #E6F7FF; color: #1677FF; }
+.oc-status.s-arrived { background: #FFF7E6; color: #FA8C16; }
+.oc-status.s-serving { background: #F6FFED; color: #52C41A; }
+.oc-status.s-completed { background: #F0F5F0; color: #8B8B8B; }
+.oc-status.s-cancelled { background: #FFF1F0; color: #FF4D4F; }
+
+/* ---- 描述 ---- */
+.oc-desc {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- 底栏 ---- */
+.oc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.oc-income {
+  font-size: 34rpx;
+}
+
+.oc-income-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.oc-income-val {
+  font-weight: 700;
+  color: #FF6B35;
+}
+
+.oc-meta {
+  display: flex;
+  gap: 20rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* ---- 抢单按钮 ---- */
+.oc-grab-btn {
+  margin-top: 20rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  background: linear-gradient(135deg, #FF6B35, #E84A1B);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  border-radius: 44rpx;
+  box-shadow: 0 6rpx 20rpx rgba(255,107,53,0.35);
+}

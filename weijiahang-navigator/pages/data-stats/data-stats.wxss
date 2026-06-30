@@ -1,0 +1,257 @@
+/* pages/data-stats/data-stats.wxss */
+/* 数据统计 — 领航员数据看板样式 */
+
+.page {
+  min-height: 100vh;
+  background-color: var(--bg, #F5F5F5);
+  padding: 24rpx 24rpx 40rpx;
+  box-sizing: border-box;
+}
+
+/* ========== loading ========== */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.loading-spinner {
+  width: 64rpx;
+  height: 64rpx;
+  border: 6rpx solid var(--border, #E8E8E8);
+  border-top-color: var(--primary, #FF6B35);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: var(--text3, #999);
+}
+
+/* ========== error ========== */
+.error-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.error-text {
+  font-size: 30rpx;
+  color: var(--text3, #999);
+  margin-bottom: 32rpx;
+}
+
+.retry-btn {
+  width: 240rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  background-color: var(--primary, #FF6B35);
+  border-radius: 12rpx;
+  border: none;
+}
+
+/* ========== section ========== */
+.section {
+  background-color: var(--card, #FFFFFF);
+  border-radius: 16rpx;
+  padding: 32rpx 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text, #333);
+  margin-bottom: 28rpx;
+}
+
+/* ========== stat grid 2x2 ========== */
+.stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -12rpx;
+}
+
+.stat-card {
+  width: calc(50% - 24rpx);
+  margin: 12rpx;
+  background-color: var(--bg, #F5F5F5);
+  border-radius: 12rpx;
+  padding: 32rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 160rpx;
+  box-sizing: border-box;
+}
+
+.stat-value {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: var(--primary, #FF6B35);
+  line-height: 1.2;
+}
+
+.stat-unit {
+  font-size: 28rpx;
+  font-weight: 400;
+  color: var(--text2, #666);
+  margin-left: 4rpx;
+}
+
+.stat-label {
+  font-size: 26rpx;
+  color: var(--text2, #666);
+  margin-top: 12rpx;
+}
+
+/* ========== 7-day bar chart ========== */
+.chart-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bars-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-width: 560rpx;
+  height: 340rpx;
+  padding-top: 40rpx;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.bar-value {
+  font-size: 24rpx;
+  color: var(--text2, #666);
+  margin-bottom: 8rpx;
+  white-space: nowrap;
+}
+
+.bar-track {
+  width: 48rpx;
+  height: 200rpx;
+  background-color: var(--bg, #F5F5F5);
+  border-radius: 24rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, #FF6B35, #FF9A5C);
+  border-radius: 24rpx;
+  transition: height 0.3s ease;
+  min-height: 2rpx;
+}
+
+.bar-label {
+  font-size: 22rpx;
+  color: var(--text3, #999);
+  margin-top: 10rpx;
+}
+
+/* ========== category horizontal bars ========== */
+.category-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.category-name {
+  font-size: 28rpx;
+  color: var(--text, #333);
+}
+
+.category-percent {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text, #333);
+}
+
+.category-track {
+  width: 100%;
+  height: 28rpx;
+  background-color: var(--bg, #F5F5F5);
+  border-radius: 14rpx;
+  overflow: hidden;
+}
+
+.category-fill {
+  height: 100%;
+  border-radius: 14rpx;
+  transition: width 0.4s ease;
+}
+
+/* ========== month summary ========== */
+.summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -12rpx;
+}
+
+.summary-item {
+  width: calc(50% - 24rpx);
+  margin: 12rpx;
+  background-color: var(--bg, #F5F5F5);
+  border-radius: 12rpx;
+  padding: 28rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.summary-value {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: var(--primary, #FF6B35);
+  line-height: 1.2;
+}
+
+.summary-unit {
+  font-size: 24rpx;
+  color: var(--text3, #999);
+  margin-left: 4rpx;
+}
+
+.summary-label {
+  font-size: 26rpx;
+  color: var(--text2, #666);
+  margin-top: 8rpx;
+}

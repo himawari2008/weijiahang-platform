@@ -1,0 +1,125 @@
+/* ============================================
+   为家航运营后台 — 全局样式
+   ============================================ */
+
+/* ---- 品牌色彩变量 ---- */
+:root {
+  --primary: #FF6B35;
+  --primary-dark: #E84A1B;
+  --primary-light: #FFE4D6;
+  --secondary: #1A365D;
+  --bg: #F5F5F5;
+  --card-bg: #FFFFFF;
+  --text: #1A1A2E;
+  --text-secondary: #666;
+  --text-tertiary: #999;
+  --success: #52C41A;
+  --warning: #FAAD14;
+  --danger: #FF4D4F;
+  --info: #1677FF;
+  --border: #F0F0F0;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+
+/* ---- 基础重置 ---- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- 滚动条美化 ---- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---- 登录页 ---- */
+.login-page {
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FF6B35 0%, #1A365D 100%);
+}
+.login-card {
+  width: 420px; max-width: 92vw; padding: 48px 40px; background: #fff;
+  border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.login-card h1 { font-size: 28px; color: #FF6B35; margin-bottom: 8px; font-weight: 700; }
+.login-card .subtitle { color: #999; margin-bottom: 32px; font-size: 14px; }
+
+/* ---- 页面标题 ---- */
+.page-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+}
+.page-header h2 { margin: 0; font-size: 20px; font-weight: 600; color: var(--text); }
+
+/* ---- 统计卡片网格 ---- */
+.stat-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: #fff; padding: 20px 24px; border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s;
+}
+.stat-card:hover { box-shadow: var(--shadow); }
+.stat-card .stat-value { font-size: 32px; font-weight: 700; line-height: 1.2; }
+.stat-card .stat-label { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+.stat-card .stat-icon {
+  font-size: 24px; margin-bottom: 8px; display: block;
+}
+
+/* ---- 通用工具类 ---- */
+.text-primary { color: var(--primary); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+.text-secondary { color: var(--text-secondary); }
+
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+
+.gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; } .gap-24 { gap: 24px; }
+
+.mt-8 { margin-top: 8px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; } .mb-16 { margin-bottom: 16px; } .mb-24 { margin-bottom: 24px; }
+
+/* ---- 表格增强 ---- */
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background: #FAFAFA; font-weight: 600; color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* ---- 卡片增强 ---- */
+.admin-card {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+/* ---- 操作栏 ---- */
+.toolbar {
+  display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 1200px) {
+  .stat-card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .stat-card-grid { grid-template-columns: 1fr; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+}
+@media (min-width: 769px) {
+  .show-mobile { display: none !important; }
+}

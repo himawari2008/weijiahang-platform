@@ -1,0 +1,140 @@
+@import "/templates/empty-state.wxss";
+
+/* ========================================
+   为家航 · 订单
+   品牌调性：掌控感、安心感
+   ======================================== */
+
+page { background: var(--bg); }
+
+/* ═══════════════════════════════════════
+   购物车入口
+   ═══════════════════════════════════════ */
+.cart-entry {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 20rpx 20rpx 16rpx; padding: 22rpx 24rpx;
+  background: linear-gradient(135deg, #FFF8F5, #FFF0EB);
+  border-radius: var(--r-lg);
+  border: 1rpx solid #FFD4BF;
+  box-shadow: var(--shadow-sm);
+}
+.ce-left { display: flex; align-items: center; gap: 14rpx; }
+.ce-icon-wrap {
+  width: 64rpx; height: 64rpx; border-radius: 16rpx;
+  background: var(--brand); display: flex; align-items: center; justify-content: center;
+}
+.ce-icon-css {
+  width: 32rpx; height: 36rpx;
+  border: 3rpx solid #fff; border-radius: 0 0 8rpx 8rpx;
+  border-top: none; position: relative; box-sizing: border-box;
+}
+.ce-icon-css::before {
+  content: ''; position: absolute; top: -10rpx; left: -3rpx;
+  width: 26rpx; height: 14rpx;
+  border: 3rpx solid #fff; border-radius: 8rpx 8rpx 0 0;
+  border-bottom: none; box-sizing: border-box;
+}
+.ce-info { display: flex; flex-direction: column; }
+.ce-title { font-size: 28rpx; font-weight: 600; color: var(--text-0); }
+.ce-desc { font-size: 24rpx; color: var(--text-3); margin-top: 2rpx; }
+.ce-right { display: flex; align-items: center; gap: 8rpx; }
+.ce-badge {
+  min-width: 36rpx; height: 36rpx; line-height: 36rpx; text-align: center;
+  background: var(--brand); color: #fff; font-size: 22rpx; font-weight: 700;
+  border-radius: 50%;
+  box-shadow: 0 2rpx 6rpx rgba(255,107,53,0.3);
+}
+.ce-arrow { font-size: 32rpx; color: var(--text-4); }
+
+/* ═══════════════════════════════════════
+   Tab 栏
+   ═══════════════════════════════════════ */
+.tab-bar {
+  display: flex; background: var(--white);
+  padding: 8rpx 16rpx;
+  border-bottom: 1rpx solid var(--border-light);
+}
+.tab {
+  flex: 1; text-align: center; padding: 18rpx 0;
+  font-size: 28rpx; color: var(--text-2);
+  position: relative;
+}
+.tab.on { color: var(--brand); font-weight: 700; }
+.tab.on::after {
+  content: ''; position: absolute; bottom: 6rpx; left: 50%;
+  width: 40rpx; height: 5rpx; border-radius: 3rpx;
+  background: var(--brand); transform: translateX(-50%);
+}
+
+/* ═══════════════════════════════════════
+   订单卡片
+   ═══════════════════════════════════════ */
+.order-list { padding: 12rpx 16rpx; }
+
+.order-card {
+  background: var(--white); border-radius: var(--r-lg);
+  padding: 20rpx 24rpx; margin-bottom: 16rpx;
+  box-shadow: var(--shadow-card);
+}
+.order-card:active { background: #FAFAFA; }
+
+.oc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10rpx; }
+.oc-service { display: flex; align-items: center; gap: 8rpx; }
+.ocs-icon { font-size: 22rpx; font-weight: 600; color: var(--brand); background: #FFF0EB; padding: 4rpx 12rpx; border-radius: 6rpx; }
+.ocs-type { font-size: 26rpx; font-weight: 600; color: var(--text-0); }
+.oc-status { font-size: 24rpx; font-weight: 600; }
+
+.oc-goods { font-size: 26rpx; color: var(--text-2); margin-bottom: 14rpx; }
+
+.oc-bottom { display: flex; justify-content: space-between; align-items: center; }
+.ocb-left { display: flex; align-items: baseline; gap: 10rpx; }
+.oc-price { font-size: 34rpx; font-weight: 800; color: var(--brand); }
+.oc-time { font-size: 22rpx; color: var(--text-4); }
+
+.ocb-actions { display: flex; gap: 12rpx; }
+.oca-btn {
+  padding: 8rpx 22rpx; border-radius: 20rpx;
+  font-size: 24rpx; color: var(--text-2);
+  background: var(--border-light);
+}
+.oca-btn.primary {
+  background: var(--brand-light); color: var(--brand); font-weight: 600;
+}
+
+/* ═══════════════════════════════════════
+   滚动区 + 加载
+   ═══════════════════════════════════════ */
+.order-scroll { flex: 1; overflow-y: auto; }
+.loading-hint { text-align: center; padding: 40rpx; font-size: 26rpx; color: #CCC; }
+
+/* ═══════════════════════════════════════
+   取消弹窗
+   ═══════════════════════════════════════ */
+.modal-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 1000;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.cancel-modal {
+  width: 100%; background: #fff; border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx 28rpx; padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  animation: slideUp 0.25s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.cm-header { font-size: 32rpx; font-weight: 700; text-align: center; margin-bottom: 24rpx; }
+.cm-label { font-size: 26rpx; color: #666; margin-bottom: 16rpx; }
+.cm-reason {
+  padding: 20rpx 24rpx; font-size: 28rpx; color: #333;
+  border-radius: 12rpx; background: #F5F5F5; margin-bottom: 12rpx;
+}
+.cm-reason.selected { background: #FFF0EB; color: var(--brand); border: 1rpx solid var(--brand); }
+.cm-footer { display: flex; gap: 16rpx; margin-top: 24rpx; }
+.cmf-btn {
+  flex: 1; text-align: center; padding: 20rpx 0; border-radius: 24rpx;
+  font-size: 28rpx; font-weight: 600;
+}
+.cmf-btn.cancel { background: #F5F5F5; color: #666; }
+.cmf-btn.confirm { background: #FF4D4F; color: #fff; }

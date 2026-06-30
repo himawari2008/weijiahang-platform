@@ -1,0 +1,67 @@
+<!-- 收货地址 · 新增/编辑 -->
+<view class="page">
+
+  <!-- ═══ 表单 ═══ -->
+  <view class="form-block">
+    <!-- 收货人 -->
+    <view class="fb-row">
+      <text class="fbr-label">收货人</text>
+      <input class="fbr-input" placeholder="请输入收货人姓名" value="{{form.name}}"
+             bindinput="onInput" data-field="name" maxlength="20" />
+    </view>
+
+    <!-- 手机号 -->
+    <view class="fb-row">
+      <text class="fbr-label">手机号</text>
+      <input class="fbr-input" type="number" placeholder="请输入手机号码" value="{{form.phone}}"
+             bindinput="onInput" data-field="phone" maxlength="11" />
+    </view>
+
+    <!-- 所在地区 -->
+    <view class="fb-row">
+      <text class="fbr-label">所在地区</text>
+      <view class="fbr-value-row">
+        <input class="fbr-input region" placeholder="省" value="{{form.province}}"
+               bindinput="onInput" data-field="province" />
+        <input class="fbr-input region" placeholder="市" value="{{form.city}}"
+               bindinput="onInput" data-field="city" />
+        <input class="fbr-input region" placeholder="区/县" value="{{form.district}}"
+               bindinput="onInput" data-field="district" />
+      </view>
+    </view>
+
+    <!-- 详细地址 -->
+    <view class="fb-row">
+      <text class="fbr-label">详细地址</text>
+      <input class="fbr-input" placeholder="小区/写字楼/街道/门牌号" value="{{form.detail}}"
+             bindinput="onInput" data-field="detail" maxlength="100" />
+    </view>
+  </view>
+
+  <!-- ═══ 标签 ═══ -->
+  <view class="form-block">
+    <view class="fb-title">地址标签</view>
+    <view class="tag-row">
+      <view class="tag-chip {{form.tag === item.key ? 'on' : ''}}"
+            wx:for="{{tagOptions}}" wx:key="key"
+            bindtap="onTagTap" data-tag="{{item.key}}">
+        <text>{{item.icon}} {{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 默认地址 ═══ -->
+  <view class="form-block">
+    <view class="fb-row switch-row">
+      <text class="fbr-label">设为默认地址</text>
+      <switch checked="{{form.isDefault}}" bindchange="onToggleDefault" color="#FF6B35" />
+    </view>
+  </view>
+
+  <!-- ═══ 保存 ═══ -->
+  <view class="save-area">
+    <view class="save-btn" bindtap="onSave">保存</view>
+    <view class="del-btn" wx:if="{{mode === 'edit'}}" bindtap="onDelete">删除此地址</view>
+  </view>
+
+</view>

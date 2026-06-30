@@ -1,0 +1,22 @@
+<!--
+  为家航 · 领航加载组件
+  用法：
+    1. 在页面 wxml 顶部：<import src="/templates/loading-compass.wxml" />
+    2. 使用：<template is="loading-compass" data="{{fullscreen: true}}" />
+    3. 在页面 wxss 顶部：@import "/templates/loading-compass.wxss";
+
+  参数：
+    fullscreen: true（默认）= 全屏遮罩 | false = 内联
+    text: 加载文案，默认 "领航中"
+-->
+<template name="loading-compass">
+  <view class="lc-wrap {{fullscreen !== false ? 'lc-fullscreen' : 'lc-inline'}}">
+    <view class="lc-compass">
+      <!-- 底版：房子（静态） -->
+      <image class="lc-icon" src="/assets/icon-house-base.svg" mode="aspectFit" />
+      <!-- 上层：圆环+指针（持续旋转） -->
+      <image class="lc-ring" src="/assets/icon-compass-ring.svg" mode="aspectFit" />
+    </view>
+    <view class="lc-text">{{text || '领航中'}}</view>
+  </view>
+</template>

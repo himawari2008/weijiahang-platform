@@ -1,0 +1,7 @@
+<!-- 通用统计卡片 -->
+<view class="stat-card" bindtap="onTap" style="--card-color: {{color}}">
+  <view class="sc-icon" wx:if="{{icon}}">{{icon}}</view>
+  <view class="sc-label">{{label}}</view>
+  <view class="sc-value" style="color: {{color}}">{{displayValue}}</view>
+  <view wx:if="{{subtitle}}" class="sc-subtitle">{{subtitle}}</view>
+</view>

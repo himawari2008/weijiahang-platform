@@ -1,0 +1,33 @@
+/* 统计卡片 — 通用组件 */
+
+.stat-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  border-top: 6rpx solid var(--card-color, #FF6B35);
+}
+
+.sc-icon {
+  font-size: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.sc-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.sc-value {
+  font-size: 44rpx;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.sc-subtitle {
+  font-size: 22rpx;
+  color: #bbb;
+  margin-top: 6rpx;
+}

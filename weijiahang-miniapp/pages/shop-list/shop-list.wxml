@@ -1,0 +1,62 @@
+<!--
+  为家航 · 商品列表 / 分类浏览 / 搜索
+  极简设计 · 纯文字
+-->
+<view class="page">
+
+  <!-- 顶栏 -->
+  <view class="top-bar">
+    <view class="tb-title">{{category || '全部商品'}}</view>
+    <view class="tb-ai" bindtap="onAICalc">AI计算</view>
+  </view>
+
+  <!-- 排序 + 搜索 -->
+  <view class="sort-bar">
+    <view class="sort-tag {{sortBy === 'default' ? 'active' : ''}}" bindtap="onSort" data-sort="default">综合</view>
+    <view class="sort-tag {{sortBy === 'rating' ? 'active' : ''}}" bindtap="onSort" data-sort="rating">好评</view>
+    <view class="sort-tag {{sortBy === 'sales' ? 'active' : ''}}" bindtap="onSort" data-sort="sales">销量</view>
+    <view class="sort-tag {{sortBy === 'price_asc' ? 'active' : ''}}" bindtap="onSort" data-sort="price_asc">价格升</view>
+    <view class="sort-tag {{sortBy === 'price_desc' ? 'active' : ''}}" bindtap="onSort" data-sort="price_desc">价格降</view>
+    <input class="sort-search" placeholder="搜{{category || '商品'}}…"
+           value="{{keyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm"
+           focus="{{focusSearch}}" />
+    <view class="sort-search-clear" wx:if="{{keyword}}" bindtap="onClearSearch">X</view>
+  </view>
+
+  <!-- 子类横滑 -->
+  <scroll-view scroll-x class="sub-row" wx:if="{{subCategories.length > 0}}">
+    <view class="sub-chip {{activeSub === '' ? 'on' : ''}}" bindtap="onSubTap" data-sub="全部">全部</view>
+    <view class="sub-chip {{activeSub === item ? 'on' : ''}}"
+          wx:for="{{subCategories}}" wx:key="*this"
+          bindtap="onSubTap" data-sub="{{item}}">{{item}}</view>
+  </scroll-view>
+
+  <!-- 双列商品网格 -->
+  <scroll-view scroll-y class="goods-area" enhanced show-scrollbar="{{false}}">
+    <view class="goods-grid" wx:if="{{products.length > 0}}">
+      <view class="goods-card" wx:for="{{products}}" wx:key="id"
+            bindtap="onProductTap" data-id="{{item.id}}" data-name="{{item.name}}"
+            data-price="{{item.price}}" data-spec="{{item.spec}}"
+            data-shop="{{item.shopName}}" data-shop-id="{{item.shopId}}" data-sales="{{item.sales}}">
+        <image class="gc-img" src="{{item.image || ''}}" mode="aspectFill" lazy-load />
+        <view class="gc-body">
+          <view class="gc-name ellipsis-2">{{item.name}}</view>
+          <view class="gc-price">¥{{item.price}}<text class="gc-unit">/{{item.unit || '㎡'}}</text></view>
+          <view class="gc-shop">
+            <text class="gc-shop-rating">{{item.shopRating > 0 ? item.shopRating + '分' : ''}}</text>
+            <text class="ellipsis">{{item.shopName}}</text>
+          </view>
+          <view class="gc-sales" wx:if="{{item.sales}}">已售{{item.sales}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空态 -->
+    <view class="list-empty" wx:if="{{products.length === 0}}">
+      <view class="le-text">{{keyword ? '未找到匹配商品' : '该分类暂无商品'}}</view>
+      <view class="le-hint" wx:if="{{keyword}}">换个关键词试试</view>
+    </view>
+
+    <view class="bottom-safe"></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,44 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 航小匠 — 为家航品牌IP形象：戴安全帽的指南针小工匠 -->
+
+  <!-- 身体/底座（圆形指南针表盘） -->
+  <circle cx="100" cy="115" r="55" fill="#FFF8F0" stroke="#FF6B35" stroke-width="3"/>
+
+  <!-- 指南针刻度盘装饰 -->
+  <circle cx="100" cy="115" r="48" fill="none" stroke="#FFD4BF" stroke-width="1"/>
+  <!-- N / S 标记 -->
+  <text x="100" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#FF6B35">N</text>
+  <text x="100" y="162" text-anchor="middle" font-size="11" font-weight="600" fill="#CCC">S</text>
+
+  <!-- 指南针指针 -->
+  <polygon points="100,80 95,115 100,112 105,115" fill="#FF6B35"/>
+  <polygon points="100,150 95,115 100,118 105,115" fill="#CCC"/>
+
+  <!-- 安全帽 -->
+  <ellipse cx="100" cy="68" rx="52" ry="28" fill="#FF6B35"/>
+  <rect x="48" y="62" width="104" height="20" rx="8" fill="#FF7B4A"/>
+  <!-- 帽檐 -->
+  <rect x="38" y="78" width="124" height="8" rx="4" fill="#E55A2B"/>
+
+  <!-- 脸部 -->
+  <circle cx="100" cy="100" r="32" fill="#FFF5EE" stroke="#F0D5C0" stroke-width="1.5"/>
+
+  <!-- 眼睛 — 弯弯的笑眼 -->
+  <path d="M84 94 Q89 88 94 94" fill="none" stroke="#3A3A3A" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M106 94 Q111 88 116 94" fill="none" stroke="#3A3A3A" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- 腮红 -->
+  <ellipse cx="82" cy="103" rx="7" ry="5" fill="#FFD4C0" opacity="0.6"/>
+  <ellipse cx="118" cy="103" rx="7" ry="5" fill="#FFD4C0" opacity="0.6"/>
+
+  <!-- 微笑 -->
+  <path d="M92 106 Q100 116 108 106" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- 小手 -->
+  <circle cx="48" cy="128" r="9" fill="#FFF5EE" stroke="#F0D5C0" stroke-width="1.5"/>
+  <circle cx="152" cy="128" r="9" fill="#FFF5EE" stroke="#F0D5C0" stroke-width="1.5"/>
+
+  <!-- 小脚 -->
+  <ellipse cx="78" cy="172" rx="14" ry="9" fill="#1A3A4A"/>
+  <ellipse cx="122" cy="172" rx="14" ry="9" fill="#1A3A4A"/>
+</svg>

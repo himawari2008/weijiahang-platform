@@ -1,0 +1,59 @@
+<!--
+  为家航 · 启动页
+  品牌：指南针 → 房子
+  3.2 秒沉浸式品牌记忆
+-->
+<view class="stage">
+
+  <!-- 粒子背景 -->
+  <view class="particles" wx:if="{{animStarted}}">
+    <view class="particle p1"></view>
+    <view class="particle p2"></view>
+    <view class="particle p3"></view>
+    <view class="particle p4"></view>
+    <view class="particle p5"></view>
+    <view class="particle p6"></view>
+    <view class="particle p7"></view>
+    <view class="particle p8"></view>
+  </view>
+
+  <!-- 动态背景光晕 -->
+  <view class="bg-glow"></view>
+  <view class="bg-glow2"></view>
+
+  <!-- Logo：房子固定 + 圆环指针绕圈（领航） -->
+  <view class="logo-stage">
+    <view class="logo-halo {{animStarted ? 'on' : ''}}"></view>
+
+    <!-- 底版：背景 + 房子（固定） -->
+    <view class="logo-wrap {{animStarted ? 'pop-in' : ''}}">
+      <image class="logo-img" src="/assets/icon-house-base.svg" mode="aspectFit" />
+    </view>
+
+    <!-- 上层：圆环 + 指针 + 刻度（旋转） -->
+    <view class="logo-ring-spin {{animStarted ? 'compass-spin' : ''}}">
+      <image class="logo-ring-img" src="/assets/icon-compass-ring.svg" mode="aspectFit" />
+    </view>
+
+    <!-- 指北光点（动画完成后出现） -->
+    <view class="north-dot {{animStarted ? 'north-glow' : ''}}"></view>
+  </view>
+
+  <!-- 品牌名 -->
+  <view class="brand-name {{animStarted ? 'fade-up' : ''}}">为家航</view>
+  <!-- 品牌口号 -->
+  <view class="brand-motto {{animStarted ? 'fade-up' : ''}}">为家领航</view>
+  <!-- 行动号召 -->
+  <view class="brand-tagline {{animStarted ? 'fade-up' : ''}}">买建材 先领航</view>
+
+  <!-- 加载进度条 -->
+  <view class="progress-track {{animStarted ? 'show' : ''}}">
+    <view class="progress-fill {{animStarted ? 'run' : ''}}"></view>
+  </view>
+
+  <!-- 底部副文案 -->
+  <view class="brand-foot {{animStarted ? 'fade-in' : ''}}">
+    <text>线下导航 · AI找货 · 领航员代看</text>
+  </view>
+
+</view>

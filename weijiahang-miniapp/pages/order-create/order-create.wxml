@@ -1,0 +1,167 @@
+<!-- 下单 — 预约领航员 -->
+<view class="page">
+  <!-- 市场选择 -->
+  <view class="section">
+    <view class="s-title">1. 选择市场</view>
+    <picker mode="selector" range="{{marketNames}}" bindchange="onMarketChange">
+      <view class="picker-box">
+        <text wx:if="{{marketIndex >= 0}}">{{marketNames[marketIndex]}}</text>
+        <text wx:else class="placeholder">请选择建材市场</text>
+        <text class="arrow">></text>
+      </view>
+    </picker>
+    <view class="market-hint" wx:if="{{marketIndex >= 0}}">
+      该市场 {{navCount}} 位领航员在线
+    </view>
+  </view>
+
+  <!-- 预约时间 -->
+  <view class="section">
+    <view class="s-title">2. 选择时间</view>
+    <view class="time-row">
+      <picker mode="date" value="{{appointDate}}" start="{{today}}" bindchange="onDateChange">
+        <view class="time-box {{appointDate ? 'filled' : ''}}">
+          <text class="time-label">日期</text>
+          <text class="time-val">{{appointDate || '请选择'}}</text>
+        </view>
+      </picker>
+      <picker mode="time" value="{{appointTime}}" bindchange="onTimeChange">
+        <view class="time-box {{appointTime ? 'filled' : ''}}">
+          <text class="time-label">时间</text>
+          <text class="time-val">{{appointTime || '请选择'}}</text>
+        </view>
+      </picker>
+    </view>
+    <!-- 快捷时段 -->
+    <view class="quick-slots" wx:if="{{appointDate}}">
+      <text class="qs-label">快捷时段：</text>
+      <view class="qs-chip {{appointTime === '09:00' ? 'on' : ''}}" bindtap="onQuickTime" data-t="09:00">上午</view>
+      <view class="qs-chip {{appointTime === '14:00' ? 'on' : ''}}" bindtap="onQuickTime" data-t="14:00">下午</view>
+      <view class="qs-chip {{appointTime === '17:00' ? 'on' : ''}}" bindtap="onQuickTime" data-t="17:00">傍晚</view>
+    </view>
+  </view>
+
+  <!-- 服务类型 -->
+  <view class="section">
+    <view class="s-title">3. 服务内容</view>
+    <view class="service-types">
+      <view class="st-item {{serviceType === 'accompany' ? 'active' : ''}}"
+            bindtap="onServiceTap" data-type="accompany">
+        <view class="st-name">陪逛代看</view>
+        <view class="st-price">¥88/次</view>
+        <view class="st-desc">领航员替你去店里·视频看货·砍价把关</view>
+      </view>
+      <view class="st-item {{serviceType === 'delivery' ? 'active' : ''}}"
+            bindtap="onServiceTap" data-type="delivery">
+        <view class="st-name">送货上门</view>
+        <view class="st-price">¥49起</view>
+        <view class="st-desc">取货验货·叫车·送到家</view>
+      </view>
+      <view class="st-item {{serviceType === 'urgent' ? 'active' : ''}}"
+            bindtap="onServiceTap" data-type="urgent">
+        <view class="st-name">急送补料</view>
+        <view class="st-price">¥29/次</view>
+        <view class="st-desc">小件急送·直达工地</view>
+      </view>
+      <view class="st-item {{serviceType === 'consolidate' ? 'active' : ''}}"
+            bindtap="onServiceTap" data-type="consolidate">
+        <view class="st-name">集货配送</view>
+        <view class="st-price">¥68起</view>
+        <view class="st-desc">多店取货·统一验货·装车送到家</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 集货配送说明 -->
+  <view class="section" wx:if="{{serviceType === 'consolidate'}}">
+    <view class="consolidate-info">
+      <view class="ci-title">集货配送怎么用？</view>
+      <view class="ci-step">1. 在线上不同店铺选好商品 → 加入购物车</view>
+      <view class="ci-step">2. 商家按订单配好货 → 领航员到市场逐店取货</view>
+      <view class="ci-step">3. 领航员统一验货把关 → 安排装车 → 送到你家</view>
+      <view class="ci-step">4. 自提也可以：领航员帮你把货整到一起装车</view>
+    </view>
+  </view>
+
+  <!-- 目标店铺 -->
+  <view class="section" wx:if="{{serviceType}}">
+    <view class="s-title">
+      4. 目标店铺
+      <text wx:if="{{serviceType === 'consolidate' && shopCount > 0}}" style="font-size:24rpx;color:#999;font-weight:400;">
+        （购物车 {{shopCount}} 家店）
+      </text>
+    </view>
+    <view class="shop-tags">
+      <view class="shop-tag" wx:for="{{selectedShops}}" wx:key="id">
+        {{item.name}} <text class="rm-shop" bindtap="onRemoveShop" data-id="{{item.id}}">x</text>
+      </view>
+      <view class="add-shop" bindtap="onAddShop">+ 添加店铺</view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="section">
+    <view class="s-title">5. 需求备注</view>
+    <textarea class="notes" placeholder="如：想看800x800亮面瓷砖，预算80元/㎡以内…"
+              value="{{desc}}" bindinput="onDesc" maxlength="200" />
+  </view>
+
+  <!-- 匹配结果 -->
+  <view class="section" wx:if="{{bestMatch}}">
+    <view class="mr-header">已为你匹配最佳领航员</view>
+    <view class="nav-card best">
+      <image class="nc-avatar" src="{{bestMatch.avatar || ''}}" mode="aspectFill" />
+      <view class="nc-body">
+        <view class="nc-top">
+          <text class="nc-name">{{bestMatch.name}}</text>
+          <text class="nc-badge">最优匹配</text>
+        </view>
+        <view class="nc-meta">
+          <text>{{bestMatch.rating}}分</text><text>·</text>
+          <text>{{bestMatch.exp}}年经验</text><text>·</text>
+          <text>{{bestMatch.orders}}单</text><text>·</text>
+          <text>~{{bestMatch.distance || '120m'}}</text>
+        </view>
+        <view class="nc-reasons">
+          <text class="nr-item" wx:for="{{bestMatch.matchReasons}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ====== 平台保障（全程可见） ====== -->
+  <view class="guarantee-bar">
+    <view class="gb-title">平台担保 · 全程保障</view>
+    <view class="gb-items">
+      <view class="gb-item">
+        <view class="gb-icon"><text class="gbi-mark">1</text></view>
+        <view class="gb-text">商家拍照留底</view>
+      </view>
+      <view class="gb-arrow">→</view>
+      <view class="gb-item">
+        <view class="gb-icon"><text class="gbi-mark">2</text></view>
+        <view class="gb-text">领航员取货验货</view>
+      </view>
+      <view class="gb-arrow">→</view>
+      <view class="gb-item">
+        <view class="gb-icon"><text class="gbi-mark">3</text></view>
+        <view class="gb-text">业主收货确认</view>
+      </view>
+    </view>
+    <view class="gb-note">三道把关，货不对板平台先行赔付</view>
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="section cost-summary">
+    <view class="cost-row"><text>服务费</text><text>{{servicePrice}}元</text></view>
+    <view class="cost-row"><text>平台服务费</text><text>{{platformFee}}元</text></view>
+    <view class="cost-row total-row"><text>合计</text><text class="total-price">{{totalPrice}}元</text></view>
+    <view class="cost-note">领航员收入 {{navigatorIncome}}元，平台只收取服务费</view>
+  </view>
+
+  <!-- 提交 -->
+  <button class="btn-primary submit-btn" bindtap="onSubmit"
+          disabled="{{!serviceType || !appointDate || !appointTime}}">
+    {{appointDate && appointTime ? '预约 ' + appointDate + ' ' + appointTime : '请完善预约信息'}}
+  </button>
+</view>

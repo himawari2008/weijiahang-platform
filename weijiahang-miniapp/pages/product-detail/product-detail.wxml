@@ -1,0 +1,156 @@
+<view class="page">
+  <!-- 图片轮播 -->
+  <swiper class="img-swiper" indicator-dots="{{images.length > 1}}" indicator-color="#ccc" indicator-active-color="#FF6B35" bindchange="onSwiperChange">
+    <swiper-item wx:for="{{images}}" wx:key="index">
+      <view class="swiper-bg" style="background:{{item.color || 'linear-gradient(135deg, #F8F9FA, #E8E9EB)'}};">
+        <text class="swiper-placeholder" wx:if="{{!item.src}}">{{product.name || '商品图片'}}</text>
+        <image wx:if="{{item.src}}" src="{{item.src}}" mode="aspectFill" class="swiper-img" />
+      </view>
+    </swiper-item>
+  </swiper>
+  <view class="img-count" wx:if="{{images.length > 1}}">{{currentImage + 1}}/{{images.length}}</view>
+
+  <!-- 价格区 -->
+  <view class="price-section">
+    <view class="ps-name">{{product.name}}</view>
+    <view class="ps-spec" wx:if="{{product.spec}}">{{product.spec}}</view>
+    <view class="ps-price-row">
+      <text class="ps-price">{{product.price}}</text>
+      <text class="ps-unit">/{{product.unit === 'm2' ? '㎡' : product.unit}}</text>
+      <text class="ps-sales" wx:if="{{product.sales}}">已售{{product.sales}}</text>
+    </view>
+  </view>
+
+  <!-- 店铺卡片 -->
+  <view class="shop-card" bindtap="onGoShop">
+    <view class="sc-left">
+      <view class="sc-avatar">{{shop.name ? shop.name[0] : '店'}}</view>
+      <view class="sc-info">
+        <view class="sc-name">{{shop.name}}</view>
+        <view class="sc-addr">{{shop.building}} {{shop.rowNo}}{{shop.shopNo}} · {{shop.rating}}分</view>
+      </view>
+    </view>
+    <view class="sc-arrow">进店 ></view>
+  </view>
+
+  <!-- ====== 平台保障 ====== -->
+  <view class="guarantee-bar">
+    <view class="gb-title">平台担保 · 全程保障</view>
+    <view class="gb-items">
+      <view class="gb-item"><view class="gb-icon"><text class="gbi-mark">1</text></view><view class="gb-text">商家拍照留底</view></view>
+      <view class="gb-arrow">→</view>
+      <view class="gb-item"><view class="gb-icon"><text class="gbi-mark">2</text></view><view class="gb-text">领航员取货验货</view></view>
+      <view class="gb-arrow">→</view>
+      <view class="gb-item"><view class="gb-icon"><text class="gbi-mark">3</text></view><view class="gb-text">业主收货确认</view></view>
+    </view>
+    <view class="gb-note">三道把关，货不对板平台先行赔付</view>
+  </view>
+
+  <!-- 规格参数 -->
+  <view class="spec-section">
+    <view class="section-title">规格参数</view>
+    <view class="spec-table">
+      <view class="spec-row" wx:for="{{specRows}}" wx:key="label">
+        <text class="sr-label">{{item.label}}</text>
+        <text class="sr-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品详情 -->
+  <view class="desc-section">
+    <view class="section-title" bindtap="onToggleExpand">
+      商品详情
+      <text class="expand-hint">{{expandDesc ? '收起' : '展开'}}</text>
+    </view>
+    <view class="desc-body {{expandDesc ? 'expanded' : ''}}">
+      <view class="desc-text">
+        <text>{{product.name}}，选用优质原料，经过1280度高温烧制，质地坚硬，耐磨防滑。表面采用进口釉料，纹理自然逼真，适合现代简约、轻奢等多种装修风格。</text>
+        <text>\n\n产品特点：</text>
+        <text>\n- 进口纳米釉面，抗污易清洁</text>
+        <text>\n- 全瓷通体，硬度高不易破损</text>
+        <text>\n- 纹理随机不重复，铺贴效果自然</text>
+        <text>\n- 低吸水率，防冻抗裂</text>
+        <text>\n\n适用空间：客厅、餐厅、过道、卧室、厨房、卫生间干区</text>
+        <text>\n\n注：因拍摄光线及显示器不同，可能存在轻微色差，建议到店看实物。</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 同店推荐 -->
+  <view class="related-section" wx:if="{{relatedGoods.length > 0}}">
+    <view class="section-title">本店其他好货</view>
+    <scroll-view scroll-x class="related-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="related-card" wx:for="{{relatedGoods}}" wx:key="id"
+            bindtap="onRelatedTap" data-id="{{item.id}}" data-name="{{item.name}}"
+            data-price="{{item.price}}" data-spec="{{item.spec}}" data-unit="{{item.unit}}"
+            data-shopid="{{item.shopId}}" data-shopname="{{item.shopName}}">
+        <view class="rc-img" style="background:{{item.bg || 'linear-gradient(180deg, #F8F9FA, #EEEFF1)'}};"></view>
+        <view class="rc-body">
+          <view class="rc-name">{{item.name}}</view>
+          <view class="rc-price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 底部留白 -->
+  <view style="height:140rpx;"></view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar">
+    <view class="bb-cart" bindtap="onGoCart">
+      <!-- CSS 购物车图标 -->
+      <view class="bb-cart-icon">
+        <view class="bci-body"></view>
+        <view class="bci-handle"></view>
+        <view class="bci-wheel l"></view>
+        <view class="bci-wheel r"></view>
+      </view>
+      <text class="bb-cart-text">购物车</text>
+      <text class="bb-cart-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</text>
+    </view>
+    <view class="bb-add-cart" bindtap="onShowQtyPicker">
+      {{inCart ? '修改数量' : '加购物车'}}
+    </view>
+    <view class="bb-btn navi" bindtap="onBookNavigator">约领航员</view>
+    <view class="bb-btn buy" bindtap="onQuickOrder">在线下单</view>
+  </view>
+
+  <!-- ====== 数量选择弹窗 ====== -->
+  <view class="qty-overlay" wx:if="{{showQtyPicker}}" catchtouchmove="noop">
+    <view class="qty-mask" bindtap="onHideQtyPicker"></view>
+    <view class="qty-panel">
+      <view class="qp-header">
+        <text>选择数量</text>
+        <text class="qp-close" bindtap="onHideQtyPicker">x</text>
+      </view>
+      <view class="qp-unit-info">{{product.unit === 'm2' ? '㎡' : product.unit}}/件 · {{product.price}}元/{{product.unit === 'm2' ? '㎡' : product.unit}}</view>
+
+      <!-- 手动输入 -->
+      <view class="qp-input-row">
+        <view class="qp-btn" bindtap="onQtyMinus">-</view>
+        <input class="qp-input" type="digit" value="{{cartQty}}" bindinput="onQtyInput" placeholder="输入数量" />
+        <view class="qp-btn" bindtap="onQtyPlus">+</view>
+      </view>
+
+      <!-- 快捷数量 -->
+      <view class="qp-presets-label">快捷数量：</view>
+      <view class="qp-presets">
+        <view class="qp-preset {{cartQty === 30 ? 'on' : ''}}" bindtap="onQtyPreset" data-v="{{30}}">30㎡</view>
+        <view class="qp-preset {{cartQty === 50 ? 'on' : ''}}" bindtap="onQtyPreset" data-v="{{50}}">50㎡</view>
+        <view class="qp-preset {{cartQty === 80 ? 'on' : ''}}" bindtap="onQtyPreset" data-v="{{80}}">80㎡</view>
+        <view class="qp-preset {{cartQty === 100 ? 'on' : ''}}" bindtap="onQtyPreset" data-v="{{100}}">100㎡</view>
+      </view>
+
+      <!-- 预估 -->
+      <view class="qp-estimate" wx:if="{{cartQty > 0}}">
+        预估：{{cartQty * product.price}}元（{{cartQty}}{{product.unit === 'm2' ? '㎡' : product.unit}} × {{product.price}}元）
+      </view>
+
+      <view class="qp-confirm" bindtap="onConfirmAddCart">
+        {{quickOrderMode ? '确认下单' : (inCart ? '更新购物车' : '加入购物车')}} · {{cartQty > 0 ? cartQty * product.price : 0}}元
+      </view>
+    </view>
+  </view>
+</view>

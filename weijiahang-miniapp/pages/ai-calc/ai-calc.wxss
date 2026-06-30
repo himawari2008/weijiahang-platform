@@ -1,0 +1,180 @@
+/** AI材料计算器样式 */
+
+/* 模式卡片 */
+.mode-card {
+  display: flex; align-items: center; gap: 20rpx;
+  padding: 28rpx 24rpx; margin-bottom: 16rpx;
+  background: #fff; border-radius: 16rpx; border: 3rpx solid transparent;
+  border-left: 4rpx solid transparent;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.04);
+}
+.mode-card.active { border-color: #FF6B35; border-left-color: #FF6B35; background: #FFF8F5; }
+.mc-icon {
+  width: 80rpx; height: 80rpx; border-radius: 16rpx;
+  background: #FFF0EB; display: flex; align-items: center;
+  justify-content: center; font-size: 26rpx; font-weight: 600;
+  color: #FF6B35; flex-shrink: 0;
+}
+.mc-body { flex: 1; }
+.mc-name { font-size: 30rpx; font-weight: 600; }
+.mc-desc { font-size: 24rpx; color: #999; margin-top: 4rpx; }
+.full-btn { width: 100%; margin-top: 30rpx; text-align: center; }
+
+/* 拍照区 */
+.photo-upload {
+  background: #fff; border-radius: 20rpx; border: 3rpx dashed #DDD;
+  min-height: 400rpx; display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.pu-placeholder { text-align: center; }
+.pu-icon { font-size: 28rpx; margin-bottom: 16rpx; font-weight: 500; color: #999; }
+.pu-text { font-size: 28rpx; color: #999; }
+.pu-preview { width: 100%; max-height: 600rpx; }
+
+/* 单品类 */
+.single-cat-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.scat-item {
+  width: 23%; text-align: center; padding: 24rpx 0; border-radius: 14rpx;
+  background: #fff; border: 2rpx solid #EEE;
+}
+.scat-item.active { border-color: #FF6B35; background: #FFF5F0; }
+.scat-icon {
+  width: 72rpx; height: 72rpx; border-radius: 14rpx;
+  background: #FFF0EB; display: inline-flex; align-items: center;
+  justify-content: center; font-size: 28rpx; font-weight: 600;
+  color: #FF6B35;
+}
+.scat-name { font-size: 22rpx; color: #666; margin-top: 6rpx; }
+
+.single-inputs { margin-top: 30rpx; }
+.si-row { display: flex; align-items: center; margin-bottom: 20rpx; }
+.si-label { width: 160rpx; font-size: 28rpx; color: #555; }
+.si-input {
+  flex: 1; background: #fff; border-radius: 12rpx; padding: 18rpx 20rpx;
+  font-size: 28rpx; border: 2rpx solid #EEE;
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 60rpx;
+  background: #fff;
+}
+.step { display: flex; flex-direction: column; align-items: center; }
+.step-num {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: var(--border); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: 600;
+}
+.step.active .step-num { background: var(--primary); }
+.step-label { font-size: 22rpx; color: var(--text-hint); margin-top: 8rpx; }
+.step.active .step-label { color: var(--primary); }
+.step-line {
+  width: 80rpx; height: 4rpx; background: var(--border);
+  margin: 0 10rpx; margin-bottom: 28rpx;
+}
+.step-line.active { background: var(--primary); }
+
+.step-content { padding: 30rpx; }
+.step-title { font-size: 36rpx; font-weight: 600; margin-bottom: 10rpx; }
+.step-desc { font-size: 26rpx; color: var(--text-hint); margin-bottom: 30rpx; }
+
+.space-grid { display: flex; flex-wrap: wrap; }
+.space-item {
+  width: 30%; margin: 0 1.5% 20rpx;
+  padding: 30rpx 0; border-radius: 16rpx;
+  background: #fff; border: 2rpx solid var(--border);
+  text-align: center; position: relative;
+}
+.space-item.selected {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+.space-letter {
+  width: 64rpx; height: 64rpx; border-radius: 14rpx;
+  background: #FFF0EB; display: inline-flex; align-items: center;
+  justify-content: center; font-size: 30rpx; font-weight: 600;
+  color: #FF6B35; margin: 0 auto;
+}
+.space-name { font-size: 26rpx; margin-top: 10rpx; }
+.space-check {
+  position: absolute; top: 8rpx; right: 12rpx;
+  width: 36rpx; height: 36rpx; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20rpx;
+}
+
+.area-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24rpx 0; border-bottom: 1rpx solid var(--border);
+}
+.area-label { font-size: 30rpx; }
+.area-input-wrap { display: flex; align-items: center; }
+.area-input {
+  width: 120rpx; text-align: right; font-size: 36rpx; font-weight: 600;
+  border-bottom: 2rpx solid var(--primary);
+}
+.area-unit { font-size: 28rpx; color: var(--text-hint); margin-left: 8rpx; }
+
+.style-select { margin-top: 30rpx; }
+.style-label { font-size: 28rpx; color: var(--text-secondary); margin-bottom: 16rpx; }
+.style-options { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.style-tag {
+  padding: 16rpx 32rpx; border-radius: 30rpx;
+  background: #fff; border: 2rpx solid var(--border);
+  font-size: 26rpx;
+}
+.style-tag.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.step-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 60rpx; gap: 20rpx;
+}
+.step-footer .btn-primary { flex: 1; text-align: center; }
+.step-footer .btn-outline { flex: 1; text-align: center; }
+.skip-btn { font-size: 26rpx; color: var(--text-hint); }
+
+/* 结果页 */
+.result-header { text-align: center; margin-bottom: 30rpx; }
+.result-title { font-size: 36rpx; font-weight: 600; }
+.result-meta { font-size: 26rpx; color: var(--text-hint); margin-top: 10rpx; }
+
+.material-group { margin-bottom: 20rpx; background: #fff; border-radius: 16rpx; overflow: hidden; }
+.mg-header {
+  display: flex; align-items: center;
+  padding: 20rpx 24rpx; background: #FFF5F0;
+  font-size: 30rpx; font-weight: 600;
+  border-left: 4rpx solid #FF6B35;
+}
+.mg-icon { margin-right: 12rpx; font-size: 28rpx; font-weight: 600; color: #FF6B35; }
+.mg-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20rpx 24rpx; border-bottom: 1rpx solid #f9f9f9;
+}
+.mg-item-name { font-size: 28rpx; }
+.mg-item-spec { font-size: 24rpx; color: var(--text-hint); margin-top: 4rpx; }
+.mg-item-right { font-size: 28rpx; color: var(--primary); font-weight: 500; }
+.mg-subtotal {
+  text-align: right; padding: 16rpx 24rpx;
+  font-size: 26rpx; color: var(--text-secondary);
+}
+
+.result-total { text-align: center; padding: 30rpx; }
+.total-label { font-size: 28rpx; margin-bottom: 12rpx; }
+.total-price {
+  font-size: 56rpx; font-weight: 700; color: var(--primary);
+}
+.total-tip { font-size: 24rpx; color: var(--success); margin-top: 12rpx; }
+
+.result-actions { display: flex; flex-wrap: wrap; gap: 20rpx; padding: 20rpx; }
+.result-actions .btn-outline { flex: 1; text-align: center; }
+.result-actions .btn-primary {
+  width: 100%; text-align: center; margin-top: 10rpx;
+}

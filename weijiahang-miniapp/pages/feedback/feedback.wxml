@@ -1,0 +1,40 @@
+<view class="page">
+  <!-- 导航 -->
+  <view class="nav-bar">
+    <view class="nb-back" bindtap="onBack">
+      <text class="nbb-icon">←</text>
+      <text class="nbb-text">返回</text>
+    </view>
+    <text class="nb-title">意见反馈</text>
+    <view class="nb-placeholder"></view>
+  </view>
+
+  <!-- 表单 -->
+  <view class="form-card">
+    <view class="fc-label">您遇到的问题或建议</view>
+    <textarea class="fc-textarea" placeholder="请详细描述，帮助我们改进…" maxlength="{{maxLen}}" auto-height bindinput="onInput" value="{{content}}"/>
+    <view class="fc-counter">{{contentLen}}/{{maxLen}}</view>
+  </view>
+
+  <view class="form-card">
+    <view class="fc-label">联系方式（选填）</view>
+    <input class="fc-input" placeholder="手机号或微信号，方便我们回复" bindinput="onContactInput" value="{{contact}}"/>
+  </view>
+
+  <!-- 快捷标签 -->
+  <view class="quick-tags">
+    <text class="qt-label">常见问题：</text>
+    <view class="qt-list">
+      <text class="qt-tag">定位不准</text>
+      <text class="qt-tag">商品信息错误</text>
+      <text class="qt-tag">功能建议</text>
+      <text class="qt-tag">性能卡顿</text>
+      <text class="qt-tag">其他</text>
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-bar">
+    <button class="btn-submit" bindtap="onSubmit">提交反馈</button>
+  </view>
+</view>

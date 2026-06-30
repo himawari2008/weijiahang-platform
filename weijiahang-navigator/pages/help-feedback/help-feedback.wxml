@@ -1,0 +1,48 @@
+<view class="page">
+  <!-- Tab切换 -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'help' ? 'active' : ''}}" data-tab="help" bindtap="onTabTap">帮助中心</view>
+    <view class="tab-item {{currentTab === 'feedback' ? 'active' : ''}}" data-tab="feedback" bindtap="onTabTap">反馈建议</view>
+  </view>
+
+  <!-- 帮助中心 -->
+  <view wx:if="{{currentTab === 'help'}}" class="help-section">
+    <view wx:for="{{articles}}" wx:key="id" class="help-item {{expandedId === item.id ? 'expanded' : ''}}">
+      <view class="hi-header" data-id="{{item.id}}" bindtap="onArticleTap">
+        <text class="hi-title">{{item.title}}</text>
+        <text class="hi-arrow {{expandedId === item.id ? 'open' : ''}}">›</text>
+      </view>
+      <view wx:if="{{expandedId === item.id}}" class="hi-body">
+        <text class="hi-content">{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 反馈建议 -->
+  <view wx:if="{{currentTab === 'feedback'}}" class="feedback-section">
+    <view class="fs-card">
+      <text class="fs-label">反馈类型</text>
+      <view class="fs-type-grid">
+        <view class="fs-type-item {{feedbackType === 'bug' ? 'selected' : ''}}" data-type="bug" bindtap="onFeedbackType">Bug反馈</view>
+        <view class="fs-type-item {{feedbackType === 'feature' ? 'selected' : ''}}" data-type="feature" bindtap="onFeedbackType">功能建议</view>
+        <view class="fs-type-item {{feedbackType === 'service' ? 'selected' : ''}}" data-type="service" bindtap="onFeedbackType">服务问题</view>
+        <view class="fs-type-item {{feedbackType === 'other' ? 'selected' : ''}}" data-type="other" bindtap="onFeedbackType">其他</view>
+      </view>
+    </view>
+
+    <view class="fs-card">
+      <text class="fs-label">详细描述</text>
+      <textarea class="fs-textarea" placeholder="请描述您遇到的问题或建议..." maxlength="500" value="{{feedbackContent}}" bindinput="onContentInput"></textarea>
+      <text class="fs-count">{{feedbackContent.length}}/500</text>
+    </view>
+
+    <view class="fs-card">
+      <text class="fs-label">联系方式（选填）</text>
+      <input class="fs-input" placeholder="手机号或微信号，方便我们联系您" value="{{feedbackContact}}" bindinput="onContactInput" />
+    </view>
+
+    <button class="fs-submit" disabled="{{submitting}}" bindtap="onSubmitFeedback">
+      {{submitting ? '提交中...' : '提交反馈'}}
+    </button>
+  </view>
+</view>

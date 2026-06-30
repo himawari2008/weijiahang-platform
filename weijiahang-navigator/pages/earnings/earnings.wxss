@@ -1,0 +1,348 @@
+/* ===== 收益页 ===== */
+
+.page {
+  min-height: 100vh;
+  background: #F5F7FA;
+  padding-bottom: 40rpx;
+}
+
+/* ---------- 余额卡片 ---------- */
+.earn-header {
+  background: linear-gradient(160deg, #1A1A2E, #2D3561);
+  padding: 40rpx 32rpx 50rpx;
+  position: relative;
+}
+
+.eh-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eh-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 28rpx;
+  margin-bottom: 12rpx;
+}
+
+.eh-amount {
+  color: #FFFFFF;
+  font-size: 56rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 24rpx;
+}
+
+.eha-symbol {
+  font-size: 36rpx;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-right: 6rpx;
+}
+
+.eha-num {
+  font-size: 64rpx;
+  letter-spacing: 2rpx;
+}
+
+.eh-withdraw {
+  background: #FF6B35;
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 18rpx 80rpx;
+  border-radius: 50rpx;
+  min-height: 88rpx;
+  line-height: 52rpx;
+  text-align: center;
+  box-shadow: 0 6rpx 20rpx rgba(255, 107, 53, 0.4);
+}
+
+/* ---------- 统计摘要 ---------- */
+.summary-row {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  margin: -30rpx 24rpx 14rpx;
+  border-radius: 16rpx;
+  padding: 28rpx 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 2;
+}
+
+.sr-item {
+  flex: 1;
+  text-align: center;
+}
+
+.sr-val {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin-bottom: 6rpx;
+}
+
+.sr-lbl {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.sr-divider {
+  width: 1rpx;
+  height: 40rpx;
+  background: #EBEBEB;
+}
+
+/* ---------- 卡片 ---------- */
+.section-card {
+  background: #FFFFFF;
+  margin: 14rpx 24rpx;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.sc-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin-bottom: 24rpx;
+}
+
+/* ---------- 柱状图 ---------- */
+.chart-card {
+  padding-bottom: 20rpx;
+}
+
+.chart-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 220rpx;
+  padding-top: 10rpx;
+}
+
+.chart-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.cb-bar-wrap {
+  width: 44rpx;
+  height: 160rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 8rpx 8rpx 4rpx 4rpx;
+  background: #F0F5FF;
+  overflow: hidden;
+}
+
+.cb-fill {
+  width: 100%;
+  border-radius: 8rpx 8rpx 2rpx 2rpx;
+  background: linear-gradient(to top, #FF6B35, #FF9A6C);
+  min-height: 4rpx;
+  transition: height 0.3s;
+}
+
+.cb-day {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 12rpx;
+}
+
+.cb-val {
+  font-size: 22rpx;
+  color: #FF6B35;
+  font-weight: 600;
+  margin-top: 4rpx;
+}
+
+/* ---------- 收入记录 ---------- */
+.record-scroll {
+  max-height: 700rpx;
+}
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.tx-item:last-child {
+  border-bottom: none;
+}
+
+.tx-icon-wrap {
+  width: 48rpx;
+  height: 48rpx;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+
+.tx-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 12rpx;
+}
+
+/* 收入图标：绿色圆形带白色箭头向上 */
+.tx-icon-in {
+  background: #52C41A;
+  position: relative;
+}
+
+.tx-icon-in::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 10rpx solid transparent;
+  border-bottom-color: #FFFFFF;
+  border-top: none;
+  transform: translate(-50%, -70%);
+}
+
+/* 提现图标：红色圆形带白色箭头向下 */
+.tx-icon-out {
+  background: #FF4D4F;
+  position: relative;
+}
+
+.tx-icon-out::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 10rpx solid transparent;
+  border-top-color: #FFFFFF;
+  border-bottom: none;
+  transform: translate(-50%, -30%);
+}
+
+.tx-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tx-name {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tx-time {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 6rpx;
+}
+
+.tx-amount {
+  font-size: 30rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.tx-amount-in {
+  color: #52C41A;
+}
+
+.tx-amount-out {
+  color: #FF4D4F;
+}
+
+/* ---------- 空态 ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.es-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 20rpx;
+  border-radius: 40rpx;
+}
+
+/* 空态图标用CSS */
+.empty-icon {
+  border: 4rpx solid #DDD;
+  border-radius: 40rpx;
+  position: relative;
+}
+
+.empty-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 20rpx;
+  height: 20rpx;
+  border: 4rpx solid #DDD;
+  border-radius: 50%;
+  transform: translate(-50%, 0);
+}
+
+.empty-icon::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 28%;
+  width: 30rpx;
+  height: 4rpx;
+  background: #DDD;
+  border-radius: 2rpx;
+  transform: translateX(-50%);
+}
+
+.error-icon {
+  background: #FFF2F0;
+  position: relative;
+}
+
+.error-icon::after {
+  content: '!';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #FF4D4F;
+}
+
+.loading-icon {
+  border: 4rpx solid #E6E6E6;
+  border-top-color: #FF6B35;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.es-text {
+  font-size: 28rpx;
+  color: #999;
+}

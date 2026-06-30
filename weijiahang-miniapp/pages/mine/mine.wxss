@@ -1,0 +1,324 @@
+/* ========================================
+   为家航 · 我的
+   品牌调性：温暖归属感
+   ======================================== */
+
+page { background: var(--bg); }
+
+/* ═══════════════════════════════════════
+   品牌头部
+   ═══════════════════════════════════════ */
+.m-masthead {
+  position: relative;
+  padding: 60rpx 32rpx 40rpx;
+  overflow: hidden;
+}
+.mm-bg {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(160deg, #1A3A4A 0%, #2A5A6A 40%, #FF6B35 100%);
+}
+/* 屋顶装饰曲线 */
+.mm-bg::after {
+  content: ''; position: absolute; bottom: -2rpx; left: 0; right: 0;
+  height: 80rpx;
+  background: var(--bg);
+  border-radius: 50% 50% 0 0 / 30rpx 30rpx 0 0;
+}
+
+.mm-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* 用户信息 */
+.mm-user { display: flex; align-items: center; gap: 20rpx; }
+.mm-avatar {
+  width: 120rpx; height: 120rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  border: 4rpx solid rgba(255,255,255,0.4);
+}
+.mm-info { display: flex; flex-direction: column; }
+.mm-name { font-size: 38rpx; font-weight: 700; color: #fff; }
+.mm-phone { font-size: 26rpx; color: rgba(255,255,255,0.75); margin-top: 6rpx; }
+
+/* 登录按钮 */
+.mm-login-btn {
+  display: flex; align-items: center; gap: 10rpx;
+  background: rgba(255,255,255,0.18);
+  color: #fff; border: 2rpx solid rgba(255,255,255,0.35);
+  border-radius: var(--r-xl); padding: 16rpx 40rpx;
+  font-size: 30rpx; font-weight: 500;
+}
+.mml-logo {
+  width: 48rpx; height: 48rpx; border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35, #FF8C66);
+  color: #fff; font-size: 26rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 品牌口号 */
+.mm-tagline {
+  margin-top: 20rpx;
+  font-size: 24rpx; color: rgba(255,255,255,0.65);
+  letter-spacing: 4rpx;
+}
+
+/* ═══════════════════════════════════════
+   订单区块
+   ═══════════════════════════════════════ */
+.order-block {
+  margin: -20rpx 20rpx 0;
+  position: relative; z-index: 2;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  box-shadow: var(--shadow-card);
+}
+.ob-head { margin-bottom: 20rpx; }
+.ob-title { font-size: 30rpx; font-weight: 700; }
+.ob-all { font-size: 26rpx; color: var(--text-3); }
+
+.ob-grid { display: flex; justify-content: space-around; }
+.ob-item {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; padding: 10rpx 20rpx;
+}
+.obi-dot {
+  width: 16rpx; height: 16rpx; border-radius: 50%;
+  margin-bottom: 8rpx;
+}
+.obi-label { font-size: 24rpx; color: var(--text-2); }
+.obi-badge {
+  position: absolute; top: 4rpx; right: 8rpx;
+  min-width: 28rpx; height: 28rpx; line-height: 28rpx; text-align: center;
+  background: var(--brand); color: #fff; font-size: 18rpx; font-weight: 700;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════
+   菜单组
+   ═══════════════════════════════════════ */
+.menu-group {
+  background: var(--white);
+  margin: 12rpx 20rpx;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.menu-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid var(--border-light);
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: #FAFAFA; }
+.mi-left { display: flex; align-items: center; gap: 14rpx; }
+.mi-icon { font-size: 32rpx; }
+.mi-label { font-size: 28rpx; color: var(--text-1); }
+.mi-extra { font-size: 22rpx; color: var(--text-3); background: var(--border-light); padding: 2rpx 12rpx; border-radius: 10rpx; }
+.mi-arrow { font-size: 32rpx; color: var(--text-4); }
+
+/* ═══════════════════════════════════════
+   CSS 图标系统（替代 emoji）
+   ═══════════════════════════════════════ */
+.mi-icon-css {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+/* 地址 pin：圆 + 底部三角 */
+.mi-icon-css.addr {
+  width: 28rpx; height: 28rpx; border-radius: 50%;
+  background: #FF6B35; position: relative;
+}
+.mi-icon-css.addr::after {
+  content: ''; position: absolute; bottom: -6rpx; left: 50%;
+  transform: translateX(-50%);
+  border: 6rpx solid transparent; border-top: 8rpx solid #FF6B35;
+}
+/* 心形：两个圆旋转拼合 */
+.mi-icon-css.heart {
+  width: 28rpx; height: 26rpx; position: relative;
+}
+.mi-icon-css.heart::before, .mi-icon-css.heart::after {
+  content: ''; position: absolute;
+  width: 16rpx; height: 24rpx; border-radius: 12rpx 12rpx 0 0;
+  background: #FF6B35;
+}
+.mi-icon-css.heart::before { left: 0; transform: rotate(-45deg); transform-origin: 0 100%; }
+.mi-icon-css.heart::after { left: 12rpx; transform: rotate(45deg); transform-origin: 100% 100%; }
+/* 列表：三条横线 */
+.mi-icon-css.list {
+  width: 28rpx; height: 22rpx;
+  background: linear-gradient(#FF6B35 3rpx, transparent 3rpx) 0 0 / 100% 8rpx,
+              linear-gradient(#FF6B35 3rpx, transparent 3rpx) 0 50% / 100% 8rpx,
+              linear-gradient(#FF6B35 3rpx, transparent 3rpx) 0 100% / 100% 8rpx;
+  background-repeat: no-repeat;
+}
+/* 购物袋 */
+.mi-icon-css.cart {
+  width: 26rpx; height: 30rpx;
+  border: 3rpx solid #FF6B35; border-radius: 0 0 8rpx 8rpx;
+  border-top: none; position: relative;
+}
+.mi-icon-css.cart::before {
+  content: ''; position: absolute; top: -8rpx; left: -3rpx;
+  width: 20rpx; height: 10rpx;
+  border: 3rpx solid #FF6B35; border-radius: 8rpx 8rpx 0 0;
+  border-bottom: none;
+}
+/* 对话气泡 */
+.mi-icon-css.chat {
+  width: 28rpx; height: 24rpx; border-radius: 8rpx;
+  background: #FF6B35; position: relative;
+}
+.mi-icon-css.chat::after {
+  content: ''; position: absolute; bottom: -6rpx; left: 6rpx;
+  border: 6rpx solid transparent; border-top: 6rpx solid #FF6B35;
+  border-right: none;
+}
+/* 客服耳机 */
+.mi-icon-css.service {
+  width: 28rpx; height: 28rpx; border-radius: 50%;
+  border: 3rpx solid #FF6B35; position: relative;
+}
+.mi-icon-css.service::after {
+  content: ''; position: absolute; bottom: -4rpx; right: -4rpx;
+  width: 14rpx; height: 16rpx;
+  border: 3rpx solid #FF6B35; border-radius: 0 8rpx 8rpx 8rpx;
+  border-left: none; border-top: none;
+}
+/* 指南针 */
+.mi-icon-css.compass {
+  width: 28rpx; height: 28rpx; border-radius: 50%;
+  background: #FF6B35; position: relative;
+}
+.mi-icon-css.compass::after {
+  content: ''; position: absolute; top: 2rpx; left: 50%;
+  transform: translateX(-50%);
+  border: 5rpx solid transparent; border-bottom: 10rpx solid #fff;
+}
+/* 历史 */
+.mi-icon-css.history {
+  width: 28rpx; height: 28rpx; border-radius: 50%;
+  border: 3rpx solid #FF6B35; position: relative;
+}
+.mi-icon-css.history::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 8rpx; height: 8rpx; border-radius: 50%;
+  background: #FF6B35; transform: translate(-50%, -50%);
+}
+/* 优惠券 */
+.mi-icon-css.coupon {
+  width: 30rpx; height: 22rpx;
+  border: 3rpx solid #FF6B35; border-radius: 4rpx;
+  position: relative;
+}
+.mi-icon-css.coupon::before {
+  content: ''; position: absolute; left: -5rpx; top: 50%;
+  transform: translateY(-50%);
+  width: 10rpx; height: 10rpx; border-radius: 50%;
+  background: #F8F9FA; border: 3rpx solid #FF6B35;
+}
+/* 设置 */
+.mi-icon-css.settings {
+  width: 28rpx; height: 28rpx; border-radius: 50%;
+  border: 3rpx solid #FF6B35; position: relative;
+}
+.mi-icon-css.settings::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8rpx; height: 8rpx; border-radius: 50%;
+  background: #FF6B35;
+}
+
+/* ═══════════════════════════════════════
+   底部
+   ═══════════════════════════════════════ */
+.bottom-safe { height: 60rpx; }
+
+/* 复用全局保障条 */
+.guarantee-strip { margin-top: 20rpx; }
+
+/* ═══════════════════════════════════════
+   积分 + VIP 区域（粘性锚点）
+   ═══════════════════════════════════════ */
+.mm-loyalty {
+  width: 100%; margin-top: 28rpx;
+  animation: cardPopIn 0.4s 0.3s ease-out both;
+}
+.mml-card {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(10rpx);
+  border-radius: var(--r-lg);
+  padding: 16rpx 24rpx;
+  border: 1rpx solid rgba(255,255,255,0.18);
+}
+.mml-points { text-align: center; min-width: 120rpx; }
+.mmlp-num {
+  font-size: 44rpx; font-weight: 900; color: #fff;
+  line-height: 1;
+}
+.mmlp-label { font-size: 20rpx; color: rgba(255,255,255,0.6); margin-top: 4rpx; }
+.mml-divider {
+  width: 2rpx; height: 60rpx; background: rgba(255,255,255,0.15);
+  margin: 0 20rpx; flex-shrink: 0;
+}
+.mml-vip { flex: 1; display: flex; flex-direction: column; gap: 8rpx; }
+.mmlv-badge {
+  display: inline-block; width: fit-content;
+  font-size: 20rpx; font-weight: 700; color: #FFD700;
+  background: rgba(255,215,0,0.15); padding: 2rpx 14rpx;
+  border-radius: 10rpx; border: 1rpx solid rgba(255,215,0,0.3);
+}
+.mmlv-bar {
+  height: 8rpx; border-radius: 4rpx;
+  background: rgba(255,255,255,0.15);
+  overflow: hidden;
+}
+.mmlv-fill {
+  height: 100%; border-radius: 4rpx;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  transition: width 0.6s ease-out;
+}
+.mmlv-hint { font-size: 20rpx; color: rgba(255,255,255,0.5); }
+
+.mml-actions {
+  display: flex; gap: 16rpx; margin-top: 16rpx;
+}
+.mmla-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8rpx;
+  background: rgba(255,255,255,0.12);
+  color: #fff; font-size: 24rpx; font-weight: 500;
+  padding: 14rpx 0; border-radius: var(--r-xl);
+  border: 1rpx solid rgba(255,255,255,0.15);
+}
+.mmla-btn:active { background: rgba(255,255,255,0.22); }
+
+/* CSS 签到图标：日历+√ */
+.mmla-icon-css.checkin {
+  width: 28rpx; height: 28rpx; border-radius: 4rpx;
+  border: 2rpx solid rgba(255,255,255,0.7); position: relative;
+}
+.mmla-icon-css.checkin::after {
+  content: ''; position: absolute; bottom: 2rpx; left: 50%;
+  transform: translateX(-50%);
+  width: 12rpx; height: 6rpx;
+  border-left: 3rpx solid rgba(255,255,255,0.7);
+  border-bottom: 3rpx solid rgba(255,255,255,0.7);
+  transform: translateX(-50%) rotate(-45deg);
+}
+/* CSS 礼物图标：盒子+蝴蝶结 */
+.mmla-icon-css.gift {
+  width: 26rpx; height: 26rpx; border-radius: 4rpx;
+  border: 2rpx solid rgba(255,255,255,0.7); position: relative;
+}
+.mmla-icon-css.gift::before {
+  content: ''; position: absolute; top: -4rpx; left: 50%;
+  transform: translateX(-50%);
+  width: 12rpx; height: 6rpx;
+  border: 2rpx solid rgba(255,255,255,0.7); border-radius: 6rpx 6rpx 0 0;
+  border-bottom: none;
+}
+.mmla-icon-css.gift::after {
+  content: ''; position: absolute; top: 40%; left: 0; right: 0;
+  height: 2rpx; background: rgba(255,255,255,0.5);
+}

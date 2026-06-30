@@ -1,0 +1,122 @@
+<!--
+  为家航 · Feed 聚合页
+  根据 ?type= 参数展示不同内容：
+    goods → 精选好货（含热销/新品/性价比标签）
+    inspo → 装修灵感
+    flash → 限时特惠
+  无图标 · 纯文字 · 无卡片阴影
+-->
+<import src="/templates/loading-compass.wxml" />
+
+<template wx:if="{{loading}}" is="loading-compass" data="{{fullscreen: true}}" />
+
+<view class="page" wx:else>
+
+  <!-- ═══ 二级标签栏（仅精选好货显示） ═══ -->
+  <view class="page-header" wx:if="{{showTabs}}">
+    <scroll-view scroll-x class="ph-tabs" enhanced show-scrollbar="{{false}}">
+      <view class="pht-chip {{activeTab === 'hot' ? 'on' : ''}}"
+            bindtap="onTabChange" data-tab="hot">热销</view>
+      <view class="pht-chip {{activeTab === 'new' ? 'on' : ''}}"
+            bindtap="onTabChange" data-tab="new">新品</view>
+      <view class="pht-chip {{activeTab === 'cheap' ? 'on' : ''}}"
+            bindtap="onTabChange" data-tab="cheap">性价比</view>
+    </scroll-view>
+  </view>
+
+  <!-- ══════════════════════════════════════
+     精选好货（双列网格 + 热销/新品/性价比 Tab）
+     ══════════════════════════════════════ -->
+  <block wx:if="{{feedType === 'goods'}}">
+    <view class="goods-grid">
+      <view class="goods-card" wx:for="{{goodsList}}" wx:key="id"
+            bindtap="onItemTap" data-type="goods" data-id="{{item.id}}"
+            data-name="{{item.name}}" data-price="{{item.price}}"
+            data-spec="{{item.spec}}" data-shopname="{{item.shopName}}"
+            data-shopid="{{item.shopId}}" data-sales="{{item.sales}}"
+            data-unit="{{item.unit}}">
+        <view class="gc-img-wrap gc-texture-{{item.texture}}">
+          <image class="gc-img" src="{{item.image || ''}}" mode="aspectFill" lazy-load />
+          <view class="gc-img-tag" wx:if="{{item.isNew}}">新品</view>
+          <view class="gc-img-tag hot" wx:if="{{item.isHot}}">热销</view>
+        </view>
+        <view class="gc-info">
+          <view class="gc-name">{{item.name}}</view>
+          <view class="gc-spec" wx:if="{{item.spec}}">{{item.spec}}</view>
+          <view class="gc-price-row">
+            <view class="gc-price">
+              <text class="gcp-sym">¥</text>
+              <text class="gcp-num">{{item.price}}</text>
+              <text class="gcp-unit">/{{item.unit || '㎡'}}</text>
+            </view>
+            <view class="gc-cart-btn" catchtap="onQuickAddCart" data-id="{{item.id}}">
+              <text class="gccb-plus">+</text>
+            </view>
+          </view>
+          <view class="gc-shop-row">
+            <text class="gcs-rating">{{item.shopRating > 0 ? item.shopRating + '分' : ''}}</text>
+            <text class="gcs-name">{{item.shopName}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="feed-empty" wx:if="{{goodsList.length === 0}}">
+      <text class="fe-text">暂无商品</text>
+    </view>
+  </block>
+
+  <!-- ══════════════════════════════════════
+     装修灵感（双列瀑布流）
+     ══════════════════════════════════════ -->
+  <block wx:elif="{{feedType === 'inspo'}}">
+    <view class="inspo-grid">
+      <view class="inspo-card" wx:for="{{inspoList}}" wx:key="id"
+            bindtap="onItemTap" data-type="inspo" data-id="{{item.id}}">
+        <view class="inspo-img" style="background:{{item.bg}};">
+          <view class="inspo-style-tag">{{item.style}}</view>
+          <view class="inspo-colors-tag" wx:if="{{item.colors}}">{{item.colors}}</view>
+        </view>
+        <view class="inspo-body">
+          <view class="inspo-title">{{item.title}}</view>
+          <view class="inspo-meta">
+            <text class="inspo-meta-area">{{item.area}}㎡</text>
+            <text class="inspo-meta-cost">约{{item.cost}}万</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="feed-empty" wx:if="{{inspoList.length === 0}}">
+      <text class="fe-text">暂无灵感案例</text>
+    </view>
+  </block>
+
+  <!-- ══════════════════════════════════════
+     限时特惠（竖排大卡片）
+     ══════════════════════════════════════ -->
+  <block wx:elif="{{feedType === 'flash'}}">
+    <view class="flash-list">
+      <view class="flash-item" wx:for="{{flashDeals}}" wx:key="id"
+            bindtap="onItemTap" data-type="flash" data-id="{{item.id}}"
+            data-name="{{item.name}}" data-price="{{item.price}}"
+            data-shopid="{{item.shopId}}" data-shopname="{{item.shopName}}"
+            data-spec="{{item.spec}}" data-unit="{{item.unit}}">
+        <view class="fi-img" style="background:{{item.bg || '#F3F4F5'}};">
+          <view class="fi-tag">{{item.tag}}</view>
+        </view>
+        <view class="fi-body">
+          <view class="fi-name">{{item.name}}</view>
+          <view class="fi-spec" wx:if="{{item.spec}}">{{item.spec}}</view>
+          <view class="fi-price-row">
+            <view class="fi-current">¥{{item.price}}</view>
+            <view class="fi-original">¥{{item.origPrice}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="feed-empty" wx:if="{{flashDeals.length === 0}}">
+      <text class="fe-text">暂无特惠活动</text>
+    </view>
+  </block>
+
+  <view class="bottom-safe"></view>
+</view>

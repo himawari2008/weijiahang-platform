@@ -1,0 +1,63 @@
+/* 地址编辑页 */
+page { background: #F8F9FA; }
+
+/* ── 表单块 ── */
+.form-block {
+  margin: 16rpx 24rpx;
+  background: #fff; border-radius: 14rpx;
+  padding: 0 24rpx;
+  box-shadow: var(--shadow-sm);
+}
+.fb-title {
+  font-size: 26rpx; color: var(--text-3);
+  padding: 20rpx 0 4rpx;
+}
+.fb-row {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+.fb-row:last-child { border-bottom: none; }
+.fbr-label {
+  font-size: 28rpx; color: var(--text-1); font-weight: 500;
+  flex-shrink: 0; width: 130rpx;
+}
+.fbr-input {
+  flex: 1; font-size: 28rpx; color: var(--text-0);
+  text-align: right;
+}
+.fbr-input.region { text-align: center; flex: 1; min-width: 0; }
+.fbr-value-row { flex: 1; display: flex; gap: 8rpx; }
+
+/* ── 标签 ── */
+.tag-row {
+  display: flex; gap: 16rpx; padding: 16rpx 0 20rpx;
+}
+.tag-chip {
+  padding: 14rpx 28rpx; border-radius: 32rpx;
+  background: #F5F5F5; font-size: 26rpx; color: var(--text-2);
+}
+.tag-chip.on { background: #FFF4ED; color: var(--brand); font-weight: 600; }
+.tag-chip:active { background: #ECECEE; }
+
+/* ── Switch 行 ── */
+.switch-row { border-bottom: none; }
+
+/* ── 保存区域 ── */
+.save-area {
+  display: flex; flex-direction: column; align-items: center;
+  margin-top: 48rpx; padding: 0 24rpx;
+}
+.save-btn {
+  width: 100%; text-align: center; padding: 28rpx 0;
+  background: linear-gradient(135deg, #FF6B35, #E55A2B);
+  color: #fff; font-size: 30rpx; font-weight: 700;
+  border-radius: 44rpx;
+  box-shadow: 0 6rpx 20rpx rgba(255,107,53,0.3);
+}
+.save-btn:active { opacity: 0.85; transform: scale(0.98); }
+.del-btn {
+  margin-top: 28rpx; font-size: 26rpx; color: var(--text-3);
+  padding: 16rpx 32rpx;
+}
+.del-btn:active { color: var(--danger); }

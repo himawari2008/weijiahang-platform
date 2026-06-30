@@ -1,0 +1,455 @@
+/* ========================================
+   为家航 · 首页样式
+   极简设计 · 材质纹理视觉语言 · 无图标无卡片阴影
+   仅浮动控件和CTA保留功能阴影
+   ======================================== */
+@import "/templates/loading-compass.wxss";
+
+page { background: #F8F9FA; }
+
+/* ═══ 1. 固定头部 ═══ */
+.sticky-top {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 60; background: #fff;
+}
+
+.top-bar {
+  display: flex; align-items: center; justify-content: center;
+  padding: 18rpx 24rpx 10rpx;
+  background: #fff;
+}
+.tb-city {
+  display: flex; align-items: center; gap: 4rpx;
+  padding: 6rpx 14rpx; border-radius: 8rpx;
+}
+.tb-city:active { background: #F5F5F5; }
+.tbc-name {
+  font-size: 28rpx; font-weight: 700; color: #1A1A1A;
+  max-width: 160rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tbc-arrow {
+  width: 0; height: 0;
+  border-left: 8rpx solid transparent;
+  border-right: 8rpx solid transparent;
+  border-top: 10rpx solid #999;
+}
+.tb-slogan {
+  font-size: 22rpx; color: #BBB; margin-left: 8rpx;
+}
+
+/* ═══ 2. 内容区 ═══ */
+.content-area { padding-top: 88rpx; }
+
+/* ═══ 3. 搜索条 ═══ */
+.search-bar {
+  margin: 14rpx 24rpx;
+  padding: 18rpx 24rpx;
+  background: #F0F1F5; border-radius: 44rpx;
+}
+.search-bar:active { background: #E4E5EA; }
+.sb-text { font-size: 26rpx; color: #999; }
+
+/* ═══ 导航快捷入口芯片栏 — 3芯片 ═══ */
+.nav-chips-wrap {
+  padding: 8rpx 24rpx;
+  background: #fff;
+}
+.nav-chips {
+  white-space: nowrap;
+  display: flex;
+}
+.nc-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 16rpx 28rpx;
+  min-height: 88rpx;
+  border-radius: 44rpx;
+  background: #F8F9FA;
+  border: 1rpx solid #F0F0F0;
+  margin-right: 16rpx;
+}
+.nc-chip:active {
+  background: #FFF0EB;
+  border-color: #FFD4C0;
+}
+.nc-label {
+  font-size: 32rpx;
+  color: #1A1A1A;
+  font-weight: 500;
+}
+
+/* CSS 绘制的小图标 */
+.nc-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+  border-radius: 8rpx;
+}
+
+/* 精选好货 — 网格图案 */
+.nc-icon-goods {
+  background:
+    linear-gradient(#E0D0C0 1rpx, transparent 1rpx) 0 0 / 50% 50%,
+    linear-gradient(to right, #E0D0C0 1rpx, transparent 1rpx) 0 0 / 50% 50%,
+    #FFF5EB;
+  border: 1rpx solid #E0D0C0;
+  border-radius: 4rpx;
+}
+
+/* 装修灵感 — 圆形渐变 */
+.nc-icon-inspo {
+  background: radial-gradient(circle at 50% 40%, #C9D8E8, #A8C0D8);
+  border-radius: 50%;
+  border: 1rpx solid #A0B8D0;
+}
+
+/* 限时特惠 — 菱形急迫感 */
+.nc-icon-flash {
+  width: 28rpx;
+  height: 28rpx;
+  margin-left: 4rpx;
+  margin-right: 16rpx;
+  background: #FF3B30;
+  border-radius: 4rpx;
+  transform: rotate(45deg);
+  box-shadow: 0 2rpx 6rpx rgba(255,59,48,0.25);
+}
+
+/* ═══ 4. 材质纹理分类入口（4列，CSS纹理+文字） ═══ */
+.texture-cates {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12rpx 4rpx;
+  padding: 12rpx 16rpx 4rpx;
+}
+.tc-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16rpx 0 12rpx; border-radius: 12rpx;
+}
+.tc-item:active { background: #F5F5F5; }
+
+/* 纹理方块 — 60rpx 彩色材质纹理 */
+.tc-block {
+  width: 60rpx; height: 60rpx;
+  margin-bottom: 8rpx;
+  border-radius: 10rpx;
+  position: relative;
+}
+
+/* 瓷砖 — 暖灰底 砖缝十字网格+橙色中心点缀 */
+.tc-tile {
+  background:
+    /* 砖缝十字线 */
+    linear-gradient(#D4C5B8 1rpx, transparent 1rpx) 0 0 / 50% 50%,
+    linear-gradient(to right, #D4C5B8 1rpx, transparent 1rpx) 0 0 / 50% 50%,
+    /* 暖灰底 */
+    linear-gradient(135deg, #F5EDE4, #EDE0D4);
+  box-shadow: inset 0 0 0 2rpx rgba(255,107,53,0.18);
+}
+
+/* 卫浴 — 浅蓝底 水波纹弧线+蓝色水滴 */
+.tc-bath {
+  background:
+    /* 水滴形状 */
+    radial-gradient(ellipse at 50% 62%, #5B9BD5 0rpx, #5B9BD5 5rpx, transparent 6rpx),
+    /* 水波纹弧线 */
+    radial-gradient(ellipse at 50% 38%, transparent 65%, #7FC4E8 65%, #7FC4E8 68%, transparent 68%),
+    radial-gradient(ellipse at 50% 28%, transparent 78%, #A8D8F0 78%, #A8D8F0 80%, transparent 80%),
+    /* 水面底色 */
+    linear-gradient(180deg, #E8F4FB, #D0EAF8);
+  border: 2rpx solid #C0DEEF;
+}
+
+/* 地板 — 暖棕底 木纹纹理（多层横线+微弧）*/
+.tc-floor {
+  background:
+    /* 木纹纹理（不同粗细和间距模拟真实木纹）*/
+    repeating-linear-gradient(0deg, transparent, transparent 5rpx, #C4A882 5rpx, #C4A882 6rpx),
+    repeating-linear-gradient(0deg, transparent, transparent 12rpx, #B8956E 12rpx, #B8956E 13rpx),
+    repeating-linear-gradient(0deg, transparent, transparent 20rpx, #D4B896 20rpx, #D4B896 20.5rpx),
+    /* 暖棕底色 */
+    linear-gradient(180deg, #E8D5B8, #DCC8A0);
+}
+
+/* 涂料 — 浅绿底 滚筒刷痕斜纹+光泽感 */
+.tc-paint {
+  background:
+    /* 刷痕斜纹 */
+    repeating-linear-gradient(42deg, transparent, transparent 7rpx, rgba(255,255,255,0.5) 7rpx, rgba(255,255,255,0.5) 8rpx),
+    /* 二次刷痕（反向，模拟交叉滚涂）*/
+    repeating-linear-gradient(-38deg, transparent, transparent 12rpx, rgba(255,255,255,0.3) 12rpx, rgba(255,255,255,0.3) 13rpx),
+    /* 底色 */
+    linear-gradient(135deg, #B8D9C8, #A3CDB5);
+  border: 2rpx solid #C5E0D2;
+}
+
+/* 门窗 — 浅灰底 立体门框造型 */
+.tc-door {
+  background:
+    /* 门框外框 */
+    linear-gradient(#E8E8E8 3rpx, transparent 3rpx) 4rpx 4rpx / calc(100% - 8rpx) calc(100% - 8rpx),
+    linear-gradient(to right, #E8E8E8 3rpx, transparent 3rpx) 4rpx 4rpx / calc(100% - 8rpx) calc(100% - 8rpx),
+    /* 门板面 */
+    linear-gradient(180deg, #F5F5F5, #EBEBEB);
+  border: 2rpx solid #D8D8D8;
+}
+
+/* 石材 — 米白底 大理石斑点纹理 */
+.tc-stone {
+  background:
+    /* 大理石脉络 */
+    radial-gradient(ellipse at 30% 40%, transparent 40%, #D0C0A8 40%, #D0C0A8 43%, transparent 43%),
+    radial-gradient(circle at 65% 50%, #C8B898 3rpx, transparent 4rpx),
+    radial-gradient(circle at 35% 70%, #C0B090 2rpx, transparent 3rpx),
+    radial-gradient(circle at 55% 25%, #D4C8B0 2rpx, transparent 3rpx),
+    radial-gradient(circle at 72% 68%, #C8B898 1.5rpx, transparent 2.5rpx),
+    radial-gradient(circle at 20% 22%, #D0C4A8 2.5rpx, transparent 3.5rpx),
+    /* 米白底色 */
+    linear-gradient(135deg, #F5F0E8, #EBE4D8);
+  border: 2rpx solid #E0D8C8;
+}
+
+/* 辅材 — 深灰底 螺丝/零件几何图案 */
+.tc-hardware {
+  background:
+    /* 中心圆形（螺丝头）*/
+    radial-gradient(circle at 50% 50%, #A0A0A0 4rpx, transparent 5rpx),
+    /* 十字螺丝线 */
+    linear-gradient(#C0C0C0 1rpx, transparent 1rpx) 0 50% / 100% 2rpx,
+    linear-gradient(to right, #C0C0C0 1rpx, transparent 1rpx) 50% 0 / 2rpx 100%,
+    /* 深灰金属底色 */
+    linear-gradient(135deg, #6B6B7B, #585868);
+  border: 2rpx solid #808090;
+}
+
+/* 全部分类 — 四色小格代表各品类 */
+.tc-all {
+  background:
+    /* 左上：瓷砖橙 */
+    linear-gradient(#FF6B35 0rpx, #FF6B35 29rpx, transparent 29rpx) 0 0 / 50% 50%,
+    /* 右上：卫浴蓝 */
+    linear-gradient(to right, transparent 50%, #5B9BD5 50%, #5B9BD5 100%) 0 0 / 100% 29rpx,
+    /* 左下：地板棕 */
+    linear-gradient(#B8956E 0rpx, #B8956E 29rpx, transparent 29rpx) 0 31rpx / 50% 50%,
+    /* 右下：涂料绿 */
+    linear-gradient(to right, transparent 50%, #7DB892 50%, #7DB892 100%) 31rpx 31rpx / 50% 50%,
+    /* 十字分隔线 */
+    linear-gradient(#FFF 1rpx, transparent 1rpx) 0 50% / 100% 1rpx,
+    linear-gradient(to right, #FFF 1rpx, transparent 1rpx) 50% 0 / 1rpx 100%,
+    /* 底色 */
+    #F0F0F0;
+  border: 2rpx solid #DDD;
+}
+
+.tc-label {
+  font-size: 24rpx; color: #555; font-weight: 500;
+}
+
+/* ═══ 5. 通用区块头 ═══ */
+.section { margin-top: 8rpx; }
+.sec-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20rpx 24rpx 12rpx;
+}
+.sec-title { font-size: 30rpx; font-weight: 700; color: #1A1A1A; }
+.sec-title-wrap { display: flex; align-items: baseline; gap: 10rpx; }
+.sec-sub { font-size: 22rpx; color: #FF3B30; font-weight: 500; }
+.sec-more { font-size: 26rpx; color: #999; }
+
+.sec-tabs { display: flex; gap: 6rpx; }
+.st-tab {
+  padding: 8rpx 20rpx; border-radius: 20rpx;
+  font-size: 24rpx; color: #666; background: #F3F3F3;
+}
+.st-tab.on { background: #FFF0EB; color: #FF6B35; font-weight: 600; }
+
+/* ═══ 6. Banner 轮播 ═══ */
+.banner-wrap {
+  margin: 8rpx 24rpx 4rpx;
+  border-radius: 12rpx; overflow: hidden;
+}
+.banner-swiper { width: 100%; height: 280rpx; }
+.banner-slide {
+  width: 100%; height: 100%;
+  display: flex; align-items: center;
+  padding: 0 36rpx;
+}
+.bn-title { font-size: 34rpx; font-weight: 700; color: #fff; margin-bottom: 6rpx; }
+.bn-desc { font-size: 26rpx; color: rgba(255,255,255,0.85); margin-bottom: 14rpx; }
+.bn-btn {
+  display: inline-block;
+  padding: 8rpx 24rpx; background: rgba(255,255,255,0.22);
+  color: #fff; font-size: 24rpx; border-radius: 20rpx;
+}
+
+/* ═══ 7. 附近建材市场（横滑卡片） ═══ */
+.market-scroll { white-space: nowrap; padding: 0 24rpx; }
+.market-card {
+  display: inline-block; width: 280rpx;
+  background: #fff; border-radius: 10rpx;
+  overflow: hidden; margin-right: 14rpx;
+  border: 1rpx solid #F0F0F0;
+  vertical-align: top;
+}
+.market-card:active { background: #FAFAFA; }
+.mc-top {
+  height: 100rpx; padding: 16rpx 16rpx 0;
+  position: relative;
+}
+.mc-name {
+  font-size: 26rpx; font-weight: 700; color: #1A1A1A;
+  display: block; margin-bottom: 4rpx;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mc-dist {
+  font-size: 24rpx; color: rgba(0,0,0,0.5); font-weight: 500;
+}
+.mc-body {
+  padding: 12rpx 16rpx 16rpx; white-space: normal;
+}
+.mc-stores { font-size: 24rpx; color: #666; display: block; margin-bottom: 2rpx; }
+.mc-cates { font-size: 22rpx; color: #999; display: block; }
+
+/* ═══ 8. 未覆盖城市 ═══ */
+.no-city-card {
+  display: flex; flex-direction: column; align-items: center;
+  margin: 16rpx 24rpx; padding: 40rpx 32rpx;
+  background: linear-gradient(135deg, #FAFBFC, #FFF8F5);
+  border-radius: 16rpx; border: 2rpx dashed #E0E0E0;
+}
+.ncc-title { font-size: 28rpx; font-weight: 600; color: #333; margin-bottom: 8rpx; }
+.ncc-desc { font-size: 24rpx; color: #999; margin-bottom: 20rpx; text-align: center; }
+.ncc-action {
+  padding: 14rpx 48rpx; background: #FF6B35; color: #fff;
+  font-size: 26rpx; font-weight: 600; border-radius: 40rpx;
+  box-shadow: 0 4rpx 12rpx rgba(255,107,53,0.25);
+}
+.no-city-compact {
+  display: flex; flex-direction: column; align-items: center;
+  margin: 20rpx 24rpx; padding: 36rpx 24rpx;
+  background: #FAFBFC; border-radius: 12rpx;
+  font-size: 26rpx; color: #999; text-align: center;
+}
+.ncp-btn {
+  margin-top: 16rpx; padding: 12rpx 40rpx;
+  background: #FF6B35; color: #fff;
+  font-size: 26rpx; font-weight: 600; border-radius: 40rpx;
+  box-shadow: 0 3rpx 10rpx rgba(255,107,53,0.22);
+}
+
+/* ═══ 9. 保障条 ═══ */
+.trust-strip {
+  display: flex; align-items: center; gap: 12rpx;
+  margin: 20rpx 24rpx; padding: 18rpx 20rpx;
+  background: linear-gradient(135deg, #F6FFF0, #FFF8F5);
+  border-radius: 10rpx; border: 1rpx solid #E8F0E0;
+}
+.ts-badge {
+  padding: 6rpx 16rpx; background: #2D8B4A;
+  color: #fff; font-size: 20rpx; font-weight: 700;
+  border-radius: 6rpx; flex-shrink: 0;
+}
+.ts-flow { font-size: 22rpx; color: #4A6B3A; flex: 1; }
+
+/* ═══ 10. 商品瀑布流（精选好货） ═══ */
+.goods-grid {
+  display: flex; flex-wrap: wrap;
+  padding: 0 20rpx; justify-content: space-between;
+}
+.goods-card { width: calc(50% - 10rpx); margin-bottom: 16rpx; background: #fff; border-radius: 4rpx; overflow: hidden; }
+.goods-card:active { transform: scale(0.98); }
+
+.gc-img-wrap {
+  width: 100%; height: 320rpx;
+  background: linear-gradient(180deg, #F8F9FA, #EEEFF1);
+  position: relative; overflow: hidden;
+}
+.gc-img { width: 100%; height: 100%; }
+
+/* 商品图片 — 材质纹理占位（无真实图片时显示品类纹理） */
+.gc-texture-tile {
+  background:
+    linear-gradient(#D4C5B8 1rpx, transparent 1rpx) 0 0 / 25% 25%,
+    linear-gradient(to right, #D4C5B8 1rpx, transparent 1rpx) 0 0 / 25% 25%,
+    linear-gradient(180deg, #F8F2EC, #EDE0D4);
+}
+.gc-texture-bath {
+  background:
+    radial-gradient(ellipse at 50% 50%, #D8EEF8 0%, #C0DEEF 100%);
+}
+.gc-texture-floor {
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 14rpx, #C4A882 14rpx, #C4A882 15rpx),
+    repeating-linear-gradient(0deg, transparent, transparent 28rpx, #B8956E 28rpx, #B8956E 28.5rpx),
+    linear-gradient(180deg, #ECDCC4, #E0D0B4);
+}
+.gc-texture-paint {
+  background:
+    repeating-linear-gradient(42deg, transparent, transparent 16rpx, rgba(255,255,255,0.3) 16rpx, rgba(255,255,255,0.3) 17rpx),
+    linear-gradient(135deg, #C8E0D4, #B0D0C0);
+}
+.gc-texture-door {
+  background:
+    linear-gradient(#E8E8E8 4rpx, transparent 4rpx) 8rpx 8rpx / calc(100% - 16rpx) calc(100% - 16rpx),
+    linear-gradient(to right, #E8E8E8 4rpx, transparent 4rpx) 8rpx 8rpx / calc(100% - 16rpx) calc(100% - 16rpx),
+    linear-gradient(180deg, #F8F8F8, #EDEDED);
+}
+.gc-texture-stone {
+  background:
+    radial-gradient(circle at 30% 40%, #D0C0A8 4rpx, transparent 5rpx),
+    radial-gradient(circle at 60% 55%, #C8B898 3rpx, transparent 4rpx),
+    radial-gradient(circle at 40% 70%, #C0B090 2rpx, transparent 3rpx),
+    radial-gradient(circle at 70% 25%, #D4C8B0 3rpx, transparent 4rpx),
+    linear-gradient(180deg, #F8F2E8, #EDE4D4);
+}
+.gc-texture-hardware {
+  background:
+    radial-gradient(circle at 50% 50%, #A0A0A0 8rpx, transparent 9rpx),
+    linear-gradient(#C0C0C0 1rpx, transparent 1rpx) 0 50% / 100% 2rpx,
+    linear-gradient(to right, #C0C0C0 1rpx, transparent 1rpx) 50% 0 / 2rpx 100%,
+    linear-gradient(180deg, #787888, #6A6A7A);
+}
+.gc-img-tag {
+  position: absolute; top: 10rpx; left: 10rpx;
+  padding: 4rpx 12rpx; background: #1A365D;
+  color: #fff; font-size: 20rpx; border-radius: 5rpx; font-weight: 600;
+}
+.gc-img-tag.hot { background: #FF6B35; }
+
+.gc-info { padding: 14rpx 16rpx 18rpx; }
+.gc-name {
+  font-size: 26rpx; color: #333; line-height: 1.5;
+  margin-bottom: 4rpx;
+  display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; overflow: hidden;
+  min-height: 78rpx;
+}
+.gc-spec { font-size: 22rpx; color: #999; margin-bottom: 10rpx; }
+
+.gc-price-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+.gc-price { display: flex; align-items: baseline; }
+.gcp-sym { font-size: 22rpx; color: #FF6B35; font-weight: 700; }
+.gcp-num { font-size: 36rpx; color: #FF6B35; font-weight: 800; line-height: 1; }
+.gcp-unit { font-size: 20rpx; color: #999; margin-left: 2rpx; }
+
+.gc-cart-btn {
+  width: 48rpx; height: 48rpx; border-radius: 50%;
+  background: #FF6B35;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(255,107,53,0.25);
+}
+.gc-cart-btn:active { background: #E55A2B; transform: scale(0.92); }
+.gccb-plus { font-size: 30rpx; color: #fff; font-weight: 600; }
+
+.gc-shop-row {
+  display: flex; align-items: center; gap: 6rpx;
+  font-size: 22rpx; color: #999;
+}
+.gcs-rating { color: #FF9500; flex-shrink: 0; }
+.gcs-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+/* ═══ 11. 通用 ═══ */
+.bottom-safe { height: 40rpx; }

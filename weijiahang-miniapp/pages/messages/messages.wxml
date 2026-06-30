@@ -1,0 +1,46 @@
+<!-- 消息列表 -->
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input class="sb-input" placeholder="搜索会话…" bindinput="onSearch" />
+  </view>
+
+  <!-- 消息分类Tab -->
+  <view class="tab-bar">
+    <view class="tab {{activeTab === 'all' ? 'on' : ''}}" bindtap="onTab" data-tab="all">
+      全部
+      <text class="tab-badge" wx:if="{{unreadTotal > 0}}">{{unreadTotal > 99 ? '99+' : unreadTotal}}</text>
+    </view>
+    <view class="tab {{activeTab === 'shop' ? 'on' : ''}}" bindtap="onTab" data-tab="shop">商家</view>
+    <view class="tab {{activeTab === 'navigator' ? 'on' : ''}}" bindtap="onTab" data-tab="navigator">领航员</view>
+    <view class="tab {{activeTab === 'system' ? 'on' : ''}}" bindtap="onTab" data-tab="system">系统</view>
+  </view>
+
+  <!-- 会话列表 -->
+  <scroll-view scroll-y class="msg-list" refresher-enabled refresher-triggered="{{refreshing}}"
+               bindrefresherrefresh="onRefresh" enhanced show-scrollbar="{{false}}">
+    <view class="msg-item" wx:for="{{conversations}}" wx:key="id"
+          bindtap="onOpenChat" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.type}}"
+          bindlongpress="onDeleteChat" data-id="{{item.id}}">
+      <view class="mi-avatar" style="background:{{item.avatarBg}};">{{item.initial}}</view>
+      <view class="mi-body">
+        <view class="mi-top">
+          <text class="mi-name">{{item.name}}</text>
+          <text class="mi-time">{{item.time}}</text>
+        </view>
+        <view class="mi-preview ellipsis">{{item.lastMsg}}</view>
+      </view>
+      <view class="mi-badge" wx:if="{{item.unread > 0}}">{{item.unread > 99 ? '99+' : item.unread}}</view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{isEmpty && !loading}}" class="empty">
+      <view class="empty-icon">消息</view>
+      <view class="empty-text">暂无消息</view>
+      <view class="empty-hint">在线订货或预约领航员后，这里会有对话记录</view>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-hint">加载中…</view>
+  </scroll-view>
+</view>

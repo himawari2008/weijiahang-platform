@@ -1,0 +1,147 @@
+<view class="page">
+  <!-- ═══════════ Period 标签栏 ═══════════ -->
+  <view class="period-bar">
+    <view
+      wx:for="{{periodOptions}}"
+      wx:key="key"
+      class="period-btn {{currentPeriod === item.key ? 'on' : ''}}"
+      bindtap="onPeriodTap"
+      data-key="{{item.key}}"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <!-- ═══════════ Type 标签栏（横向滚动） ═══════════ -->
+  <scroll-view scroll-x class="type-bar" enhanced show-scrollbar="{{false}}">
+    <view
+      wx:for="{{typeOptions}}"
+      wx:key="key"
+      class="type-btn {{currentType === item.key ? 'on' : ''}}"
+      bindtap="onTypeTap"
+      data-key="{{item.key}}"
+    >
+      {{item.label}}
+    </view>
+  </scroll-view>
+
+  <!-- ═══════════ 我的排名条（sticky 吸附） ═══════════ -->
+  <view class="my-rank-bar" wx:if="{{myRankInfo}}">
+    <view class="mrb-left">
+      <text class="mrb-label">我的排名</text>
+      <text class="mrb-rank-num">#{{myRankInfo.rank}}</text>
+    </view>
+    <view class="mrb-center">
+      <text class="mrb-name">{{myRankInfo.name}}</text>
+      <view class="mrb-rating-row">
+        <view class="mrb-star"></view>
+        <text class="mrb-rating">{{myRankInfo.ratingText}}</text>
+      </view>
+    </view>
+    <text class="mrb-value">{{myRankInfo.valueText}}</text>
+  </view>
+
+  <!-- ═══════════ 领奖台（Top 3） ═══════════ -->
+  <view class="podium-wrap" wx:if="{{topThree.length > 0}}">
+    <view class="podium">
+      <!-- 第 2 名（左侧） -->
+      <view class="pi pi-2">
+        <view class="pi-badge badge-silver">
+          <text class="pib-num">2</text>
+        </view>
+        <view class="pi-avatar">
+          <view class="pia-circle"></view>
+        </view>
+        <text class="pi-name">{{topThree[1].name}}</text>
+        <text class="pi-val">{{topThree[1].valueText}}</text>
+      </view>
+
+      <!-- 第 1 名（中央） -->
+      <view class="pi pi-1">
+        <view class="pi-badge badge-gold">
+          <view class="pib-crown"></view>
+          <text class="pib-num">1</text>
+        </view>
+        <view class="pi-avatar gold">
+          <view class="pia-circle"></view>
+        </view>
+        <text class="pi-name">{{topThree[0].name}}</text>
+        <text class="pi-val">{{topThree[0].valueText}}</text>
+      </view>
+
+      <!-- 第 3 名（右侧） -->
+      <view class="pi pi-3">
+        <view class="pi-badge badge-bronze">
+          <text class="pib-num">3</text>
+        </view>
+        <view class="pi-avatar">
+          <view class="pia-circle"></view>
+        </view>
+        <text class="pi-name">{{topThree[2].name}}</text>
+        <text class="pi-val">{{topThree[2].valueText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══════════ 排名列表头部 ═══════════ -->
+  <view class="rl-header" wx:if="{{rankList.length > 0}}">
+    <text class="rlh-title">全部排名</text>
+    <text class="rlh-count">共{{totalCount}}人</text>
+  </view>
+
+  <!-- ═══════════ 排名列表 ═══════════ -->
+  <view class="rank-list" wx:if="{{rankList.length > 0}}">
+    <view
+      wx:for="{{rankList}}"
+      wx:for-item="r"
+      wx:key="rank"
+      class="rank-item {{r.isMe ? 'highlight' : ''}}"
+    >
+      <!-- 排名 CSS 徽章 -->
+      <view class="ri-badge">
+        <text class="rib-num">{{r.rank}}</text>
+      </view>
+      <!-- 头像占位圆形 -->
+      <view class="ri-avatar">
+        <view class="ria-circle"></view>
+      </view>
+      <!-- 姓名 + 评分 -->
+      <view class="ri-info">
+        <text class="ri-name">{{r.name}}</text>
+        <view class="ri-rating-row">
+          <view class="rir-star"></view>
+          <text class="rir-text">{{r.ratingText}}</text>
+        </view>
+      </view>
+      <!-- 排行值 -->
+      <text class="ri-value">{{r.valueText}}</text>
+    </view>
+  </view>
+
+  <!-- ═══════════ 骨架屏 ═══════════ -->
+  <view class="sk-section" wx:if="{{loading}}">
+    <view class="sk-podium">
+      <view class="sk-pi" wx:for="{{3}}" wx:for-index="i" wx:key="i">
+        <view class="skp-badge"></view>
+        <view class="skp-avatar"></view>
+        <view class="skp-line w60"></view>
+        <view class="skp-line w40"></view>
+      </view>
+    </view>
+    <view class="sk-item" wx:for="{{5}}" wx:for-index="i" wx:key="i">
+      <view class="ski-badge"></view>
+      <view class="ski-avatar"></view>
+      <view class="ski-body">
+        <view class="ski-line w60"></view>
+        <view class="ski-line w35"></view>
+      </view>
+      <view class="ski-value"></view>
+    </view>
+  </view>
+
+  <!-- ═══════════ 空态 ═══════════ -->
+  <view wx:if="{{!loading && rankList.length === 0 && topThree.length === 0}}" class="empty-box">
+    <view class="empty-icon"></view>
+    <text class="empty-text">暂无排行榜数据</text>
+  </view>
+</view>

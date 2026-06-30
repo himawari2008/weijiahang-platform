@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 顶部操作 -->
+  <view class="nav-bar" wx:if="{{notifications.length > 0}}">
+    <text class="nav-title">{{unreadCount}} 条未读</text>
+    <text class="nav-action" bindtap="onMarkAllRead">全部已读</text>
+  </view>
+
+  <!-- 加载骨架 -->
+  <view wx:if="{{loading}}" class="skeleton-wrap">
+    <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="sk-item">
+      <view class="sk-dot"></view>
+      <view class="sk-content">
+        <view class="sk-line w60"></view>
+        <view class="sk-line w90"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 错误态 -->
+  <view wx:elif="{{error}}" class="error-wrap">
+    <view class="error-icon">!</view>
+    <text class="error-text">加载失败</text>
+    <view class="btn-retry" bindtap="onRetry">重试</view>
+  </view>
+
+  <!-- 空态 -->
+  <view wx:elif="{{isEmpty}}" class="empty-wrap">
+    <view class="empty-icon">&#9993;</view>
+    <text class="empty-text">暂无通知</text>
+  </view>
+
+  <!-- 通知列表 -->
+  <view wx:else class="notif-list">
+    <view
+      wx:for="{{notifications}}"
+      wx:key="id"
+      class="notif-item {{item.isRead ? 'read' : 'unread'}}"
+      data-id="{{item.id}}"
+      bindtap="onMarkRead"
+    >
+      <view class="ni-dot" wx:if="{{!item.isRead}}"></view>
+      <view class="ni-body">
+        <view class="ni-title">{{item.title || '系统通知'}}</view>
+        <view class="ni-content">{{item.content || item.message || ''}}</view>
+        <view class="ni-time">{{item.timeText}}</view>
+      </view>
+      <view class="ni-arrow">›</view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">
+      加载更多
+    </view>
+  </view>
+</view>

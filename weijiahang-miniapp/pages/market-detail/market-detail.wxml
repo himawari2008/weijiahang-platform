@@ -1,0 +1,157 @@
+<!--
+  为家航 · 市场详情页
+  点击市场 → 该市场店铺+货物全展示
+  上半：地图导航 | 下半：商品瀑布流
+  无图标、无卡片阴影
+-->
+<view class="page">
+
+  <!-- ═══ 1. 地图区域 ═══ -->
+  <view class="map-area {{mapCollapsed ? 'collapsed' : ''}}">
+    <map
+      id="marketMap"
+      class="md-map"
+      latitude="{{mapCenter.lat}}"
+      longitude="{{mapCenter.lng}}"
+      scale="{{mapScale}}"
+      markers="{{markers}}"
+      circles="{{circles}}"
+      show-location="{{true}}"
+      enable-zoom="{{true}}"
+      enable-scroll="{{true}}"
+      enable-rotate="{{false}}"
+      bindmarkertap="onMarkerTap"
+    />
+
+    <!-- 地图浮动控件 -->
+    <view class="md-float-back" bindtap="onBack">
+      <text class="mdfb-arrow">←</text>
+    </view>
+    <view class="md-float-search" bindtap="onSearchFocus">
+      <text class="md-float-placeholder">搜本市场商品…</text>
+    </view>
+    <view class="md-float-locate" bindtap="onLocateMe">
+      <text class="mdfl-dot"></text>
+    </view>
+
+    <!-- 收起/展开地图按钮 -->
+    <view class="md-collapse-btn" bindtap="onToggleMap" wx:if="{{!mapCollapsed}}">
+      <text class="mdcb-text">收起地图 ↑</text>
+    </view>
+  </view>
+
+  <!-- ═══ 2. 市场信息条（地图下方） ═══ -->
+  <view class="market-info-bar">
+    <view class="mib-left">
+      <view class="mib-name">{{market.name}}</view>
+      <view class="mib-meta">{{market.storeCount}}家店铺 · {{market.cateCount}}个品类 · {{market.floors.length}}层</view>
+    </view>
+    <view class="mib-right" bindtap="onExpandMap" wx:if="{{mapCollapsed}}">
+      <text class="mibr-text">展开地图 ↓</text>
+    </view>
+  </view>
+
+  <!-- ═══ 3. 搜索条（地图收起时显示） ═══ -->
+  <view class="md-search-bar" wx:if="{{showSearchBar}}">
+    <input
+      class="mdsb-input"
+      placeholder="搜索本市场商品…"
+      value="{{keyword}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearchConfirm"
+      confirm-type="search"
+    />
+    <text class="mdsb-clear" wx:if="{{keyword}}" bindtap="onClearSearch">X</text>
+  </view>
+
+  <!-- ═══ 4. 分类筛选 chips（纯文字） ═══ -->
+  <view class="md-cate-row">
+    <scroll-view scroll-x class="mdcr-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="mdcr-chip {{currentCate === '' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="">全部</view>
+      <view class="mdcr-chip {{currentCate === '瓷砖' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="瓷砖">瓷砖</view>
+      <view class="mdcr-chip {{currentCate === '卫浴' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="卫浴">卫浴</view>
+      <view class="mdcr-chip {{currentCate === '地板' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="地板">地板</view>
+      <view class="mdcr-chip {{currentCate === '涂料' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="涂料">涂料</view>
+      <view class="mdcr-chip {{currentCate === '门窗' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="门窗">门窗</view>
+      <view class="mdcr-chip {{currentCate === '石材' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="石材">石材</view>
+      <view class="mdcr-chip {{currentCate === '辅材' ? 'on' : ''}}"
+            bindtap="onCateChange" data-cate="辅材">辅材</view>
+    </scroll-view>
+  </view>
+
+  <!-- ═══ 5. 排序标签 ═══ -->
+  <view class="md-sort-row">
+    <view class="mdsr-tab {{sortBy === 'hot' ? 'on' : ''}}"
+          bindtap="onSortChange" data-sort="hot">热销</view>
+    <view class="mdsr-tab {{sortBy === 'new' ? 'on' : ''}}"
+          bindtap="onSortChange" data-sort="new">新品</view>
+    <view class="mdsr-tab {{sortBy === 'price_asc' ? 'on' : ''}}"
+          bindtap="onSortChange" data-sort="price_asc">价格升</view>
+    <view class="mdsr-tab {{sortBy === 'price_desc' ? 'on' : ''}}"
+          bindtap="onSortChange" data-sort="price_desc">价格降</view>
+  </view>
+
+  <!-- ═══ 6. 商品瀑布流 ═══ -->
+  <scroll-view
+    scroll-y
+    class="goods-scroll"
+    enhanced
+    show-scrollbar="{{false}}"
+    bindscrolltolower="onLoadMore"
+    lower-threshold="200"
+  >
+    <view class="goods-grid">
+      <view class="goods-card" wx:for="{{goodsList}}" wx:key="id"
+            bindtap="onGoodsTap" data-id="{{item.id}}" data-name="{{item.name}}"
+            data-price="{{item.price}}" data-spec="{{item.spec}}" data-shop="{{item.shopName}}">
+        <!-- 商品图占位 -->
+        <view class="gc-img-wrap">
+          <image class="gc-img" src="{{item.image || ''}}" mode="aspectFill" lazy-load />
+          <view class="gc-img-tag" wx:if="{{item.isNew}}">新品</view>
+          <view class="gc-img-tag hot" wx:if="{{item.isHot}}">热销</view>
+        </view>
+        <!-- 信息 -->
+        <view class="gc-info">
+          <view class="gc-name">{{item.name}}</view>
+          <view class="gc-spec" wx:if="{{item.spec}}">{{item.spec}}</view>
+          <view class="gc-price-row">
+            <view class="gc-price">
+              <text class="gcp-sym">¥</text>
+              <text class="gcp-num">{{item.price}}</text>
+              <text class="gcp-unit">/{{item.unit || '㎡'}}</text>
+            </view>
+            <view class="gc-cart-btn" catchtap="onQuickAddCart" data-id="{{item.id}}">
+              <text class="gccb-plus">+</text>
+            </view>
+          </view>
+          <view class="gc-shop-row">
+            <view class="gcs-rating">{{item.shopRating > 0 ? item.shopRating + '分' : ''}}</view>
+            <text class="gcs-name">{{item.shopName}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}">
+      <text>加载中…</text>
+    </view>
+    <view class="load-more" wx:if="{{!hasMore && goodsList.length > 0}}">
+      <text class="lm-end">— 已展示全部商品 —</text>
+    </view>
+
+    <!-- 空态 -->
+    <view class="goods-empty" wx:if="{{goodsList.length === 0 && !loading}}">
+      <text class="ge-text">该分类暂无商品</text>
+    </view>
+
+    <view class="bottom-safe"></view>
+  </scroll-view>
+</view>

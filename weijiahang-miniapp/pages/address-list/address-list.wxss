@@ -1,0 +1,68 @@
+/* 地址列表页 */
+page { background: #F8F9FA; }
+
+/* ── 空态 ── */
+.empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 120rpx 0 0;
+}
+.em-mascot { width: 160rpx; height: 160rpx; opacity: 0.5; margin-bottom: 24rpx; }
+.em-title { font-size: 30rpx; color: var(--text-2); font-weight: 600; margin-bottom: 8rpx; }
+.em-desc { font-size: 26rpx; color: var(--text-3); }
+
+/* ── 地址卡片 ── */
+.addr-list { padding: 16rpx 24rpx; }
+.addr-card {
+  background: #fff; border-radius: 14rpx; padding: 24rpx 24rpx 20rpx;
+  margin-bottom: 14rpx; box-shadow: var(--shadow-sm);
+}
+.addr-card.default {
+  border: 2rpx solid #FFCBA4;
+  box-shadow: 0 2rpx 12rpx rgba(255,107,53,0.08);
+}
+.addr-card:active { background: #FAFAFA; }
+
+/* 顶部行 */
+.ac-top {
+  display: flex; align-items: center; gap: 12rpx; margin-bottom: 10rpx;
+}
+.act-name { font-size: 30rpx; font-weight: 600; color: var(--text-0); }
+.act-phone { font-size: 26rpx; color: var(--text-2); }
+.ac-badges { display: flex; gap: 8rpx; margin-left: auto; }
+.actb-default {
+  padding: 4rpx 12rpx; border-radius: 6rpx;
+  background: #FFF4ED; color: var(--brand); font-size: 20rpx; font-weight: 600;
+}
+.actb-tag {
+  padding: 4rpx 12rpx; border-radius: 6rpx;
+  background: #F0F0F0; color: var(--text-3); font-size: 20rpx;
+}
+
+/* 地址详情 */
+.ac-addr {
+  font-size: 26rpx; color: var(--text-2); line-height: 1.6;
+  padding-right: 20rpx;
+}
+
+/* 操作 */
+.ac-actions {
+  display: flex; justify-content: flex-end; gap: 20rpx;
+  margin-top: 16rpx; padding-top: 16rpx;
+  border-top: 1rpx solid #F5F5F5;
+}
+.aca-btn {
+  font-size: 26rpx; color: var(--brand); padding: 6rpx 12rpx;
+}
+.aca-btn:active { opacity: 0.7; }
+
+/* ── 底部新增按钮 ── */
+.add-area {
+  padding: 32rpx 24rpx;
+}
+.add-btn {
+  width: 100%; text-align: center; padding: 26rpx 0;
+  border: 2rpx dashed #CCC; border-radius: 44rpx;
+  font-size: 28rpx; color: var(--text-2);
+  background: #FAFBFC;
+}
+.add-btn:active { background: #F0F0F0; }

@@ -1,0 +1,99 @@
+<import src="/templates/empty-state.wxml" />
+
+<view class="page">
+  <!-- 空购物车 -->
+  <view class="cart-empty" wx:if="{{isEmpty}}">
+    <view class="ce-icon">购物车</view>
+    <view class="ce-title">购物车是空的</view>
+    <view class="ce-desc">去首页逛逛，发现好建材</view>
+    <view class="ce-btn" bindtap="onGoHome">去首页</view>
+
+    <view class="ce-reco">
+      <view class="ce-reco-title">为你推荐</view>
+      <view class="ce-reco-grid">
+        <view class="ce-reco-card" wx:for="{{recommendGoods}}" wx:key="id"
+              bindtap="onRecoGoodsTap" data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}" data-shopid="{{item.shopId}}" data-shopname="{{item.shopName}}">
+          <view class="cer-img" style="background:linear-gradient(180deg, #F8F9FA, #EEEFF1);"></view>
+          <view class="cer-name">{{item.name}}</view>
+          <view class="cer-price">¥{{item.price}}/{{item.unit}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <block wx:if="{{!isEmpty}}">
+    <!-- 顶部 -->
+    <view class="cart-header">
+      <view class="ch-select-all" bindtap="onSelectAll">
+        <view class="chsa-box {{allSelected ? 'on' : ''}}">
+          <text wx:if="{{allSelected}}">OK</text>
+        </view>
+        <text>全选</text>
+      </view>
+      <view class="ch-info">{{itemCount}}件商品 · {{shopCount}}家店铺</view>
+      <view class="ch-clear" bindtap="onClear">清空</view>
+    </view>
+
+    <!-- 按店铺分组 -->
+    <view class="shop-group" wx:for="{{shopGroups}}" wx:key="shopId">
+      <view class="sg-header" bindtap="onGoShop" data-shopid="{{item.shopId}}" data-shopname="{{item.shopName}}">
+        <text class="sg-name">{{item.shopName}}</text>
+        <text class="sg-arrow">进店 ></text>
+      </view>
+
+      <view class="sg-item" wx:for="{{item.items}}" wx:key="id" wx:for-item="p">
+        <view class="sgi-img-wrap">
+          <image class="sgi-img" src="{{p.image || ''}}" mode="aspectFill" />
+        </view>
+        <view class="sgi-body">
+          <view class="sgi-name">{{p.name}}</view>
+          <view class="sgi-spec" wx:if="{{p.spec}}">{{p.spec}}</view>
+          <view class="sgi-price-row">
+            <text class="sgi-price">{{p.price}}</text>
+            <text class="sgi-unit">/{{p.unit === 'm2' ? '㎡' : (p.unit || '㎡')}}</text>
+          </view>
+          <view class="sgi-qty-row">
+            <view class="sgi-qty-btn" bindtap="onQtyChange" data-id="{{p.id}}" data-d="{{-1}}">−</view>
+            <text class="sgi-qty-val">{{p.qty || 1}}</text>
+            <view class="sgi-qty-btn" bindtap="onQtyChange" data-id="{{p.id}}" data-d="{{1}}">+</view>
+            <text class="sgi-subtotal">{{(p.price || 0) * (p.qty || 1)}}元</text>
+          </view>
+        </view>
+        <view class="sgi-del" bindtap="onRemove" data-id="{{p.id}}">x</view>
+      </view>
+
+      <view class="sg-footer">本店小计 {{item.shopTotal}}元</view>
+    </view>
+
+    <!-- 总计 + 说明 -->
+    <view class="cart-total">
+      <text class="ct-label">商品参考总价</text>
+      <text class="ct-val">{{totalEstimate}}元起</text>
+      <text class="ct-note">实际价格到店确认</text>
+    </view>
+
+    <!-- 领航员集货提示 -->
+    <view class="navi-tip" wx:if="{{shopCount > 1}}">
+      选了{{shopCount}}家店的货？<text class="nt-link" bindtap="onCheckoutConsolidate">约领航员一次跑完 ></text>
+    </view>
+
+    <!-- 平台保障（紧凑） -->
+    <view class="guarantee-bar">
+      <text class="gb-title">平台担保 · 全程保障：</text>
+      <text class="gb-flow">商家留底 → 领航员验货 → 业主收货确认</text>
+      <text class="gb-note">货不对板平台先行赔付</text>
+    </view>
+
+    <view style="height:140rpx;"></view>
+  </block>
+</view>
+
+<!-- 底部结算栏 -->
+<view class="bottom-bar" wx:if="{{!isEmpty}}">
+  <view class="bb-total">
+    <text class="bb-label">合计</text>
+    <text class="bb-price">{{totalEstimate}}</text>
+    <text class="bb-unit">元起</text>
+  </view>
+  <view class="bb-settle" bindtap="onGoSettle">去结算</view>
+</view>

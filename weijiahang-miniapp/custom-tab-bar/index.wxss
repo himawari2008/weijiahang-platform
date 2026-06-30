@@ -1,0 +1,177 @@
+/* ========================================
+   为家航 · 自定义 TabBar 样式
+   Logo 图片 + CSS 图标 + 文字
+   ======================================== */
+
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #FFFFFF;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.tab-bar-inner {
+  display: flex;
+  align-items: flex-start;
+  height: 100rpx;
+  padding: 8rpx 4rpx 0;
+}
+
+.tb-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  position: relative;
+  padding-top: 4rpx;
+}
+
+/* ── Logo 图片 ── */
+.tb-logo-img {
+  width: 64rpx;
+  height: 64rpx;
+  margin-bottom: 2rpx;
+  border-radius: 14rpx;
+}
+
+/* ── 图标容器 ── */
+.tb-icon-wrap {
+  width: 44rpx;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rpx;
+}
+
+/* ── 基础图标尺寸 ── */
+.tb-icon {
+  width: 40rpx;
+  height: 40rpx;
+  position: relative;
+}
+
+/* ── 文字 ── */
+.tb-text {
+  font-size: 20rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.tb-item.on .tb-text {
+  color: #FF6B35;
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════
+   CSS 图标绘制（tab 2-5）
+   ════════════════════════════════════════ */
+
+/* ── AI计算：计算器/网格 ── */
+.tb-icon-calc {
+  border-radius: 6rpx;
+  background:
+    linear-gradient(#999 1rpx, transparent 1rpx) 0 33% / 100% 1rpx,
+    linear-gradient(#999 1rpx, transparent 1rpx) 0 66% / 100% 1rpx,
+    linear-gradient(to right, #999 1rpx, transparent 1rpx) 50% 33% / 1rpx 67%;
+  border: 3rpx solid #999;
+}
+.tb-icon-calc.on {
+  border-color: #FF6B35;
+  background:
+    linear-gradient(#FF6B35 1rpx, transparent 1rpx) 0 33% / 100% 1rpx,
+    linear-gradient(#FF6B35 1rpx, transparent 1rpx) 0 66% / 100% 1rpx,
+    linear-gradient(to right, #FF6B35 1rpx, transparent 1rpx) 50% 33% / 1rpx 67%;
+}
+
+/* ── 消息：聊天气泡 ── */
+.tb-icon-msg {
+  border-radius: 50%;
+  border: 3rpx solid #999;
+  background: transparent;
+  box-shadow: 10rpx 10rpx 0 -6rpx #999;
+}
+.tb-icon-msg::after {
+  content: '';
+  position: absolute;
+  bottom: 2rpx;
+  left: 8rpx;
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: #999;
+}
+.tb-icon-msg.on {
+  border-color: #FF6B35;
+  box-shadow: 10rpx 10rpx 0 -6rpx #FF6B35;
+}
+.tb-icon-msg.on::after {
+  background: #FF6B35;
+}
+
+/* ── 订单：文档/列表 ── */
+.tb-icon-order {
+  border-radius: 4rpx;
+  border: 3rpx solid #999;
+  background: transparent;
+}
+.tb-icon-order::before {
+  content: '';
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  right: 6rpx;
+  height: 1rpx;
+  background: #999;
+  box-shadow:
+    0 8rpx 0 #999,
+    0 16rpx 0 #999;
+}
+.tb-icon-order.on {
+  border-color: #FF6B35;
+}
+.tb-icon-order.on::before {
+  background: #FF6B35;
+  box-shadow:
+    0 8rpx 0 #FF6B35,
+    0 16rpx 0 #FF6B35;
+}
+
+/* ── 我的：人形 ── */
+.tb-icon-mine {
+  width: 28rpx;
+  height: 28rpx;
+  margin: 6rpx;
+  border-radius: 50%;
+  border: 3rpx solid #999;
+}
+.tb-icon-mine::after {
+  content: '';
+  position: absolute;
+  top: 18rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24rpx;
+  height: 16rpx;
+  border-radius: 12rpx 12rpx 4rpx 4rpx;
+  border: 3rpx solid #999;
+  border-top: none;
+}
+.tb-icon-mine.on {
+  border-color: #FF6B35;
+}
+.tb-icon-mine.on::after {
+  border-color: #FF6B35;
+}
+
+/* ═══ 安全区 ═══ */
+.tb-safe {
+  height: constant(safe-area-inset-bottom);
+  height: env(safe-area-inset-bottom);
+  background: #FFFFFF;
+}

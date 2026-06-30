@@ -1,0 +1,15 @@
+<!--
+  为家航 Logo — 与客户端启动页完全一致
+  橙红渐变圆角方底 + 白色房子 + 白色指南针圆环
+-->
+<view class="lo-wrap" style="font-size: {{iconSize}}rpx;">
+  <!-- 图标主体 — 叠合两个 SVG 素材 -->
+  <view class="lo-icon" style="width: {{iconSize}}rpx; height: {{iconSize}}rpx;">
+    <!-- 底版：橙红渐变圆角方 + 白色房子（固定） -->
+    <image class="lo-base" src="/assets/icon-house-base.svg" mode="aspectFit" />
+    <!-- 上层：白色指南针圆环 + 刻度 + 南指针（叠加） -->
+    <image class="lo-ring" src="/assets/icon-compass-ring.svg" mode="aspectFit" />
+  </view>
+  <!-- 品牌文字 -->
+  <view wx:if="{{showText}}" class="lo-text" style="font-size: {{iconSize * 0.38}}rpx;">为家航</view>
+</view>

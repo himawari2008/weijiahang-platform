@@ -1,0 +1,84 @@
+<view class="page">
+  <!-- 头部月份切换 -->
+  <view class="header">
+    <view class="month-nav" bindtap="onPrevMonth">‹</view>
+    <view class="month-display">{{monthOptions[monthIndex].label}}</view>
+    <view class="month-nav" bindtap="onNextMonth">›</view>
+  </view>
+  <view class="header-sub">月度成绩单</view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading">加载中...</view>
+  </block>
+  <block wx:elif="{{error}}">
+    <view class="error-box" bindtap="onRetry">
+      <text>加载失败，点击重试</text>
+    </view>
+  </block>
+  <block wx:else>
+    <!-- 汇总卡片 -->
+    <view class="summary-grid">
+      <view class="sg-card">
+        <view class="sg-value">{{ordersText}}</view>
+        <view class="sg-label">总单量</view>
+        <view class="sg-change {{orderChangeClass}}">{{orderChange}} 环比</view>
+      </view>
+      <view class="sg-card">
+        <view class="sg-value highlight">{{incomeText}}</view>
+        <view class="sg-label">总收入</view>
+        <view class="sg-change {{incomeChangeClass}}">{{incomeChange}} 环比</view>
+      </view>
+      <view class="sg-card">
+        <view class="sg-value">{{avgRating}}</view>
+        <view class="sg-label">好评率</view>
+        <view class="sg-change {{ratingChangeClass}}">{{ratingChange}} 环比</view>
+      </view>
+      <view class="sg-card">
+        <view class="sg-value">{{onlineHours}}h</view>
+        <view class="sg-label">在线时长</view>
+        <view class="sg-change {{hoursChangeClass}}">{{hoursChange}} 环比</view>
+      </view>
+    </view>
+
+    <!-- 趋势图 -->
+    <view class="card">
+      <view class="card-title">每日收入趋势</view>
+      <canvas canvas-id="trendCanvas" id="trendCanvas" style="width:660rpx;height:360rpx;display:block;margin:0 auto;"></canvas>
+    </view>
+
+    <!-- 品类分布 -->
+    <view class="card">
+      <view class="card-title">品类分布</view>
+      <view class="category-list">
+        <view class="cat-item" wx:for="{{categoryBreakdown}}" wx:key="name">
+          <view class="cat-name">{{item.name}}</view>
+          <view class="cat-bar-bg">
+            <view class="cat-bar-fill" style="width:{{item.percent}}%;background:{{item.color}};"></view>
+          </view>
+          <view class="cat-percent">{{item.percent}}%</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- VS 市场均值 -->
+    <view class="card highlight-card">
+      <view class="card-title">市场对比</view>
+      <view class="vs-row">
+        <view class="vs-item">
+          <view class="vs-label">你的表现</view>
+          <view class="vs-value">{{vsMarketOrders}}</view>
+        </view>
+        <view class="vs-divider"></view>
+        <view class="vs-item">
+          <view class="vs-label">收入对比</view>
+          <view class="vs-value">{{vsMarketIncome}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <button class="btn-share" bindtap="onShare">生成分享图片</button>
+    </view>
+  </block>
+</view>

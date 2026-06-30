@@ -1,0 +1,70 @@
+<!-- 对话详情 -->
+<view class="page">
+  <!-- 对方信息 -->
+  <view class="chat-header">
+    <view class="ch-back" bindtap="onBack">←</view>
+    <view class="ch-avatar" style="background:{{avatarBg}}">{{chatIcon}}</view>
+    <view class="ch-info">
+      <view class="ch-name">{{chatName}}</view>
+      <view class="ch-desc">
+        <text wx:if="{{partnerTyping}}">对方正在输入…</text>
+        <text wx:elif="{{partnerOnline}}">在线 · {{chatType === 'shop' ? '商家' : chatType === 'navigator' ? '领航员' : '系统消息'}}</text>
+        <text wx:else>离线</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 消息区 -->
+  <scroll-view scroll-y class="msg-area" scroll-into-view="{{scrollTo}}"
+               enhanced show-scrollbar="{{false}}" scroll-with-animation>
+    <view class="c-msg {{m.from === 'me' ? 'me' : 'other'}}"
+          wx:for="{{msgs}}" wx:key="id" id="msg-{{m.id}}">
+      <!-- 文字 -->
+      <view class="cm-bubble" wx:if="{{m.text && !m.image}}">{{m.text}}</view>
+      <!-- 图片 -->
+      <image class="cm-image" wx:if="{{m.image}}"
+             src="{{m.image}}" mode="aspectFill"
+             bindtap="onPreviewImage" data-src="{{m.image}}" />
+      <!-- 语音 -->
+      <view class="cm-voice" wx:if="{{m.voicePath}}"
+            bindtap="onPlayVoice" data-path="{{m.voicePath}}">
+        <text class="cmv-icon">🔊</text>
+        <text class="cmv-dur">{{m.voiceDuration || 0}}"</text>
+      </view>
+      <!-- 订单卡片（嵌入对话） -->
+      <view class="order-card-inline" wx:if="{{m.orderCard}}"
+            bindtap="onOrderTap" data-id="{{m.orderId}}">
+        <view class="oci-title">订单 {{m.orderCard.title}}</view>
+        <view class="oci-items">{{m.orderCard.items}}</view>
+        <view class="oci-price">合计 ¥{{m.orderCard.total}}</view>
+        <view class="oci-status">状态：{{m.orderCard.status}}</view>
+      </view>
+    </view>
+
+    <!-- 对方正在输入 -->
+    <view class="c-msg other" wx:if="{{partnerTyping}}">
+      <view class="cm-bubble typing-bubble">
+        <text class="typing-dot"></text>
+        <text class="typing-dot"></text>
+        <text class="typing-dot"></text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 快捷操作（商家对话时） -->
+  <view class="quick-actions" wx:if="{{chatType === 'shop'}}">
+    <view class="qa-btn" bindtap="onQuickMsg" data-msg="这款有现货吗？">有现货吗？</view>
+    <view class="qa-btn" bindtap="onQuickMsg" data-msg="能拍个实物照看看吗？">拍实物照</view>
+    <view class="qa-btn" bindtap="onQuickMsg" data-msg="能不能便宜点？">能便宜吗</view>
+    <view class="qa-btn" bindtap="onQuickMsg" data-msg="最快什么时候能送货？">什么时候送货</view>
+  </view>
+
+  <!-- 输入 -->
+  <view class="input-bar">
+    <view class="ib-btn" bindtap="onSendImage">图片</view>
+    <input class="ib-input" value="{{text}}" placeholder="输入消息…"
+           bindinput="onInput" confirm-type="send" bindconfirm="onSend"
+           adjust-position cursor-spacing="20" />
+    <view class="ib-send {{text ? 'active' : ''}}" bindtap="onSend">发送</view>
+  </view>
+</view>

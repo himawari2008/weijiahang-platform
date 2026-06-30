@@ -1,0 +1,56 @@
+# 依赖
+node_modules/
+.pnp
+.pnp.js
+
+# 构建产物
+dist/
+build/
+*.tsbuildinfo
+
+# 环境变量
+.env
+.env.local
+.env.development
+.env.production
+
+# 日志
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude Code 本地配置 (含密钥)
+.claude/settings.json
+.claude/mcp.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 小程序
+miniprogram_npm/
+.project.config.json
+.tea/
+
+# 运行时库 (非项目代码)
+RuntimeFix/
+
+# 临时文件
+*.tmp
+temp/
+
+# 安装包
+*.msi
+*.exe
+
+# 参考图片
+ref_ui_*.jpg
+*webwxgetmsgimg*

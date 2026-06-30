@@ -1,0 +1,256 @@
+/* ========================================
+   为家航 · 市场详情页
+   上半地图导航 · 下半商品瀑布流
+   无图标 · 无卡片阴影 · 纯文字设计
+   ======================================== */
+
+page { background: #F5F6F8; height: 100vh; overflow: hidden; }
+
+/* page内部的根节点 — flex列布局，让scroll-view拿到确定高度 */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════
+   1. 地图区域
+   ═══════════════════════════════════════ */
+.map-area {
+  width: 100%;
+  height: 55vh;
+  position: relative;
+  transition: height 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  flex-shrink: 0;
+}
+.map-area.collapsed { height: 28vh; }
+
+.md-map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+}
+
+/* 浮动控件（留出状态栏高度） */
+.md-float-back {
+  position: absolute; top: 100rpx; left: 24rpx;
+  width: 60rpx; height: 60rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.90);
+  backdrop-filter: blur(8rpx);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.12);
+  z-index: 10;
+}
+.md-float-back:active { background: #EEE; }
+.mdfb-arrow { font-size: 36rpx; color: #333; font-weight: 300; }
+
+.md-float-search {
+  position: absolute; top: 100rpx; left: 100rpx; right: 100rpx;
+  padding: 16rpx 20rpx;
+  background: rgba(255,255,255,0.90);
+  backdrop-filter: blur(8rpx);
+  border-radius: 40rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.10);
+  z-index: 10;
+}
+.md-float-search:active { background: rgba(245,245,245,0.95); }
+.md-float-placeholder { font-size: 26rpx; color: #999; }
+
+.md-float-locate {
+  position: absolute; top: 100rpx; right: 24rpx;
+  width: 60rpx; height: 60rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.90);
+  backdrop-filter: blur(8rpx);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.12);
+  z-index: 10;
+}
+.md-float-locate:active { background: #EEE; }
+.mdfl-dot {
+  width: 18rpx; height: 18rpx; border-radius: 50%;
+  background: #FF6B35; border: 3rpx solid #fff;
+}
+
+/* 收起地图按钮 */
+.md-collapse-btn {
+  position: absolute; bottom: 12rpx; left: 50%;
+  transform: translateX(-50%);
+  padding: 10rpx 28rpx;
+  background: rgba(255,255,255,0.90);
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.08);
+  z-index: 10;
+}
+.md-collapse-btn:active { background: #F0F0F0; }
+.mdcb-text { font-size: 22rpx; color: #666; }
+
+/* ═══════════════════════════════════════
+   2. 市场信息条
+   ═══════════════════════════════════════ */
+.market-info-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16rpx 24rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+.mib-left { flex: 1; min-width: 0; }
+.mib-name {
+  font-size: 32rpx; font-weight: 700; color: #1A1A1A;
+  margin-bottom: 4rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mib-meta { font-size: 24rpx; color: #999; }
+.mib-right { flex-shrink: 0; }
+.mibr-text {
+  padding: 10rpx 20rpx; background: #FFF0EB; color: #FF6B35;
+  font-size: 24rpx; font-weight: 600; border-radius: 20rpx;
+}
+.mibr-text:active { background: #FFE0D0; }
+
+/* ═══════════════════════════════════════
+   3. 搜索条（收起地图时显示）
+   ═══════════════════════════════════════ */
+.md-search-bar {
+  display: flex; align-items: center;
+  margin: 12rpx 20rpx;
+  padding: 14rpx 20rpx;
+  background: #F0F1F5; border-radius: 40rpx;
+}
+.mdsb-input {
+  flex: 1; font-size: 26rpx; background: transparent;
+}
+.mdsb-clear {
+  width: 40rpx; height: 40rpx; border-radius: 50%;
+  background: #DDD; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20rpx; flex-shrink: 0;
+}
+.mdsb-clear:active { background: #BBB; }
+
+/* ═══════════════════════════════════════
+   4. 分类筛选 chips（纯文字）
+   ═══════════════════════════════════════ */
+.md-cate-row {
+  padding: 14rpx 0 8rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+.mdcr-scroll { white-space: nowrap; padding: 0 20rpx; }
+.mdcr-chip {
+  display: inline-block;
+  padding: 10rpx 24rpx; border-radius: 20rpx;
+  background: #F3F4F5; font-size: 24rpx; color: #666;
+  margin-right: 10rpx;
+  transition: all 0.15s;
+}
+.mdcr-chip.on {
+  background: #FF6B35; color: #fff;
+  font-weight: 600;
+  box-shadow: 0 3rpx 8rpx rgba(255,107,53,0.20);
+}
+.mdcr-chip:active { transform: scale(0.95); }
+
+/* ═══════════════════════════════════════
+   5. 排序标签
+   ═══════════════════════════════════════ */
+.md-sort-row {
+  display: flex; align-items: center; gap: 8rpx;
+  padding: 14rpx 20rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+.mdsr-tab {
+  flex: 1; text-align: center;
+  padding: 10rpx 0; border-radius: 6rpx;
+  font-size: 24rpx; color: #666;
+  background: #F8F9FA;
+}
+.mdsr-tab.on {
+  color: #FF6B35; font-weight: 700;
+  background: #FFF0EB;
+}
+
+/* ═══════════════════════════════════════
+   6. 商品瀑布流
+   ═══════════════════════════════════════ */
+.goods-scroll {
+  flex: 1;
+  min-height: 0;
+  background: #F5F6F8;
+}
+
+.goods-grid {
+  display: flex; flex-wrap: wrap;
+  padding: 16rpx 16rpx 0;
+  gap: 14rpx;
+}
+
+.goods-card {
+  width: calc(50% - 7rpx);
+  background: #fff; border-radius: 4rpx;
+  overflow: hidden;
+}
+.goods-card:active { transform: scale(0.98); }
+
+/* 商品图 */
+.gc-img-wrap {
+  width: 100%; height: 320rpx;
+  background: linear-gradient(180deg, #F8F9FA, #EEEFF1);
+  position: relative; overflow: hidden;
+}
+.gc-img { width: 100%; height: 100%; }
+.gc-img-tag {
+  position: absolute; top: 10rpx; left: 10rpx;
+  padding: 4rpx 12rpx; background: #1A365D;
+  color: #fff; font-size: 20rpx; border-radius: 5rpx; font-weight: 600;
+}
+.gc-img-tag.hot { background: #FF6B35; }
+
+/* 商品信息 */
+.gc-info { padding: 14rpx 16rpx 18rpx; }
+.gc-name {
+  font-size: 26rpx; color: #333; line-height: 1.5;
+  margin-bottom: 4rpx;
+  display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; overflow: hidden;
+  min-height: 78rpx;
+}
+.gc-spec { font-size: 22rpx; color: #999; margin-bottom: 10rpx; }
+
+/* 价格行 */
+.gc-price-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+.gc-price { display: flex; align-items: baseline; }
+.gcp-sym { font-size: 22rpx; color: #FF6B35; font-weight: 700; }
+.gcp-num { font-size: 36rpx; color: #FF6B35; font-weight: 800; line-height: 1; }
+.gcp-unit { font-size: 20rpx; color: #999; margin-left: 2rpx; }
+
+/* 快速加购 */
+.gc-cart-btn {
+  width: 48rpx; height: 48rpx; border-radius: 50%;
+  background: #FF6B35;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(255,107,53,0.25);
+}
+.gc-cart-btn:active { background: #E55A2B; transform: scale(0.92); }
+.gccb-plus { font-size: 30rpx; color: #fff; font-weight: 600; }
+
+/* 店铺行 */
+.gc-shop-row {
+  display: flex; align-items: center; gap: 6rpx;
+  font-size: 22rpx; color: #999;
+}
+.gcs-rating { color: #FF9500; flex-shrink: 0; }
+.gcs-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ═══════════════════════════════════════
+   7. 通用
+   ═══════════════════════════════════════ */
+.load-more { text-align: center; padding: 24rpx 0; font-size: 24rpx; color: #BBB; }
+.lm-end { color: #DDD; }
+.goods-empty { padding: 80rpx 0; text-align: center; }
+.ge-text { font-size: 28rpx; color: #CCC; }
+.bottom-safe { height: 40rpx; }

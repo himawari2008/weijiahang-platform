@@ -1,0 +1,117 @@
+<!--
+  为家航 · 首次引导页
+  3张卡片 — 3秒讲清楚"你能帮我干嘛"
+  只在首次安装后出现一次
+-->
+<view class="stage">
+
+  <!-- Swiper -->
+  <swiper class="swiper" current="{{current}}" bindchange="onSwipeChange"
+          indicator-dots="{{false}}" circular="{{false}}">
+
+    <!-- ═══ 第1页：找得到 ═══ -->
+    <swiper-item>
+      <view class="slide">
+        <!-- 插图：室内导航概念图 -->
+        <view class="illu-wrap illu-1">
+          <view class="illu-map">
+            <view class="im-grid"></view>
+            <view class="im-pin im-pin-a"><view class="o-icon pin"></view></view>
+            <view class="im-pin im-pin-b"><view class="o-icon block">市</view></view>
+            <view class="im-route"></view>
+          </view>
+          <view class="illu-icon"><view class="o-icon nav">航</view></view>
+        </view>
+        <!-- 文案 -->
+        <view class="slide-text">
+          <view class="st-badge">市场导航</view>
+          <view class="st-title">市场太大<text class="st-hl">别瞎逛</text></view>
+          <view class="st-desc">精确到区/排/号，输入你要的品类\n一键导航到店，不再满市场乱转</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ═══ 第2页：买不错 ═══ -->
+    <swiper-item>
+      <view class="slide">
+        <!-- 插图：三道关验货 -->
+        <view class="illu-wrap illu-2">
+          <view class="check-flow">
+            <view class="cf-step">
+              <view class="cf-icon"><view class="o-icon cam">拍</view></view>
+              <text>商家留底</text>
+            </view>
+            <view class="cf-arrow">→</view>
+            <view class="cf-step active">
+              <view class="cf-icon"><view class="o-icon search">验</view></view>
+              <text>领航员验货</text>
+            </view>
+            <view class="cf-arrow">→</view>
+            <view class="cf-step">
+              <view class="cf-icon"><view class="o-icon ok">✓</view></view>
+              <text>你确认</text>
+            </view>
+          </view>
+        </view>
+        <!-- 文案 -->
+        <view class="slide-text">
+          <view class="st-badge green">三道把关</view>
+          <view class="st-title">怕被宰？<text class="st-hl">三道关</text>把关</view>
+          <view class="st-desc">商家拍照留底 → 领航员逐店验货\n→ 你收货确认，货不对板平台先行赔付</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ═══ 第3页：不操心 ═══ -->
+    <swiper-item>
+      <view class="slide">
+        <!-- 插图：送货到家 -->
+        <view class="illu-wrap illu-3">
+          <view class="deliver-scene">
+            <view class="ds-shop"><view class="o-icon shop">店</view></view>
+            <view class="ds-arrow">→</view>
+            <view class="ds-truck"><view class="o-icon truck">送</view></view>
+            <view class="ds-arrow">→</view>
+            <view class="ds-home"><view class="o-icon home">家</view></view>
+          </view>
+          <view class="deliver-person">
+            <image class="dp-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+            <text class="dp-label">领航员</text>
+          </view>
+        </view>
+        <!-- 文案 -->
+        <view class="slide-text">
+          <view class="st-badge orange">领航员代办</view>
+          <view class="st-title">不想跑？<text class="st-hl">领航员</text>帮你</view>
+          <view class="st-desc">多店集货 + 验货把关 + 装车/送货到家\n你全程不用跑市场，坐等收货就行</view>
+        </view>
+      </view>
+    </swiper-item>
+
+  </swiper>
+
+  <!-- ═══ 底部区 ═══ -->
+  <view class="bottom-zone">
+    <!-- 圆点指示器 -->
+    <view class="dots">
+      <view class="dot {{current === 0 ? 'on' : ''}}"></view>
+      <view class="dot {{current === 1 ? 'on' : ''}}"></view>
+      <view class="dot {{current === 2 ? 'on' : ''}}"></view>
+    </view>
+
+    <!-- 按钮区 -->
+    <view class="action-row">
+      <view class="ar-skip" wx:if="{{current < 2}}" bindtap="onSkip">跳过</view>
+      <view class="ar-skip" wx:else></view>
+
+      <view class="ar-next" wx:if="{{current < 2}}" bindtap="onNext">
+        下一步
+      </view>
+      <view class="ar-start" wx:else bindtap="onStart">
+        <image class="ars-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+        <text>开始使用</text>
+      </view>
+    </view>
+  </view>
+
+</view>

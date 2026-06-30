@@ -1,0 +1,173 @@
+<view class="page">
+
+  <!-- ═══ 骨架屏 ═══ -->
+  <view class="skeleton" wx:if="{{loading && !loadError}}">
+    <view class="sk-header">
+      <view class="skh-circle"></view>
+      <view class="skh-lines">
+        <view class="sk-line w30"></view>
+        <view class="sk-line w50"></view>
+      </view>
+    </view>
+    <view class="sk-card">
+      <view class="sk-line w40"></view>
+      <view class="sk-bar"></view>
+      <view class="sk-line w60"></view>
+      <view class="sk-bar"></view>
+      <view class="sk-line w50"></view>
+      <view class="sk-bar"></view>
+    </view>
+    <view class="sk-card">
+      <view class="sk-grid-3">
+        <view class="skg-item" wx:for="{{3}}" wx:for-index="i" wx:key="i">
+          <view class="skg-icon"></view>
+          <view class="sk-line w40"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 错误态 ═══ -->
+  <view class="err-state" wx:elif="{{loadError}}">
+    <view class="err-box">
+      <view class="err-icon-wrap">
+        <view class="err-icon-inner"></view>
+      </view>
+      <text class="err-text">{{errorMsg || '加载失败'}}</text>
+      <view class="err-retry" bindtap="onRetry">
+        <text>重新加载</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 主内容 ═══ -->
+  <block wx:else>
+
+    <!-- ════════════════════════════════════════════
+       顶部渐变卡片
+       ════════════════════════════════════════════ -->
+    <view class="header-card">
+      <view class="hc-bg-glow"></view>
+      <view class="hc-content">
+        <view class="hc-badge t{{currentLevel}}">
+          <text>{{tierName}}</text>
+        </view>
+        <text class="hc-level">Lv.{{currentLevelText}}</text>
+        <text class="hc-title">{{tierFullName}}</text>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════════
+       升级进度
+       ════════════════════════════════════════════ -->
+    <view class="section-card">
+      <view class="section-header">
+        <text class="section-title">升级进度</text>
+        <text class="section-val">{{progressPercent}}%</text>
+      </view>
+      <view class="pc-bar-wrap">
+        <view class="pc-bar-fill" style="width:{{progressPercent}}%"></view>
+      </view>
+
+      <view class="pc-details">
+        <!-- 接单量 -->
+        <view class="pcd-item">
+          <view class="pcd-head">
+            <text class="pcd-label">接单量</text>
+            <text class="pcd-val">{{ordersText}}</text>
+          </view>
+          <view class="pcd-bar-wrap">
+            <view class="pcd-bar-fill pcd-orders" style="width:{{ordersPct}}%"></view>
+          </view>
+        </view>
+        <!-- 评分 -->
+        <view class="pcd-item">
+          <view class="pcd-head">
+            <text class="pcd-label">评分</text>
+            <text class="pcd-val">{{ratingText}}</text>
+          </view>
+          <view class="pcd-bar-wrap">
+            <view class="pcd-bar-fill pcd-rating" style="width:{{ratingPct}}%"></view>
+          </view>
+        </view>
+        <!-- 经验值 -->
+        <view class="pcd-item">
+          <view class="pcd-head">
+            <text class="pcd-label">经验值</text>
+            <text class="pcd-val">{{expText}}</text>
+          </view>
+          <view class="pcd-bar-wrap">
+            <view class="pcd-bar-fill pcd-exp" style="width:{{expPct}}%"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="next-tier-hint" wx:if="{{nextTierGap}}">
+        <view class="nth-icon"></view>
+        <text>{{nextTierGap}}</text>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════════
+       当前权益
+       ════════════════════════════════════════════ -->
+    <view class="section-card">
+      <text class="section-title">当前权益</text>
+
+      <view class="benefits-metrics">
+        <view class="bm-item">
+          <view class="bm-icon bm-commission"></view>
+          <text class="bm-value">{{commissionRateText}}</text>
+          <text class="bm-label">佣金比例</text>
+        </view>
+        <view class="bm-item">
+          <view class="bm-icon bm-weight"></view>
+          <text class="bm-value">{{dispatchWeightText}}</text>
+          <text class="bm-label">派单权重</text>
+        </view>
+        <view class="bm-item">
+          <view class="bm-icon bm-priority"></view>
+          <text class="bm-value">{{priorityText}}</text>
+          <text class="bm-label">专属权益</text>
+        </view>
+      </view>
+
+      <view class="benefits-list" wx:if="{{benefitList.length > 0}}">
+        <view class="bl-item" wx:for="{{benefitList}}" wx:key="index">
+          <view class="bli-dot {{item.icon}}"></view>
+          <text class="bli-text">{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════════
+       全部等级阶梯
+       ════════════════════════════════════════════ -->
+    <view class="section-card ladder-card">
+      <text class="section-title">全部等级</text>
+
+      <view class="tier-list">
+        <view
+          class="tl-item {{item.isCurrent ? 'current' : ''}}"
+          wx:for="{{tierLevels}}"
+          wx:key="level"
+        >
+          <view class="tl-badge {{item.levelClass}} {{item.isCurrent ? 'active' : ''}}">
+            <text>{{item.levelName}}</text>
+          </view>
+          <view class="tl-info">
+            <text class="tli-name">{{item.name}}</text>
+            <text class="tli-req">{{item.req}}</text>
+          </view>
+          <view class="tli-tag" wx:if="{{item.isCurrent}}">
+            <text>当前</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-spacer"></view>
+
+  </block>
+</view>

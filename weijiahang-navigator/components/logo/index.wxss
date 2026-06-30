@@ -1,0 +1,43 @@
+/* ========================================
+   为家航 Logo 组件 — 与客户端完全一致
+   橙红渐变圆角方底 + 白色房子 + 白色指南针圆环
+   ======================================== */
+
+.lo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22em;
+}
+
+/* — 图标容器 — */
+.lo-icon {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* — 底版图层（圆角方底 + 房子） — */
+.lo-base {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* — 上层图层（指南针圆环 + 刻度） — */
+.lo-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* — 品牌文字 — */
+.lo-text {
+  font-weight: 700;
+  color: #1A365D;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  line-height: 1;
+}

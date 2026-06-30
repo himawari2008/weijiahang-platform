@@ -1,0 +1,92 @@
+<!-- pages/data-stats/data-stats.wxml -->
+<!-- 数据统计 — 领航员数据看板 -->
+
+<view class="page">
+
+  <!-- ====== loading state ====== -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- ====== error state ====== -->
+  <view wx:elif="{{error}}" class="error-wrap">
+    <text class="error-text">数据加载失败</text>
+    <button class="retry-btn" bindtap="fetchData">重新加载</button>
+  </view>
+
+  <!-- ====== main content ====== -->
+  <view wx:else class="content">
+
+    <!-- section 1: stat grid 2x2 -->
+    <view class="section">
+      <view class="section-title">核心数据</view>
+      <view class="stat-grid">
+        <view class="stat-card" wx:for="{{statCards}}" wx:key="label">
+          <text class="stat-value">{{item.value}}<text class="stat-unit">{{item.unit}}</text></text>
+          <text class="stat-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- section 2: 7-day income trend (vertical bar chart) -->
+    <view class="section">
+      <view class="section-title">近7日收入趋势</view>
+      <view class="chart-wrap">
+        <view class="bars-container">
+          <view class="bar-group" wx:for="{{weekBars}}" wx:key="day">
+            <view class="bar-value">{{item.showValue}}</view>
+            <view class="bar-track">
+              <view class="bar-fill" style="height:{{item.height}}%"></view>
+            </view>
+            <text class="bar-label">{{item.day}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- section 3: category distribution (horizontal bar chart) -->
+    <view class="section">
+      <view class="section-title">服务类型分布</view>
+      <view class="category-wrap">
+        <view class="category-item" wx:for="{{categoryBars}}" wx:key="name">
+          <view class="category-header">
+            <text class="category-name">{{item.name}}</text>
+            <text class="category-percent">{{item.percent}}%</text>
+          </view>
+          <view class="category-track">
+            <view class="category-fill" style="width:{{item.widthPercent}}%;background-color:{{item.color}}"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- section 4: month summary -->
+    <view class="section">
+      <view class="section-title">本月汇总</view>
+      <view class="summary-grid">
+        <view class="summary-item">
+          <text class="summary-value">{{monthSummary.orders}}</text>
+          <text class="summary-unit">单</text>
+          <text class="summary-label">接单</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{monthSummary.income}}</text>
+          <text class="summary-unit">元</text>
+          <text class="summary-label">收入</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{monthSummary.hours}}</text>
+          <text class="summary-unit">小时</text>
+          <text class="summary-label">服务时长</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{monthSummary.distance}}</text>
+          <text class="summary-unit">公里</text>
+          <text class="summary-label">行走距离</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+</view>

@@ -1,0 +1,34 @@
+<!-- 通用订单卡片组件 -->
+<view class="order-card {{typeClass}}" bindtap="onTap">
+  <!-- 顶部：类型标签 + 倒计时/状态 -->
+  <view class="oc-header">
+    <view class="oc-type-tag {{typeClass}}">{{typeLabel}}</view>
+    <view wx:if="{{showCountdown && countdownText}}" class="oc-countdown {{isUrgent ? 'urgent' : ''}}">
+      <view class="oc-countdown-ring" style="--pct: {{countdownPercent}}"></view>
+      <text>{{countdownText}}</text>
+    </view>
+    <view wx:elif="{{statusLabel}}" class="oc-status {{statusClass}}">
+      {{statusLabel}}
+    </view>
+  </view>
+
+  <!-- 描述 -->
+  <view class="oc-desc">{{description}}</view>
+
+  <!-- 底栏：预估收入 + 距离 + 店铺数 -->
+  <view class="oc-footer">
+    <view class="oc-income">
+      <text class="oc-income-label">预估¥</text>
+      <text class="oc-income-val">{{incomeText}}</text>
+    </view>
+    <view class="oc-meta">
+      <text class="oc-distance">{{distance}}</text>
+      <text class="oc-shops">{{shopsText}}</text>
+    </view>
+  </view>
+
+  <!-- 抢单按钮 -->
+  <view wx:if="{{showGrabBtn}}" class="oc-grab-btn" catchtap="onGrab">
+    立即抢单
+  </view>
+</view>

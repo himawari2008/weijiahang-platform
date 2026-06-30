@@ -1,0 +1,57 @@
+/* 倒计时角标 — 环形倒计时 */
+
+.cd-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-ring {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(
+    #FF6B35 calc(var(--progress, 100) * 1%),
+    #e8e8e8 calc(var(--progress, 100) * 1%)
+  );
+  transition: background 0.3s;
+}
+
+.cd-badge.urgent .cd-ring {
+  background: conic-gradient(
+    #E84A1B calc(var(--progress, 100) * 1%),
+    #FFE4D6 calc(var(--progress, 100) * 1%)
+  );
+  animation: cd-pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes cd-pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.cd-ring-inner {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-text {
+  font-size: 22rpx;
+  font-weight: 800;
+  color: #FF6B35;
+  position: absolute;
+  z-index: 1;
+}
+
+.urgent .cd-text {
+  color: #E84A1B;
+}

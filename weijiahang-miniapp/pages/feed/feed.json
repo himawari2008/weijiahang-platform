@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "精选好货",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 100,
+  "usingComponents": {}
+}

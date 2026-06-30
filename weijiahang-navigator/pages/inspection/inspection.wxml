@@ -1,0 +1,60 @@
+<view class="page">
+  <!-- 页面标题 -->
+  <view class="header">
+    <view class="header-title">验货拍照确认</view>
+    <view class="header-desc">请逐项拍照，确保照片清晰可见</view>
+  </view>
+
+  <!-- 拍照清单 -->
+  <view class="section">
+    <view class="section-title">拍照清单</view>
+    <view class="checklist">
+      <view class="cl-item {{item.done ? 'cl-item-done' : ''}}" wx:for="{{checklist}}" wx:key="id" data-id="{{item.id}}">
+        <!-- 编号圆圈 -->
+        <view class="cli-badge {{item.done ? 'cli-badge-done' : 'cli-badge-pending'}}">
+          <view class="cli-badge-inner" wx:if="{{item.done}}">
+            <view class="icon-check"></view>
+          </view>
+          <text wx:else>{{item.id}}</text>
+        </view>
+        <!-- 标签 -->
+        <view class="cli-content">
+          <text class="cli-label">{{item.label}}</text>
+          <text class="cli-sub-label" wx:if="{{item.done}}">已拍照</text>
+        </view>
+        <!-- 缩略图预览 -->
+        <image class="cli-thumb" src="{{item.photo}}" wx:if="{{item.photo}}" mode="aspectFill" data-id="{{item.id}}" bindtap="onRetake" />
+        <!-- 拍照/重拍按钮 -->
+        <view class="cli-btn-wrap">
+          <view class="cli-btn {{item.done ? 'cli-btn-done' : 'cli-btn-photo'}}" data-id="{{item.id}}" bindtap="{{item.done ? 'onRetake' : 'onPhoto'}}">
+            <view class="cli-btn-icon">
+              <view class="icon-camera" wx:if="{{!item.done}}"></view>
+              <view class="icon-check-circle" wx:else></view>
+            </view>
+            <text>{{item.done ? '重拍' : '拍照'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注输入 -->
+  <view class="section">
+    <view class="section-title">备注</view>
+    <textarea class="notes-textarea" placeholder="补充说明（选填）" value="{{notes}}" bindinput="onNotesInput" maxlength="300" auto-height />
+  </view>
+
+  <!-- 底部进度与提交 -->
+  <view class="footer">
+    <view class="footer-progress">
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fill" style="width: {{progressPercent}}%"></view>
+      </view>
+      <text class="progress-text">{{doneCount}}/{{checklist.length}} 项已完成</text>
+    </view>
+    <button class="btn-submit {{canSubmit ? '' : 'btn-submit-disabled'}}" disabled="{{!canSubmit || submitting}}" bindtap="onSubmit">
+      <text wx:if="{{!submitting}}">提交验货报告</text>
+      <text wx:else>提交中...</text>
+    </button>
+  </view>
+</view>

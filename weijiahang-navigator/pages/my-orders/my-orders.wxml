@@ -1,0 +1,110 @@
+<view class="page">
+  <!-- ═══ 导航栏容器 ═══ -->
+  <view class="nav-bar">
+    <view class="nav-tabs">
+      <view
+        class="nav-tab {{currentTab === item.key ? 'on' : ''}}"
+        wx:for="{{tabOptions}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="onTabChange"
+      >
+        <text>{{item.label}}</text>
+        <view class="nav-tab-line" wx:if="{{currentTab === item.key}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 骨架屏 ═══ -->
+  <view class="skeleton-wrap" wx:if="{{loading && displayOrders.length === 0}}">
+    <view class="sk-card" wx:for="{{3}}" wx:for-index="i" wx:key="i">
+      <view class="skc-dot"></view>
+      <view class="skc-body">
+        <view class="skc-line w40"></view>
+        <view class="skc-line w70"></view>
+        <view class="skc-line w50"></view>
+      </view>
+      <view class="skc-right">
+        <view class="skc-line w30"></view>
+        <view class="skc-btn"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 错误态 ═══ -->
+  <view class="err-state" wx:elif="{{loadError && displayOrders.length === 0}}">
+    <view class="err-box">
+      <view class="err-icon-wrap">
+        <view class="err-icon-inner"></view>
+      </view>
+      <text class="err-text">{{errorMsg || '加载失败'}}</text>
+      <view class="err-retry" bindtap="onRetry">
+        <text>重新加载</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 订单列表 ═══ -->
+  <scroll-view
+    scroll-y
+    class="order-scroll"
+    refresher-enabled
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+    wx:if="{{!loading || displayOrders.length > 0}}"
+  >
+    <!-- 订单卡片 -->
+    <view
+      class="mo-card {{item.statusClass}}"
+      wx:for="{{displayOrders}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onOrderTap"
+    >
+      <view class="moc-top">
+        <view class="moc-left">
+          <view class="moc-type-icon {{item.serviceType}}"></view>
+          <view class="moc-info">
+            <view class="moc-shop ellipsis">{{item.shopName}}</view>
+            <view class="moc-desc ellipsis">{{item.description || item.typeLabel + '服务'}}</view>
+          </view>
+        </view>
+        <view class="moc-status {{item.statusClass}}">
+          <view class="ms-dot {{item.statusDotClass}}"></view>
+          <text>{{item.statusLabel}}</text>
+        </view>
+      </view>
+
+      <view class="moc-mid">
+        <view class="moc-tag">{{item.typeLabel}}</view>
+        <view class="moc-tag" wx:if="{{item.category}}">{{item.category}}</view>
+        <text class="moc-time" wx:if="{{item.createdAt}}">{{item.createdAt}}</text>
+      </view>
+
+      <view class="moc-bottom">
+        <view class="moc-price">
+          <text class="moc-amount">{{item.amountText}}</text>
+          <text class="moc-income">到手{{item.incomeText}}</text>
+        </view>
+        <view class="moc-countdown {{item.isUrgent ? 'urgent' : ''}}" wx:if="{{item.countdownText}}">
+          <view class="moc-clock"></view>
+          <text>{{item.countdownText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空态 -->
+    <view class="empty-state" wx:if="{{displayOrders.length === 0 && !loading && !loadError}}">
+      <view class="empty-box">
+        <view class="empty-icon-box">
+          <view class="empty-order-icon"></view>
+        </view>
+        <text class="empty-main">{{emptyText}}</text>
+        <text class="empty-sub">{{emptyHint}}</text>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,78 @@
+<!-- 城市选择页 -->
+<view class="page">
+
+  <!-- ═══ 搜索栏 ═══ -->
+  <view class="cs-search {{searchFocused ? 'focused' : ''}}">
+    <view class="css-input-row">
+      <text class="css-search-icon">🔍</text>
+      <input class="css-input"
+             placeholder="搜索城市名…"
+             value="{{searchWord}}"
+             focus="{{false}}"
+             bindinput="onSearchInput"
+             bindfocus="onSearchFocus"
+             bindblur="onSearchBlur"
+             confirm-type="search" />
+      <view class="css-clear" wx:if="{{searchWord}}" bindtap="onSearchClear">
+        <text>✕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 自动定位（搜索词为空时显示） ═══ -->
+  <view class="cs-locate" wx:if="{{!searchWord}}">
+    <view class="csl-row" bindtap="onAutoLocate">
+      <view class="csl-left">
+        <text class="csl-pin">📍</text>
+        <view class="csl-info">
+          <view class="csl-label">GPS 自动定位</view>
+          <view class="csl-city">
+            <block wx:if="{{locating}}">定位中…</block>
+            <block wx:elif="{{locatedCity}}">{{locatedCity}}</block>
+            <block wx:else>点击定位</block>
+          </view>
+        </view>
+      </view>
+      <view class="csl-btn">
+        <text wx:if="{{locating}}">定位中…</text>
+        <text wx:else>重新定位</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 当前选择 ═══ -->
+  <view class="cs-current" wx:if="{{currentCity && !searchWord}}">
+    <text class="csc-label">当前城市</text>
+    <text class="csc-name">{{currentCity}}</text>
+    <text class="csc-check">✓</text>
+  </view>
+
+  <!-- ═══ 城市列表 ═══ -->
+  <view class="cs-section">
+    <view class="css-title">
+      {{searchWord ? '搜索结果（' + cities.length + '）' : '全部城市'}}
+    </view>
+
+    <!-- 有搜索结果 -->
+    <view class="css-grid" wx:if="{{cities.length > 0}}">
+      <view class="css-item {{currentCity === item ? 'on' : ''}}"
+            wx:for="{{cities}}" wx:key="*this"
+            bindtap="onSelectCity" data-city="{{item}}">
+        <text>{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 无匹配 -->
+    <view class="cs-empty" wx:else>
+      <text class="cse-icon">🔍</text>
+      <text class="cse-text">未找到"{{searchWord}}"相关城市</text>
+      <text class="cse-hint">试试输入拼音首字母或城市全称</text>
+    </view>
+  </view>
+
+  <!-- 底部品牌 -->
+  <view class="cs-brand">
+    <text>为家航 — 买建材，先领航</text>
+  </view>
+
+</view>

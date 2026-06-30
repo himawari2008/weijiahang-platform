@@ -1,0 +1,84 @@
+/* ============================================
+   为家航商家端 — 全局样式
+   ============================================ */
+
+/* ---- 品牌色彩变量 ---- */
+:root {
+  --primary: #FF6B35;
+  --primary-dark: #E84A1B;
+  --primary-light: #FFE4D6;
+  --secondary: #1A365D;
+  --bg: #F5F5F5;
+  --card-bg: #FFFFFF;
+  --text: #1A1A2E;
+  --text-secondary: #666;
+  --text-tertiary: #999;
+  --success: #52C41A;
+  --warning: #FAAD14;
+  --danger: #FF4D4F;
+  --info: #1677FF;
+  --border: #F0F0F0;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+
+/* ---- 基础重置 ---- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- 滚动条美化 ---- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---- 登录页 ---- */
+.login-page {
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; background: linear-gradient(135deg, #FF6B35 0%, #1A365D 100%);
+}
+.login-card {
+  width: 400px; max-width: 90vw; padding: 48px 40px; background: #fff;
+  border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.login-card h1 { font-size: 28px; color: #FF6B35; margin-bottom: 8px; font-weight: 700; }
+.login-card .subtitle { color: #999; margin-bottom: 32px; font-size: 14px; }
+
+/* ---- 仪表盘统计卡片（旧样式兼容） ---- */
+.dashboard-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #fff; padding: 24px; border-radius: 12px; text-align: center; }
+.stat-card .num { font-size: 36px; font-weight: 700; color: #FF6B35; }
+.stat-card .label { font-size: 14px; color: #999; margin-top: 4px; }
+
+/* ---- 商品图片上传 ---- */
+.product-img-upload { width: 120px; height: 120px; border: 2px dashed #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #999; font-size: 32px; }
+
+/* ---- 通用工具类 ---- */
+.text-primary { color: var(--primary); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+.text-secondary { color: var(--text-secondary); }
+
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+
+.gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; } .gap-24 { gap: 24px; }
+
+.mt-8 { margin-top: 8px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; } .mb-16 { margin-bottom: 16px; } .mb-24 { margin-bottom: 24px; }
+
+/* ---- 响应式 ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 769px) {
+  .show-mobile { display: none !important; }
+}

@@ -1,0 +1,195 @@
+<view class="page">
+  <!-- ═══ Logo ═══ -->
+  <view class="logo-bar">
+    <logo-icon size="72" show-text="{{true}}"></logo-icon>
+  </view>
+
+  <!-- ═══ 顶部状态栏：问候语 + 连接状态 + 上下线开关 + 今日统计 ═══ -->
+  <view class="status-header">
+    <view class="sh-top">
+      <view class="sh-left">
+        <view class="sh-greeting">{{greeting}}，{{navInfo ? navInfo.name : '领航员'}}</view>
+        <view class="sh-connection {{connectionDotClass}}">
+          <view class="shc-dot"></view>
+          <text class="shc-text">{{connectionStatusText}}</text>
+        </view>
+      </view>
+      <view class="sh-actions">
+        <view class="sh-toggle" bindtap="onToggle">
+          <view class="sht-switch {{isOnline ? 'on' : ''}}">
+            <view class="sht-dot"></view>
+          </view>
+          <text>{{isOnline ? '接单中' : '已下线'}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="sh-earn-row">
+      <view class="she-item">
+        <view class="she-val">{{todayStats.earn}}</view>
+        <view class="she-label">今日收入</view>
+      </view>
+      <view class="she-div"></view>
+      <view class="she-item">
+        <view class="she-val">{{todayStats.orders}}</view>
+        <view class="she-label">今日接单</view>
+      </view>
+      <view class="she-div"></view>
+      <view class="she-item">
+        <view class="she-val">{{ratingText}}</view>
+        <view class="she-label">好评率</view>
+      </view>
+      <view class="she-div"></view>
+      <view class="she-item">
+        <view class="she-val">{{todayStats.totalOrders}}</view>
+        <view class="she-label">总订单</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 快捷入口：当前市场 / 附近单数 / 排名 / 我的订单 ═══ -->
+  <view class="quick-row">
+    <view class="qr-item" bindtap="onSwitchMarket">
+      <view class="qr-icon market"></view>
+      <text class="qr-label">{{marketShortName}}</text>
+    </view>
+    <view class="qr-item">
+      <view class="qr-icon nearby"></view>
+      <text class="qr-label">附近{{nearbyCount}}单</text>
+    </view>
+    <view class="qr-item">
+      <view class="qr-icon rank"></view>
+      <text class="qr-label">排名{{rank}}</text>
+    </view>
+    <view class="qr-item" bindtap="onGoMyOrders">
+      <view class="qr-icon myorders"></view>
+      <text class="qr-label">我的订单</text>
+    </view>
+  </view>
+
+  <!-- ═══ 实时待抢订单区域（有 pending 订单时显示）══════ -->
+  <view class="pending-section" wx:if="{{pendingOrders.length > 0}}">
+    <view class="pending-header">
+      <view class="ph-dot-pulse"></view>
+      <text class="ph-title">实时抢单</text>
+      <text class="ph-count">{{pendingOrders.length}}单待抢</text>
+    </view>
+    <view class="pending-card" wx:for="{{pendingOrders}}" wx:for-item="po" wx:key="id">
+      <view class="pc-top">
+        <view class="pc-type {{po.serviceType}}">
+          <view class="pct-icon"></view>
+        </view>
+        <view class="pc-info">
+          <view class="pc-title">{{po.typeLabel}}</view>
+          <view class="pc-desc ellipsis">{{po.description}}</view>
+          <view class="pc-tags">
+            <text class="pc-tag">{{po.shopsText}}</text>
+            <text class="pc-tag">{{po.marketName}}</text>
+          </view>
+        </view>
+        <view class="pc-price">
+          <view class="pc-amount">{{po.amountText}}</view>
+          <view class="pc-income">到手{{po.incomeText}}</view>
+        </view>
+      </view>
+      <!-- 倒计时条 -->
+      <view class="pc-countdown-bar">
+        <view class="pcc-bg">
+          <view class="pcc-fill {{po.isUrgent ? 'urgent' : ''}}" style="width:{{po.countdownPercent}}%"></view>
+        </view>
+        <text class="pcc-text {{po.isUrgent ? 'urgent' : ''}}">{{po.countdownText}}</text>
+      </view>
+      <!-- 抢单按钮（含环形倒计时） -->
+      <view class="pc-grab-wrap">
+        <!-- 环形倒计时 -->
+        <view class="pcg-ring">
+          <view class="pcgr-bg"></view>
+          <view class="pcgr-fill {{po.isUrgent ? 'urgent' : ''}}" style="--remain:{{po.countdownPercent}}"></view>
+          <view class="pcgr-inner">
+            <text class="pcgr-countdown {{po.isUrgent ? 'urgent' : ''}}">{{po.countdownText}}</text>
+          </view>
+        </view>
+        <view class="pc-grab" catchtap="onGrabOrder" data-id="{{po.id}}">
+          <text class="pcg-text">立即抢单</text>
+          <view class="pcg-arrow"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 筛选栏 ═══ -->
+  <scroll-view scroll-x class="filter-row" enhanced show-scrollbar="{{false}}">
+    <view
+      class="f-chip {{filter === item.key ? 'on' : ''}}"
+      wx:for="{{filterOptions}}"
+      wx:key="key"
+      bindtap="onFilter"
+      data-f="{{item.key}}"
+    >
+      {{item.label}}
+      <text class="fc-count">{{item.key === 'all' ? orders.length : filterCounts[item.key] || 0}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- ═══ 骨架屏 ═══ -->
+  <view class="skeleton" wx:if="{{loading}}">
+    <view class="sk-card" wx:for="{{3}}" wx:for-index="i" wx:key="i">
+      <view class="sk-left"></view>
+      <view class="sk-body">
+        <view class="sk-line w60"></view>
+        <view class="sk-line w85"></view>
+        <view class="sk-line w45"></view>
+      </view>
+      <view class="sk-right">
+        <view class="sk-line w35"></view>
+        <view class="sk-line w30"></view>
+        <view class="sk-btn"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 订单列表 + 空态 ═══ -->
+  <scroll-view
+    scroll-y
+    class="order-list"
+    refresher-enabled
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+    wx:if="{{!loading}}"
+  >
+    <view class="order-card" wx:for="{{filteredOrders}}" wx:key="id">
+      <view class="oc-left">
+        <view class="oc-type-icon {{item.serviceType}}"></view>
+      </view>
+      <view class="oc-body">
+        <view class="oc-title">
+          {{item.serviceType === 'navigation' ? '导航单' : item.serviceType === 'accompany' ? '陪逛单' : '验货单'}}
+        </view>
+        <view class="oc-desc ellipsis">{{item.description}}</view>
+        <view class="oc-tags">
+          <text class="oc-tag">{{item.shops || 1}}家店</text>
+          <text class="oc-tag">{{item.timeAgo || '刚刚'}}</text>
+          <text class="oc-tag dist">{{item.distance || '100m'}}</text>
+        </view>
+      </view>
+      <view class="oc-right">
+        <view class="oc-price">{{item.amount}}</view>
+        <view class="oc-income">到手{{item.navigatorIncome || Math.round(item.amount * 0.8)}}</view>
+        <view class="grab-btn" catchtap="onGrabOrder" data-id="{{item.id}}">抢 单</view>
+      </view>
+    </view>
+
+    <!-- 空态 -->
+    <view wx:if="{{filteredOrders.length === 0 && pendingOrders.length === 0}}" class="empty-state">
+      <view wx:if="{{apiError}}" class="empty-box">
+        <view class="empty-icon error"></view>
+        <view class="empty-text">网络开小差了</view>
+        <view class="empty-hint">下拉刷新重试</view>
+      </view>
+      <view wx:else class="empty-box">
+        <view class="empty-icon"></view>
+        <view class="empty-text">暂无匹配订单</view>
+        <view class="empty-hint">切换筛选或稍后再试</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

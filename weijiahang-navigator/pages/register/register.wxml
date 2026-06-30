@@ -1,0 +1,388 @@
+<view class="page">
+
+  <!-- ═══ 注册成功页面（替代步骤流程）═══ -->
+  <view wx:if="{{registerSuccess}}" class="success-page">
+    <view class="sp-circle">
+      <view class="sp-check"></view>
+    </view>
+    <text class="sp-title">认证提交成功</text>
+    <text class="sp-hint">平台将在1-3个工作日内审核</text>
+    <view class="sp-card">
+      <view class="spc-header">新人保护期（前20单）</view>
+      <view class="spc-row">
+        <view class="spc-icon priority"></view>
+        <text class="spc-text">优先派发简单订单</text>
+      </view>
+      <view class="spc-row">
+        <view class="spc-icon forgive"></view>
+        <text class="spc-text">超时免处罚</text>
+      </view>
+      <view class="spc-row">
+        <view class="spc-icon guide"></view>
+        <text class="spc-text">资深领航员一对一指导</text>
+      </view>
+    </view>
+    <view class="sp-btn" bindtap="onBackHome">返回接单大厅</view>
+  </view>
+
+  <!-- ═══ 步骤流程 ═══ -->
+  <block wx:else>
+
+    <!-- 步骤指示器 -->
+    <view class="step-indicator">
+      <view class="si-track">
+        <view class="si-line" style="width:{{(currentStep - 1) / (totalSteps - 1) * 100}}%"></view>
+      </view>
+      <view class="si-dots">
+        <view
+          class="si-dot {{index + 1 < currentStep ? 'completed' : index + 1 === currentStep ? 'active' : ''}}"
+          wx:for="{{stepProgress}}"
+          wx:key="number"
+        >
+          <text class="sid-number">{{index + 1 < currentStep ? '' : index + 1}}</text>
+          <view class="sid-check" wx:if="{{index + 1 < currentStep}}"></view>
+        </view>
+      </view>
+      <view class="si-labels">
+        <text class="si-label {{index + 1 === currentStep ? 'active' : ''}}"
+          wx:for="{{stepProgress}}"
+          wx:key="number"
+        >{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════
+       Step 1: 实名信息
+       ════════════════════════════════════════ -->
+    <view class="step-content" wx:if="{{currentStep === 1}}">
+      <view class="form-card">
+        <view class="form-title">实名信息</view>
+        <text class="form-desc">请填写您的真实身份信息，用于平台审核和结算</text>
+
+        <view class="form-group">
+          <text class="fg-label">真实姓名</text>
+          <input class="fg-input {{step1Errors.realName ? 'error' : ''}}"
+            type="text"
+            placeholder="请输入真实姓名"
+            value="{{realName}}"
+            bindinput="onNameInput"
+            maxlength="20"
+          />
+          <text class="fg-error" wx:if="{{step1Errors.realName}}">{{step1Errors.realName}}</text>
+        </view>
+
+        <view class="form-group">
+          <text class="fg-label">身份证号</text>
+          <input class="fg-input {{step1Errors.idCard ? 'error' : ''}}"
+            type="idcard"
+            placeholder="请输入18位身份证号"
+            value="{{idCard}}"
+            bindinput="onIdCardInput"
+            maxlength="18"
+          />
+          <text class="fg-error" wx:if="{{step1Errors.idCard}}">{{step1Errors.idCard}}</text>
+        </view>
+
+        <view class="form-group">
+          <text class="fg-label">手机号码</text>
+          <input class="fg-input {{step1Errors.phone ? 'error' : ''}}"
+            type="number"
+            placeholder="请输入手机号"
+            value="{{phone}}"
+            bindinput="onPhoneInput"
+            maxlength="11"
+          />
+          <text class="fg-error" wx:if="{{step1Errors.phone}}">{{step1Errors.phone}}</text>
+        </view>
+
+        <view class="form-remark">
+          <view class="fr-icon"></view>
+          <text>您的信息仅用于平台审核，不会对外公开</text>
+        </view>
+      </view>
+
+      <view class="step-actions">
+        <view class="step-btn primary" bindtap="goNextStep">
+          <text>下一步</text>
+          <view class="sb-arrow"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════
+       Step 2: 身份认证
+       ════════════════════════════════════════ -->
+    <view class="step-content" wx:if="{{currentStep === 2}}">
+      <view class="form-card">
+        <view class="form-title">身份认证</view>
+        <text class="form-desc">请上传身份证照片并完成人脸验证</text>
+
+        <!-- 身份证正面 -->
+        <view class="photo-group">
+          <text class="fg-label">身份证正面（人像面）</text>
+          <view class="photo-upload {{idCardFront ? 'has-image' : ''}}" bindtap="onTakeIdFront">
+            <image wx:if="{{idCardFront}}" src="{{idCardFront}}" mode="aspectFill" class="pu-image"></image>
+            <view wx:else class="pu-placeholder">
+              <view class="pu-camera-icon"></view>
+              <text class="pu-hint">拍摄或上传</text>
+            </view>
+          </view>
+          <text class="fg-error" wx:if="{{step2Errors.idCardFront}}">{{step2Errors.idCardFront}}</text>
+        </view>
+
+        <!-- 身份证反面 -->
+        <view class="photo-group">
+          <text class="fg-label">身份证反面（国徽面）</text>
+          <view class="photo-upload {{idCardBack ? 'has-image' : ''}}" bindtap="onTakeIdBack">
+            <image wx:if="{{idCardBack}}" src="{{idCardBack}}" mode="aspectFill" class="pu-image"></image>
+            <view wx:else class="pu-placeholder">
+              <view class="pu-camera-icon"></view>
+              <text class="pu-hint">拍摄或上传</text>
+            </view>
+          </view>
+          <text class="fg-error" wx:if="{{step2Errors.idCardBack}}">{{step2Errors.idCardBack}}</text>
+        </view>
+
+        <!-- 人脸验证 -->
+        <view class="face-group">
+          <text class="fg-label">人脸验证</text>
+          <view class="face-row">
+            <view class="face-left">
+              <view class="face-avatar {{faceVerified ? 'verified' : ''}}">
+                <view class="fa-icon"></view>
+              </view>
+              <view class="face-info">
+                <text class="face-status">{{faceVerified ? '已完成人脸验证' : '未验证'}}</text>
+                <text class="face-hint">{{faceVerified ? '有效期30天' : '需完成活体检测'}}</text>
+              </view>
+            </view>
+            <view class="face-btn {{faceVerified ? 'done' : ''}}" bindtap="onFaceVerify">
+              <text>{{faceVerified ? '已认证' : '开始验证'}}</text>
+            </view>
+          </view>
+          <text class="fg-error" wx:if="{{step2Errors.faceVerified}}">{{step2Errors.faceVerified}}</text>
+        </view>
+      </view>
+
+      <view class="step-actions dual">
+        <view class="step-btn outline" bindtap="goPrevStep">
+          <view class="sb-arrow-left"></view>
+          <text>上一步</text>
+        </view>
+        <view class="step-btn primary" bindtap="goNextStep">
+          <text>下一步</text>
+          <view class="sb-arrow"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════
+       Step 3: 市场考核（选市场 + 答题）
+       ════════════════════════════════════════ -->
+    <view class="step-content" wx:if="{{currentStep === 3}}">
+      <!-- 常驻市场选择 -->
+      <view class="form-card">
+        <view class="form-title">选择常驻市场</view>
+        <text class="form-desc">选择您最熟悉的市场（1-3个），便于平台派单</text>
+
+        <view class="market-grid">
+          <view
+            class="mg-item {{item.selected ? 'on' : ''}}"
+            wx:for="{{marketOptions}}"
+            wx:key="id"
+            data-id="{{item.id}}"
+            bindtap="onMarketToggle"
+          >
+            <view class="mgi-check {{item.selected ? 'checked' : ''}}">
+              <view class="mgic-inner" wx:if="{{item.selected}}"></view>
+            </view>
+            <text class="mgi-name">{{item.name}}</text>
+          </view>
+        </view>
+
+        <text class="market-count" wx:if="{{selectedMarketNames}}">已选：{{selectedMarketNames}}</text>
+      </view>
+
+      <!-- 市场知识考核 -->
+      <view class="form-card quiz-card">
+        <view class="form-title">市场知识考核</view>
+        <text class="form-desc">答对3题及以上通过（共5题）</text>
+
+        <view class="quiz-result" wx:if="{{quizSubmitted && quizResult}}">
+          <view class="qr-circle {{quizResult.passed ? 'pass' : 'fail'}}">
+            <text class="qr-score">{{quizResult.score}}/{{quizResult.total}}</text>
+          </view>
+          <text class="qr-label">{{quizResult.passed ? '恭喜，通过考核！' : '很遗憾，未通过考核'}}</text>
+          <view class="qr-retry" wx:if="{{!quizResult.passed}}" bindtap="onQuizRetry">
+            <text>重新答题</text>
+          </view>
+        </view>
+
+        <view class="quiz-list" wx:if="{{!quizSubmitted}}">
+          <view class="quiz-item" wx:for="{{quizQuestions}}" wx:for-item="q" wx:key="id">
+            <text class="qi-question">{{q.question}}</text>
+            <view
+              class="qi-option {{quizAnswers[q.id] === oidx ? 'selected' : ''}} {{quizSubmitted ? (oidx === q.answer ? 'correct' : 'wrong') : ''}}"
+              wx:for="{{q.options}}"
+              wx:for-item="opt"
+              wx:for-index="oidx"
+              wx:key="oidx"
+              data-qid="{{q.id}}"
+              data-oidx="{{oidx}}"
+              bindtap="onQuizSelect"
+              data-disabled="{{quizSubmitted}}"
+            >
+              <view class="qio-radio {{quizAnswers[q.id] === oidx ? 'on' : ''}}"></view>
+              <text class="qio-text">{{opt}}</text>
+            </view>
+          </view>
+
+          <view class="quiz-submit" bindtap="onQuizSubmit" wx:if="{{Object.keys(quizAnswers).length === quizQuestions.length}}">
+            <text>提交答案</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="step-actions dual">
+        <view class="step-btn outline" bindtap="goPrevStep">
+          <view class="sb-arrow-left"></view>
+          <text>上一步</text>
+        </view>
+        <view class="step-btn primary" bindtap="goNextStep">
+          <text>下一步</text>
+          <view class="sb-arrow"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ════════════════════════════════════════
+       Step 4: 技能选择
+       ════════════════════════════════════════ -->
+    <view class="step-content" wx:if="{{currentStep === 4}}">
+      <view class="form-card">
+        <view class="form-title">选择擅长品类</view>
+        <text class="form-desc">选择您熟悉的建材品类（可多选）</text>
+
+        <view class="skill-grid">
+          <view
+            class="sg-item {{item.selected ? 'on' : ''}}"
+            wx:for="{{skillOptions}}"
+            wx:key="id"
+            data-id="{{item.id}}"
+            bindtap="onSkillToggle"
+          >
+            <view class="sgi-icon {{item.id}}"></view>
+            <text class="sgi-label">{{item.label}}</text>
+          </view>
+        </view>
+
+        <view class="selection-summary" wx:if="{{skillNames}}">
+          <text>已选：{{skillNames}}</text>
+        </view>
+      </view>
+
+      <view class="form-card">
+        <view class="form-title">选择服务类型</view>
+        <text class="form-desc">您愿意提供哪些服务</text>
+
+        <view class="service-list">
+          <view
+            class="sv-item {{item.selected ? 'on' : ''}}"
+            wx:for="{{serviceTypeOptions}}"
+            wx:key="id"
+            data-id="{{item.id}}"
+            bindtap="onServiceTypeToggle"
+          >
+            <view class="sv-left">
+              <view class="sv-check {{item.selected ? 'checked' : ''}}">
+                <view class="svc-inner" wx:if="{{item.selected}}"></view>
+              </view>
+              <view class="sv-info">
+                <text class="sv-label">{{item.label}}</text>
+                <text class="sv-desc">{{item.desc}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-card">
+        <view class="form-title">特殊技能</view>
+
+        <view class="special-list">
+          <view class="sp-item {{specialSkills.bargain ? 'on' : ''}}" data-key="bargain" bindtap="onSpecialToggle">
+            <view class="sp-check {{specialSkills.bargain ? 'checked' : ''}}">
+              <view class="spc-inner" wx:if="{{specialSkills.bargain}}"></view>
+            </view>
+            <view class="sp-content">
+              <view class="sp-icon bargain"></view>
+              <view class="sp-info">
+                <text class="sp-label">砍价能力</text>
+                <text class="sp-desc">能为客户争取更优惠的价格</text>
+              </view>
+            </view>
+          </view>
+          <view class="sp-item {{specialSkills.dialect ? 'on' : ''}}" data-key="dialect" bindtap="onSpecialToggle">
+            <view class="sp-check {{specialSkills.dialect ? 'checked' : ''}}">
+              <view class="spc-inner" wx:if="{{specialSkills.dialect}}"></view>
+            </view>
+            <view class="sp-content">
+              <view class="sp-icon dialect"></view>
+              <view class="sp-info">
+                <text class="sp-label">方言沟通</text>
+                <text class="sp-desc">会当地方言，交流更顺畅</text>
+              </view>
+            </view>
+          </view>
+          <view class="sp-item {{specialSkills.hasVehicle ? 'on' : ''}}" data-key="hasVehicle" bindtap="onSpecialToggle">
+            <view class="sp-check {{specialSkills.hasVehicle ? 'checked' : ''}}">
+              <view class="spc-inner" wx:if="{{specialSkills.hasVehicle}}"></view>
+            </view>
+            <view class="sp-content">
+              <view class="sp-icon vehicle"></view>
+              <view class="sp-info">
+                <text class="sp-label">有货车/面包车</text>
+                <text class="sp-desc">可协助客户运输小件材料</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-card">
+        <view class="form-title">从业经验</view>
+
+        <view class="picker-group">
+          <picker
+            mode="selector"
+            range="{{experienceOptions}}"
+            value="{{experienceIndex}}"
+            bindchange="onExperienceChange"
+          >
+            <view class="picker-display">
+              <text class="pd-label">建材行业经验</text>
+              <text class="pd-value {{experienceIndex < 0 ? 'placeholder' : ''}}">
+                {{experienceIndex >= 0 ? expText : '请选择从业年限'}}
+              </text>
+              <view class="pd-arrow"></view>
+            </view>
+          </picker>
+          <text class="fg-error" wx:if="{{step4Errors.experience}}">{{step4Errors.experience}}</text>
+        </view>
+      </view>
+
+      <view class="step-actions dual">
+        <view class="step-btn outline" bindtap="goPrevStep">
+          <view class="sb-arrow-left"></view>
+          <text>上一步</text>
+        </view>
+        <view class="step-btn primary {{submitting ? 'loading' : ''}}" bindtap="goNextStep">
+          <view class="sb-loading" wx:if="{{submitting}}"></view>
+          <text>{{submitting ? '提交中...' : '提交认证'}}</text>
+          <view class="sb-arrow" wx:if="{{!submitting}}"></view>
+        </view>
+      </view>
+    </view>
+
+  </block>
+</view>

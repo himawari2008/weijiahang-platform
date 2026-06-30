@@ -1,0 +1,53 @@
+<view class="page">
+  <!-- 通知设置 -->
+  <view class="section-title">消息通知</view>
+  <view class="section">
+    <view class="row">
+      <text class="row-label">接收通知</text>
+      <switch checked="{{notificationEnabled}}" bindchange="onToggleNotification" color="#FF6B35" />
+    </view>
+    <view class="row">
+      <text class="row-label">声音提醒</text>
+      <switch checked="{{soundEnabled}}" bindchange="onToggleSound" color="#FF6B35" />
+    </view>
+    <view class="row">
+      <text class="row-label">震动</text>
+      <switch checked="{{vibrateEnabled}}" bindchange="onToggleVibrate" color="#FF6B35" />
+    </view>
+  </view>
+
+  <!-- 通用 -->
+  <view class="section-title">通用</view>
+  <view class="section">
+    <view class="row" bindtap="onClearCache">
+      <text class="row-label">清除缓存</text>
+      <view class="row-right">
+        <text class="row-value">{{cacheSize}}</text>
+        <text class="row-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="section-title">其他</view>
+  <view class="section">
+    <view class="row" bindtap="onPrivacy">
+      <text class="row-label">隐私政策</text>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row" bindtap="onAgreement">
+      <text class="row-label">用户协议</text>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row" bindtap="onAbout">
+      <text class="row-label">关于为家航</text>
+      <view class="row-right">
+        <text class="row-value">v1.0.0</text>
+        <text class="row-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-btn" bindtap="onLogout">退出登录</view>
+</view>

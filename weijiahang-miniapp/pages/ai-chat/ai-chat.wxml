@@ -1,0 +1,124 @@
+<!-- AI 助手 — 对话式 -->
+<import src="/templates/loading-compass.wxml" />
+
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="chat-header">
+    <view class="ch-avatar">AI</view>
+    <view class="ch-info">
+      <view class="ch-name">AI 材料计算</view>
+      <view class="ch-status">在线 · 帮你找材料、算用量、推店铺</view>
+    </view>
+    <view class="ch-actions">
+      <view class="ch-calc-btn" bindtap="onGoCalc"><text>清单</text><text>快速计算</text></view>
+      <view class="ch-new-btn" bindtap="onNewChat" wx:if="{{messages.length > 0}}">新对话</view>
+    </view>
+  </view>
+
+  <!-- 模式切换 -->
+  <view class="mode-switch">
+    <view class="ms-tab {{mode === 'chat' ? 'active' : ''}}" bindtap="onMode" data-mode="chat">自由对话</view>
+    <view class="ms-tab {{mode === 'calc' ? 'active' : ''}}" bindtap="onMode" data-mode="calc">快速计算</view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view scroll-y class="chat-list" scroll-into-view="{{scrollTo}}"
+               scroll-with-animation enhanced show-scrollbar="{{false}}">
+    <!-- 欢迎消息 -->
+    <view class="msg ai-msg" wx:if="{{messages.length === 0}}">
+      <view class="msg-avatar">AI</view>
+      <view class="msg-bubble">
+        <view class="bubble-text">你好！我是为家航AI助手，你可以直接告诉我你想做什么，比如：</view>
+        <view class="quick-questions">
+          <view class="qq-item" bindtap="onQuickAsk" data-q="我想给客厅做一个电视背景墙，用什么材料好？">"我想给客厅做个电视背景墙"</view>
+          <view class="qq-item" bindtap="onQuickAsk" data-q="120平三室两厅装修，帮我算一下要买多少瓷砖">"120平三室两厅，帮我算要买多少瓷砖"</view>
+          <view class="qq-item" bindtap="onQuickAsk" data-q="预算3000块，想买个智能马桶，有什么推荐？">"预算3000，想买个智能马桶"</view>
+          <view class="qq-item" bindtap="onQuickAsk" data-q="西安大明宫附近哪家瓷砖店评分高？">"大明宫附近哪家瓷砖店评分高？"</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 对话消息 -->
+    <view class="msg {{item.role === 'user' ? 'user-msg' : 'ai-msg'}}"
+          wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}">
+      <view class="msg-avatar">{{item.role === 'user' ? '我' : 'AI'}}</view>
+      <view class="msg-bubble">
+        <!-- 文字 -->
+        <view class="bubble-text" wx:if="{{item.text}}">{{item.text}}</view>
+        <!-- 图片 -->
+        <image class="bubble-img" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" />
+        <!-- 材料卡片 -->
+        <view class="material-card" wx:if="{{item.materials}}">
+          <view class="mcard-title">材料建议</view>
+          <view class="mcard-item" wx:for="{{item.materials}}" wx:key="name" wx:for-item="m">
+            <view class="mcard-name">{{m.name}} <text class="mcard-spec">{{m.spec || ''}}</text></view>
+            <view class="mcard-row">
+              <text>用量：约{{m.qty}}{{m.unit || '㎡'}}</text>
+              <text class="mcard-price">¥{{m.priceMin}}-{{m.priceMax}}</text>
+            </view>
+            <!-- 操作按钮 -->
+            <view class="mcard-actions">
+              <view class="mca-btn cart" bindtap="onAddToCart"
+                    data-name="{{m.name}}" data-spec="{{m.spec}}" data-qty="{{m.qty}}"
+                    data-unit="{{m.unit}}" data-pricemin="{{m.priceMin}}" data-pricemax="{{m.priceMax}}">加购物车</view>
+              <view class="mca-btn buy" bindtap="onBuyNow"
+                    data-name="{{m.name}}" data-spec="{{m.spec}}" data-qty="{{m.qty}}"
+                    data-unit="{{m.unit}}" data-pricemin="{{m.priceMin}}" data-pricemax="{{m.priceMax}}">立即下单</view>
+            </view>
+          </view>
+        </view>
+        <!-- 店铺推荐卡片 -->
+        <view class="shop-rec-card" wx:if="{{item.shops}}">
+          <view class="sr-title">推荐店铺</view>
+          <view class="sr-item" wx:for="{{item.shops}}" wx:key="id" wx:for-item="s"
+                bindtap="onShopTap" data-id="{{s.id}}" data-name="{{s.name}}">
+            <view class="sr-name">{{s.rating}}分 {{s.name}}</view>
+            <view class="sr-addr">地址：{{s.address || ''}}</view>
+            <view class="sr-actions">
+              <text class="sr-price">¥{{s.priceMin}}-{{s.priceMax}}/{{s.unit || '㎡'}}</text>
+              <text class="sr-nav">去这里</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 流式输出中的AI消息 -->
+    <view class="msg ai-msg" wx:if="{{streaming && streamingText}}">
+      <view class="msg-avatar">AI</view>
+      <view class="msg-bubble">
+        <view class="bubble-text">{{streamingText}}<text class="stream-cursor">|</text></view>
+      </view>
+    </view>
+
+    <!-- 加载中（还未收到第一个字时） -->
+    <view class="msg ai-msg" wx:if="{{loading && !streamingText}}">
+      <view class="msg-avatar">AI</view>
+      <view class="msg-bubble">
+        <template is="loading-compass" data="{{fullscreen: false, text: '思考中'}}" />
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 输入区 -->
+  <view class="input-bar">
+    <!-- 语音模式：整条变红 -->
+    <block wx:if="{{isRecording}}">
+      <view class="ib-recording-indicator">
+        <view class="ib-rec-dot"></view>
+        <text class="ib-rec-text">正在录音 {{recordTime}}s</text>
+      </view>
+      <view class="ib-rec-hint">松开发送，上滑取消</view>
+    </block>
+    <!-- 正常模式 -->
+    <block wx:else>
+      <view class="ib-camera" bindtap="onTakePhoto"><text>拍照</text></view>
+      <view class="ib-voice" catchtouchstart="onVoiceStart" catchtouchend="onVoiceEnd" catchtouchcancel="onVoiceCancel">
+        <text>语音</text>
+      </view>
+      <input class="ib-input" value="{{inputText}}" placeholder="描述你想买什么、做什么…"
+             bindinput="onInput" confirm-type="send" bindconfirm="onSend" adjust-position />
+      <view class="ib-send {{inputText ? 'active' : ''}}" bindtap="onSend">发送</view>
+    </block>
+  </view>
+</view>

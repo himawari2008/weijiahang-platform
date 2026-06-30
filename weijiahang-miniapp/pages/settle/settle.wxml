@@ -1,0 +1,491 @@
+<scroll-view scroll-y class="page">
+
+  <!-- ============================================================
+       🅰 上下文：直接下单 direct
+       默认自取，可选+领航员验货，突出速度和价格
+       ============================================================ -->
+  <block wx:if="{{context === 'direct'}}">
+
+    <!-- 页头 -->
+    <view class="ctx-header direct">
+      <text class="ctxh-title">确认订单</text>
+      <text class="ctxh-sub">下单后商家确认价格，确认后支付</text>
+    </view>
+
+    <!-- 取货方式 -->
+    <view class="block">
+      <view class="block-title">选择取货方式</view>
+
+      <view class="svc-card {{serviceMode === 'self' ? 'active' : ''}}" bindtap="onMode" data-mode="self">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'self' ? 'checked' : ''}}">{{serviceMode === 'self' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">自己到店取货</view>
+            <view class="svc-price free">免费</view>
+          </view>
+        </view>
+        <view class="svc-desc">到市场门店自提，现场验货后取走</view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'delivery' ? 'active' : ''}}" bindtap="onMode" data-mode="delivery">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'delivery' ? 'checked' : ''}}">{{serviceMode === 'delivery' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">商家配送</view>
+            <view class="svc-price">按距离计费</view>
+          </view>
+        </view>
+        <view class="svc-desc">商户自有物流配送到家</view>
+      </view>
+
+      <!-- 交叉入口：直接下单也可以加领航员 -->
+      <view class="cross-ref">
+        <view class="cr-bar {{needNavigator ? 'on' : ''}}" bindtap="onToggleNeedNavigator">
+          <view class="crb-left">
+            <view class="crb-check {{needNavigator ? 'checked' : ''}}">{{needNavigator ? '✓' : '+'}}</view>
+            <text>需要领航员帮我把关验货</text>
+          </view>
+          <text class="crb-hint">{{needNavigator ? '已选' : '推荐'}}</text>
+        </view>
+
+        <block wx:if="{{needNavigator}}">
+          <view class="navi-sub-row">
+            <view class="nsr-card {{navigatorSubMode === 'inspect' ? 'on' : ''}}" bindtap="onNavigatorSubMode" data-sub="inspect">
+              <text class="nsr-name">验货把关</text>
+              <text class="nsr-price">¥29</text>
+              <text class="nsr-desc">到店帮你验瓷砖/地板/卫浴</text>
+            </view>
+            <view class="nsr-card {{navigatorSubMode === 'accompany' ? 'on' : ''}}" bindtap="onNavigatorSubMode" data-sub="accompany">
+              <text class="nsr-name">陪同选材</text>
+              <text class="nsr-price">¥88</text>
+              <text class="nsr-desc">全程陪逛+砍价+比质</text>
+            </view>
+          </view>
+
+          <!-- 防利益捆绑：诚信承诺（direct+领航员） -->
+          <view class="integrity-mini" wx:if="{{needNavigator}}">
+            <view class="im-top flex-between" bindtap="onToggleIntegrityDetail">
+              <view class="imt-left">
+                <text class="imt-icon">盾</text>
+                <text class="imt-label">领航员诚信承诺</text>
+              </view>
+              <text class="expand-btn">{{showIntegrityDetail ? '收起' : '详情'}}</text>
+            </view>
+            <view class="im-clauses" wx:if="{{showIntegrityDetail}}">
+              <view class="imc-item" wx:for="{{integrityClauses}}" wx:key="title" wx:for-item="c">
+                <text class="imci-icon">{{c.icon}}</text>
+                <text class="imci-text">{{c.title}}：{{c.desc}}</text>
+              </view>
+            </view>
+            <view class="im-confirm {{integrityConfirmed ? 'on' : ''}}" bindtap="onToggleIntegrity">
+              <view class="imc-check {{integrityConfirmed ? 'checked' : ''}}">
+                <text wx:if="{{integrityConfirmed}}">✓</text>
+              </view>
+              <text class="imc-text">已阅读诚信条款（领航员不收商户回扣）</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- ============================================================
+       🅱 上下文：预约领航员 navigator
+       默认陪同选材，可选+顺便采购，突出领航员个人能力
+       ============================================================ -->
+  <block wx:if="{{context === 'navigator'}}">
+
+    <!-- 页头 -->
+    <view class="ctx-header navigator">
+      <text class="ctxh-title">预约领航员</text>
+      <text class="ctxh-sub">专业买手帮你省时省钱，全程担保</text>
+    </view>
+
+    <!-- 领航员服务类型 -->
+    <view class="block">
+      <view class="block-title">选择服务类型</view>
+
+      <view class="svc-card {{serviceMode === 'navi-accompany' ? 'active' : ''}}" bindtap="onMode" data-mode="navi-accompany">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'navi-accompany' ? 'checked' : ''}}">{{serviceMode === 'navi-accompany' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">陪同选材</view>
+            <view class="svc-price">¥88/次</view>
+          </view>
+        </view>
+        <view class="svc-desc">领航员全程陪逛市场，按你的预算和风格推荐店铺和商品，现场帮你砍价比质。适合第一次装修、不懂建材的业主。</view>
+        <view class="svc-tags"><text>陪逛</text><text>砍价</text><text>比质</text><text>推荐</text></view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'navi-inspect' ? 'active' : ''}}" bindtap="onMode" data-mode="navi-inspect">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'navi-inspect' ? 'checked' : ''}}">{{serviceMode === 'navi-inspect' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">验货把关</view>
+            <view class="svc-price">¥29/次</view>
+          </view>
+        </view>
+        <view class="svc-desc">你选好商品后，领航员到店帮你检验：瓷砖平整度、地板色差、卫浴釉面、板材环保等级等，不合格当场拒收。</view>
+        <view class="svc-tags"><text>验货</text><text>拒收不合格</text><text>拍照留底</text></view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'navi-bulk' ? 'active' : ''}}" bindtap="onMode" data-mode="navi-bulk">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'navi-bulk' ? 'checked' : ''}}">{{serviceMode === 'navi-bulk' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">批量代购</view>
+            <view class="svc-price">¥68/次 或 面议</view>
+          </view>
+        </view>
+        <view class="svc-desc">适合工长/装企/批发客户：给出采购清单，领航员跨市场统一采购+验货+装车，量大可面议费用。</view>
+        <view class="svc-tags"><text>跨市场</text><text>集采</text><text>量大面议</text></view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'navi-deliver' ? 'active' : ''}}" bindtap="onMode" data-mode="navi-deliver">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'navi-deliver' ? 'checked' : ''}}">{{serviceMode === 'navi-deliver' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">送货到家</view>
+            <view class="svc-price">¥68起 + 运费</view>
+          </view>
+        </view>
+        <view class="svc-desc">领航员全程代办：跑店取货→验货把关→叫车配送→送到家门口。你全程不用跑市场，适合没时间的业主。</view>
+        <view class="svc-tags"><text>全程代办</text><text>验货</text><text>送货上门</text></view>
+      </view>
+
+      <!-- 交叉入口：约领航员也可以顺便采购 -->
+      <view class="cross-ref">
+        <view class="cr-bar {{needPurchase ? 'on' : ''}}" bindtap="onToggleNeedPurchase">
+          <view class="crb-left">
+            <view class="crb-check {{needPurchase ? 'checked' : ''}}">{{needPurchase ? '✓' : '+'}}</view>
+            <text>顺便让领航员帮我采购商品</text>
+          </view>
+          <text class="crb-hint">{{needPurchase ? '已开启' : '可选'}}</text>
+        </view>
+        <view wx:if="{{needPurchase && itemCount === 0}}" class="cr-empty">
+          <text class="cre-text">商品已从购物车加载，或去商品页面加购后再来</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 防利益捆绑：诚信承诺 -->
+    <view class="block integrity-block">
+      <view class="block-title flex-between" bindtap="onToggleIntegrityDetail">
+        <view class="ibt-left">
+          <text class="ibt-icon">盾</text>
+          <text>领航员诚信承诺 · 防利益捆绑</text>
+        </view>
+        <text class="expand-btn">{{showIntegrityDetail ? '收起' : '详情'}}</text>
+      </view>
+
+      <!-- 摘要条 -->
+      <view class="integ-summary">
+        <view class="is-item">
+          <text class="isi-dot"></text>
+          <text>领航员禁止收受商户任何形式回扣、返点、好处费</text>
+        </view>
+        <view class="is-item">
+          <text class="isi-dot"></text>
+          <text>推荐商品/店铺的唯一依据：品质 + 价格</text>
+        </view>
+        <view class="is-item">
+          <text class="isi-dot"></text>
+          <text>违规处罚：全额扣保证金 · 永久封号 · 追溯佣金</text>
+        </view>
+      </view>
+
+      <!-- 展开详情 -->
+      <view class="integ-detail" wx:if="{{showIntegrityDetail}}">
+        <view class="id-clause" wx:for="{{integrityClauses}}" wx:key="title">
+          <view class="idc-head">
+            <text class="idc-icon">{{item.icon}}</text>
+            <text class="idc-title">{{item.title}}</text>
+          </view>
+          <text class="idc-desc">{{item.desc}}</text>
+        </view>
+      </view>
+
+      <!-- 确认勾选 -->
+      <view class="integ-confirm {{integrityConfirmed ? 'on' : ''}}" bindtap="onToggleIntegrity">
+        <view class="ic-check {{integrityConfirmed ? 'checked' : ''}}">
+          <text wx:if="{{integrityConfirmed}}">✓</text>
+        </view>
+        <text class="ic-text">我已阅读并同意上述诚信条款，确认预约即表示我知晓：若领航员违反诚信承诺，平台将先行赔付差价并追溯领航员责任</text>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- ============================================================
+       🅲 上下文：购物车结算 cart
+       默认智能推荐，合单优化，跨店运费计算
+       ============================================================ -->
+  <block wx:if="{{context === 'cart'}}">
+
+    <!-- 页头 -->
+    <view class="ctx-header cart">
+      <text class="ctxh-title">购物车结算</text>
+      <text class="ctxh-sub">{{shopCount}}家店 · {{itemCount}}件商品</text>
+    </view>
+
+    <!-- 智能推荐条 -->
+    <view class="smart-hint" wx:if="{{shopCount > 1}}">
+      <text class="sh-icon">💡</text>
+      <text class="sh-text">
+        <block wx:if="{{shopCount === 1}}">1家店，建议自取最方便</block>
+        <block wx:elif="{{shopCount === 2}}">2家店，推荐领航员帮取货装车（省时省力）</block>
+        <block wx:else>{{shopCount}}家店跨店采购，强烈推荐领航员集货配送（一次搞定免奔波）</block>
+      </text>
+    </view>
+
+    <!-- 服务方式（cart模式：4种） -->
+    <view class="block">
+      <view class="block-title">选择服务方式</view>
+
+      <view class="svc-card {{serviceMode === 'self' ? 'active' : ''}}" bindtap="onMode" data-mode="self">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'self' ? 'checked' : ''}}">{{serviceMode === 'self' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">自己到市场取货</view>
+            <view class="svc-price free">免费</view>
+          </view>
+        </view>
+        <view class="svc-desc">自己开车/叫车到各市场，逐店取货装车。适合时间充裕、有车的业主。</view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'navi-load' ? 'active' : ''}}" bindtap="onMode" data-mode="navi-load">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'navi-load' ? 'checked' : ''}}">{{serviceMode === 'navi-load' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">领航员帮取货装车</view>
+            <view class="svc-price">¥68</view>
+          </view>
+        </view>
+        <view class="svc-desc">领航员跑遍你的店铺→逐店取货→验货把关→集中到装车点→帮你装车。你开车来拉走就行。</view>
+        <view class="svc-tags"><text>多店集货</text><text>验货把关</text><text>帮装车</text></view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'navi-deliver' ? 'active' : ''}}" bindtap="onMode" data-mode="navi-deliver">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'navi-deliver' ? 'checked' : ''}}">{{serviceMode === 'navi-deliver' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">领航员送货到家</view>
+            <view class="svc-price">¥68起 + 运费</view>
+          </view>
+        </view>
+        <view class="svc-desc">领航员全程代办：跑店取货→验货把关→叫车/自有车辆→送到你家门口。你全程不用跑市场。</view>
+        <view class="svc-tags"><text>多店集货</text><text>验货把关</text><text>送货上门</text><text>全程代办</text></view>
+      </view>
+
+      <view class="svc-card {{serviceMode === 'logistics' ? 'active' : ''}}" bindtap="onMode" data-mode="logistics">
+        <view class="svc-top">
+          <view class="svc-check {{serviceMode === 'logistics' ? 'checked' : ''}}">{{serviceMode === 'logistics' ? '✓' : ''}}</view>
+          <view class="svc-info">
+            <view class="svc-name">平台物流配送</view>
+            <view class="svc-price">按距离计费</view>
+          </view>
+        </view>
+        <view class="svc-desc">平台合作物流公司统一配送，适合大件/大批量商品。</view>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- ============================================================
+       共用区域：地址 / 时间 / 商品明细 / 费用 / 保障
+       ============================================================ -->
+
+  <!-- 地址（需要时出现） -->
+  <view class="block" wx:if="{{showAddressRequired || serviceMode === 'navi-deliver' || serviceMode === 'delivery' || serviceMode === 'logistics' || serviceMode === 'navi-load'}}">
+    <view class="block-title">
+      {{serviceMode === 'navi-load' ? '装车地址（你到哪里接货）' : (context === 'navigator' && !needPurchase ? '服务地址' : '收货地址')}}
+    </view>
+
+    <view class="addr-card" wx:if="{{selectedAddress}}" bindtap="onSelectAddress">
+      <view class="adc-left">
+        <view class="adcl-top">
+          <text class="adc-name">{{selectedAddress.name}}</text>
+          <text class="adc-phone">{{selectedAddress.phone}}</text>
+          <text class="adc-tag" wx:if="{{selectedAddress.tag}}">{{selectedAddress.tag}}</text>
+          <text class="adc-tag default" wx:if="{{selectedAddress.isDefault}}">默认</text>
+        </view>
+        <view class="adc-detail">{{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}} {{selectedAddress.detail}}</view>
+      </view>
+      <text class="adc-arrow">›</text>
+    </view>
+
+    <view class="addr-empty" wx:else bindtap="onSelectAddress">
+      <view class="ade-pin">址</view>
+      <text class="ade-text">请选择地址</text>
+      <text class="ade-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 预约时间（需要时出现） -->
+  <view class="block" wx:if="{{showAddressRequired || serviceMode !== 'self'}}">
+    <view class="block-title">预约时间</view>
+    <view class="time-row">
+      <picker mode="date" value="{{appointDate}}" start="{{today}}" bindchange="onDateChange">
+        <view class="time-box {{appointDate ? 'filled' : ''}}">
+          <text class="time-label">日期</text>
+          <text class="time-val">{{appointDate || '选择'}}</text>
+        </view>
+      </picker>
+      <picker mode="time" value="{{appointTime}}" bindchange="onTimeChange">
+        <view class="time-box {{appointTime ? 'filled' : ''}}">
+          <text class="time-label">时间</text>
+          <text class="time-val">{{appointTime || '选择'}}</text>
+        </view>
+      </picker>
+    </view>
+    <view class="quick-slots" wx:if="{{appointDate}}">
+      <view class="qs-chip {{appointTime === '09:00' ? 'on' : ''}}" bindtap="onQuickTime" data-t="09:00">上午</view>
+      <view class="qs-chip {{appointTime === '14:00' ? 'on' : ''}}" bindtap="onQuickTime" data-t="14:00">下午</view>
+      <view class="qs-chip {{appointTime === '17:00' ? 'on' : ''}}" bindtap="onQuickTime" data-t="17:00">傍晚</view>
+    </view>
+  </view>
+
+  <!-- 客群类型（cart + direct有商品时显示） -->
+  <view class="block" wx:if="{{itemCount > 0 && (context === 'cart' || context === 'direct')}}">
+    <view class="block-title">客群类型</view>
+    <view class="cust-row">
+      <view class="cust-chip {{customerType === 'retail' ? 'on' : ''}}" bindtap="onSelectCustomerType" data-type="retail">散客</view>
+      <view class="cust-chip {{customerType === 'contractor' ? 'on' : ''}}" bindtap="onSelectCustomerType" data-type="contractor">工长</view>
+      <view class="cust-chip {{customerType === 'decoration_company' ? 'on' : ''}}" bindtap="onSelectCustomerType" data-type="decoration_company">装企</view>
+      <view class="cust-chip {{customerType === 'wholesale' ? 'on' : ''}}" bindtap="onSelectCustomerType" data-type="wholesale">批发</view>
+    </view>
+    <view class="cust-note" wx:if="{{tierDiscountRate > 0}}">
+      {{customerTypeLabel}}等级折扣 {{tierDiscountRate * 100}}%
+    </view>
+  </view>
+
+  <!-- 商品明细（有商品时显示） -->
+  <view class="block" wx:if="{{itemCount > 0}}">
+    <view class="block-title flex-between" bindtap="onToggleItems">
+      商品明细（{{itemCount}}件 · {{shopCount}}家店）
+      <text class="expand-btn">{{showItems ? '收起' : '展开'}}</text>
+    </view>
+    <view wx:if="{{showItems}}">
+      <view class="shop-label" wx:for="{{shopGroups}}" wx:key="shopId">
+        <view class="sl-name">{{item.shopName}}</view>
+        <view class="goods-item" wx:for="{{item.items}}" wx:key="id" wx:for-item="p">
+          <view class="gi-name ellipsis">{{p.name}}</view>
+          <view class="gi-meta">{{p.qty || 1}}{{p.unit === 'm2' ? '㎡' : (p.unit || '㎡')}}</view>
+          <view class="gi-price">{{(p.price || 0) * (p.qty || 1)}}元</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 优惠券（有商品时显示，cart + direct） -->
+  <view class="block" wx:if="{{itemCount > 0 && availableCoupons.length > 0 && (context === 'cart' || context === 'direct')}}">
+    <view class="block-title">优惠券</view>
+    <view class="coupon-row" wx:for="{{availableCoupons}}" wx:key="id">
+      <view class="coupon-chip {{couponId === item.id ? 'on' : ''}}" bindtap="onSelectCoupon" data-index="{{index}}">
+        <text class="cc-name">{{item.name}}</text>
+        <text class="cc-desc" wx:if="{{item.discountType === 'amount'}}">减¥{{item.value}}</text>
+        <text class="cc-desc" wx:elif="{{item.discountType === 'percentage'}}">{{item.value}}折</text>
+        <text class="cc-min" wx:if="{{item.minAmount > 0}}">满¥{{item.minAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="block" wx:if="{{context !== 'navigator' || needPurchase || itemCount > 0}}">
+    <view class="block-title">费用明细</view>
+
+    <view class="cost-row" wx:if="{{itemCount > 0}}">
+      <text>商品预估（到店确认最终价）</text>
+      <text>{{goodsTotal}}元</text>
+    </view>
+
+    <view class="cost-row" wx:if="{{tierDiscount > 0}}">
+      <text>等级折扣</text>
+      <text class="cost-green">-{{tierDiscount}}元</text>
+    </view>
+
+    <view class="cost-row" wx:if="{{couponDiscount > 0}}">
+      <text>优惠券</text>
+      <text class="cost-green">-{{couponDiscount}}元</text>
+    </view>
+
+    <!-- 领航员服务费（有领航员时） -->
+    <view wx:if="{{serviceFee > 0}}">
+      <view class="cost-row">
+        <text>领航员服务费</text>
+        <text>{{serviceFee}}元</text>
+      </view>
+      <view class="cost-note-sm">
+        <block wx:if="{{serviceMode === 'navi-accompany'}}">含：全程陪逛 + 砍价比质 + 商品推荐</block>
+        <block wx:elif="{{serviceMode === 'navi-inspect'}}">含：到店验货 + 拍照留底 + 不合格拒收</block>
+        <block wx:elif="{{serviceMode === 'navi-bulk'}}">含：跨市场集采 + 逐店验货 + 装车</block>
+        <block wx:elif="{{serviceMode === 'navi-load'}}">含：多店集货 + 逐店验货 + 帮装车</block>
+        <block wx:elif="{{serviceMode === 'navi-deliver'}}">含：多店集货 + 逐店验货 + 装车（运费另计）</block>
+      </view>
+    </view>
+
+    <!-- 运费 -->
+    <view wx:if="{{serviceMode === 'navi-deliver'}}">
+      <view class="cost-row"><text>预估运费</text><text>约50-150元</text></view>
+      <view class="cost-note-sm">按实际距离和货量，领航员现场叫车/自有车辆，费用实报实销</view>
+    </view>
+
+    <view class="cost-row" wx:if="{{deliveryFee > 0 && serviceMode !== 'navi-deliver'}}">
+      <text>配送费</text>
+      <text>{{deliveryFee}}元</text>
+    </view>
+
+    <!-- 合计 -->
+    <view class="cost-row total">
+      <text>合计</text>
+      <text class="total-num">{{totalPrice || goodsTotal}}</text>
+      <text class="total-unit">元{{serviceMode === 'navi-deliver' ? '起' : ''}}</text>
+    </view>
+
+    <!-- 提示 -->
+    <view class="cost-note" wx:if="{{context === 'direct' || context === 'cart'}}">
+      提交后商家确认商品价格，确认后你再支付
+    </view>
+    <view class="cost-note" wx:if="{{context === 'navigator'}}">
+      提交后等待领航员接单，接单后预约生效
+    </view>
+  </view>
+
+  <!-- 平台保障（领航员服务时强化防利益捆绑） -->
+  <view class="guarantee-bar" wx:if="{{context === 'navigator' || needNavigator || serviceMode.indexOf('navi-') === 0}}">
+    <text class="gb-icon">保</text>
+    <view class="gb-content">
+      <text class="gb-title">平台担保 · 防利益捆绑：</text>
+      <text class="gb-flow">领航员禁止收商户回扣 → 推荐基于品质价格 → 轨迹全程可查</text>
+      <text class="gb-note">若查实利益输送导致多花冤枉钱，平台先行赔付差价</text>
+    </view>
+  </view>
+
+  <view style="height:160rpx;"></view>
+</scroll-view>
+
+<!-- ============================================================
+     底部固定栏（上下文差异化CTA）
+     ============================================================ -->
+<view class="bottom-bar">
+  <view class="bb-total">
+    <text class="bb-label">
+      {{context === 'navigator' ? '服务费' : (itemCount > 0 ? '合计' : '预计')}}
+    </text>
+    <text class="bb-price">{{totalPrice || goodsTotal || serviceFee}}</text>
+    <text class="bb-unit">元{{serviceMode === 'navi-deliver' ? '起' : ''}}</text>
+  </view>
+
+  <view class="bb-submit {{(serviceMode || context === 'navigator') ? '' : 'disabled'}}" bindtap="onSubmit">
+    <block wx:if="{{context === 'direct'}}">
+      {{needNavigator ? '确认下单（含领航员）' : '确认下单'}}
+    </block>
+    <block wx:elif="{{context === 'navigator'}}">
+      {{needPurchase ? '预约并下单' : '预约领航员'}}
+    </block>
+    <block wx:else>
+      {{shopCount > 1 ? '合并结算' : '提交订单'}}
+    </block>
+  </view>
+</view>

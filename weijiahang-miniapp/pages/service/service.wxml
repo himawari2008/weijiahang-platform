@@ -1,0 +1,48 @@
+<view class="page">
+  <view class="header">
+    <view class="header-icon">客服</view>
+    <view class="header-title">客服与帮助</view>
+  </view>
+
+  <!-- 常见问题（手风琴） -->
+  <view class="card">
+    <view class="card-title">常见问题</view>
+    <view class="faq-item" wx:for="{{faqs}}" wx:key="q" wx:for-index="index"
+          bindtap="onToggleFaq" data-index="{{index}}">
+      <view class="faq-q-row">
+        <text class="faq-q">{{item.q}}</text>
+        <text class="faq-arrow {{item.open ? 'open' : ''}}">›</text>
+      </view>
+      <view class="faq-a {{item.open ? 'show' : ''}}">{{item.a}}</view>
+    </view>
+  </view>
+
+  <!-- 联系客服 -->
+  <view class="card">
+    <view class="card-title">联系客服</view>
+    <view class="contact-row" bindtap="onCall">
+      <view class="cr-icon call"></view>
+      <text class="cr-label">客服电话</text>
+      <text class="cr-arrow">›</text>
+    </view>
+    <view class="contact-row" bindtap="onOnlineService">
+      <view class="cr-icon msg"></view>
+      <text class="cr-label">在线客服</text>
+      <text class="cr-desc">工作日 9:00-18:00</text>
+      <text class="cr-arrow">›</text>
+    </view>
+    <view class="contact-row" bindtap="onFeedback">
+      <view class="cr-icon feedback"></view>
+      <text class="cr-label">意见反馈</text>
+      <text class="cr-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 纠纷处理 -->
+  <view class="card" bindtap="onDispute">
+    <view class="dispute-entry">
+      <text class="de-text">需要申诉或投诉？</text>
+      <text class="de-arrow">去申诉 ›</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,131 @@
+<!-- 订单详情 + 保障追踪 -->
+<view class="page">
+  <!-- 状态头 -->
+  <view class="status-bar {{order.status}}">
+    <view class="st-text">{{order.statusLabel}}</view>
+    <view class="st-no">订单号：{{order.orderNo || 'WJH20260618001'}}</view>
+  </view>
+
+  <!-- 保障链 -->
+  <view class="card guarantee-chain">
+    <view class="gc-title">保障追踪</view>
+    <view class="gc-steps">
+      <view class="gcs-item {{order.guaranteeStep >= 1 ? 'done' : ''}}">
+        <view class="gcs-dot">{{order.guaranteeStep >= 1 ? '✓' : '1'}}</view>
+        <view class="gcs-label">商家备货拍照</view>
+        <view class="gcs-time" wx:if="{{order.guaranteeStep >= 1}}">{{order.sellerCheckTime || '待确认'}}</view>
+      </view>
+      <view class="gcs-line {{order.guaranteeStep >= 2 ? 'done' : ''}}"></view>
+      <view class="gcs-item {{order.guaranteeStep >= 2 ? 'done' : ''}}">
+        <view class="gcs-dot">{{order.guaranteeStep >= 2 ? '✓' : '2'}}</view>
+        <view class="gcs-label">领航员取货验货</view>
+        <view class="gcs-time" wx:if="{{order.guaranteeStep >= 2}}">{{order.pickupCheckTime || '待确认'}}</view>
+      </view>
+      <view class="gcs-line {{order.guaranteeStep >= 3 ? 'done' : ''}}"></view>
+      <view class="gcs-item {{order.guaranteeStep >= 3 ? 'done' : ''}}">
+        <view class="gcs-dot">{{order.guaranteeStep >= 3 ? '✓' : '3'}}</view>
+        <view class="gcs-label">业主收货确认</view>
+        <view class="gcs-time" wx:if="{{order.guaranteeStep >= 3}}">{{order.receiveCheckTime || '待确认'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="card">
+    <view class="info-row"><text class="lbl">市场</text>{{order.marketName || '大明宫建材市场'}}</view>
+    <view class="info-row"><text class="lbl">类型</text>
+      <text wx:if="{{order.delivery === 'delivery'}}" style="color:#1677FF">送货上门</text>
+      <text wx:else>到店自提</text>
+    </view>
+    <view class="info-row" wx:if="{{order.delivery === 'delivery'}}">
+      <text class="lbl">收货地址</text>{{order.address || '西安市未央区XX小区'}}
+    </view>
+    <view class="info-row"><text class="lbl">金额</text>¥{{order.amount || 0}}</view>
+    <view class="info-row"><text class="lbl">描述</text>{{order.description || '无'}}</view>
+  </view>
+
+  <!-- 送货追踪（仅送货单） -->
+  <view class="card" wx:if="{{order.delivery === 'delivery'}}">
+    <view class="card-title">送货追踪</view>
+    <view class="delivery-steps">
+      <view class="ds-step {{order.deliveryStep >= 1 ? 'done' : ''}}">
+        <view class="ds-dot">{{order.deliveryStep >= 1 ? '✓' : '1'}}</view>
+        <view class="ds-text">商家备货完成</view>
+      </view>
+      <view class="ds-line {{order.deliveryStep >= 2 ? 'done' : ''}}"></view>
+      <view class="ds-step {{order.deliveryStep >= 2 ? 'done' : ''}}">
+        <view class="ds-dot">{{order.deliveryStep >= 2 ? '✓' : '2'}}</view>
+        <view class="ds-text">领航员取货装车</view>
+      </view>
+      <view class="ds-line {{order.deliveryStep >= 3 ? 'done' : ''}}"></view>
+      <view class="ds-step {{order.deliveryStep >= 3 ? 'done' : ''}}">
+        <view class="ds-dot">{{order.deliveryStep >= 3 ? '✓' : '3'}}</view>
+        <view class="ds-text">运输中</view>
+      </view>
+      <view class="ds-line {{order.deliveryStep >= 4 ? 'done' : ''}}"></view>
+      <view class="ds-step {{order.deliveryStep >= 4 ? 'done' : ''}}">
+        <view class="ds-dot">{{order.deliveryStep >= 4 ? '✓' : '4'}}</view>
+        <view class="ds-text">卸货签收</view>
+      </view>
+    </view>
+    <!-- 叫车信息 -->
+    <view class="vehicle-info" wx:if="{{order.deliveryStep >= 2}}">
+      <view class="vi-row">货拉拉已叫车 · 中型货车</view>
+      <view class="vi-row">约50箱瓷砖 · 预估运费 ¥68-132</view>
+      <view class="vi-row">司机：王师傅 · 预计30分钟到达</view>
+      <view class="vi-note">* 运费由货拉拉按实际里程计价，平台不收取运费差价</view>
+    </view>
+  </view>
+
+  <!-- 异常上报 -->
+  <view class="card" wx:if="{{order.status === 'shipping' || order.status === 'arrived'}}">
+    <view class="card-title">发现问题？</view>
+    <view class="issue-btns">
+      <button class="issue-btn" bindtap="onReportIssue" data-type="damage">
+        货物破损
+      </button>
+      <button class="issue-btn" bindtap="onReportIssue" data-type="wrong">
+        货不对板
+      </button>
+      <button class="issue-btn" bindtap="onReportIssue" data-type="shortage">
+        数量缺少
+      </button>
+    </view>
+    <view class="issue-note">上报后平台将冻结款项，核实属实免费换货或退款，并降低商家评分</view>
+  </view>
+
+  <!-- 保障说明 -->
+  <view class="card guarantee-rules">
+    <view class="card-title">三重保障</view>
+    <view class="rule-item">
+      <view class="rule-icon">商</view>
+      <view class="rule-text">
+        <view class="rule-name">商家保障</view>
+        <view>发货前拍照留证，确保货品完好。如发残次品，平台扣分降权，并免费给业主换货。</view>
+      </view>
+    </view>
+    <view class="rule-item">
+      <view class="rule-icon">航</view>
+      <view class="rule-text">
+        <view class="rule-name">领航员/送货员保障</view>
+        <view>取货时当面验货确认，运输途中损坏由承运方担责。未认真验货导致纠纷的，降低领航员评分。</view>
+      </view>
+    </view>
+    <view class="rule-item">
+      <view class="rule-icon">业</view>
+      <view class="rule-text">
+        <view class="rule-name">业主保障</view>
+        <view>收货时当场查验，发现问题立即上报。核实属实免费换货或全额退款。恶意上报3次以上限制账号。</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作 -->
+  <view class="actions" wx:if="{{order.status === 'arrived'}}">
+    <button class="btn-primary" bindtap="onConfirmReceive">确认收货</button>
+    <button class="btn-dispute" bindtap="onDispute">申诉</button>
+  </view>
+  <view class="card" wx:if="{{order.status === 'pending'}}">
+    <button class="btn-outline" bindtap="onCancel">取消订单</button>
+  </view>
+</view>

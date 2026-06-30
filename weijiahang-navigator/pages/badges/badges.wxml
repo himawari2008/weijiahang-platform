@@ -1,0 +1,88 @@
+<view class="page">
+  <!-- ====== Header ====== -->
+  <view class="header">
+    <view class="header-icon">
+      <view class="header-icon-inner"></view>
+    </view>
+    <text class="header-title">勋章墙</text>
+    <text class="header-subtitle">{{headerText}}</text>
+  </view>
+
+  <!-- ====== Loading ====== -->
+  <view wx:if="{{loading}}" class="state-wrapper">
+    <view class="loading-spinner"></view>
+    <text class="state-text">加载中...</text>
+  </view>
+
+  <!-- ====== Error ====== -->
+  <view wx:elif="{{error}}" class="state-wrapper">
+    <view class="error-icon">
+      <view class="error-icon-mark"></view>
+    </view>
+    <text class="state-text">加载失败，请重试</text>
+    <view class="retry-btn" bindtap="onRetry">重新加载</view>
+  </view>
+
+  <!-- ====== Empty ====== -->
+  <view wx:elif="{{isEmpty}}" class="state-wrapper">
+    <view class="empty-icon">
+      <view class="empty-icon-shield"></view>
+    </view>
+    <text class="state-text">暂无勋章数据</text>
+    <text class="state-hint">完成指定任务即可获得勋章</text>
+  </view>
+
+  <!-- ====== Badges Content ====== -->
+  <block wx:else>
+    <!-- Earned Section -->
+    <view wx:if="{{hasEarned}}" class="section">
+      <view class="section-header">
+        <text class="section-title">已获得</text>
+        <text class="section-count">{{earnedCount}}枚</text>
+      </view>
+      <view class="badge-grid">
+        <view
+          wx:for="{{earnedBadges}}"
+          wx:key="badgeKey"
+          class="badge-card badge-earned"
+        >
+          <view class="badge-icon earned-icon">
+            <view class="checkmark"></view>
+          </view>
+          <text class="badge-name">{{item.badgeName}}</text>
+          <text class="badge-desc">{{item.description}}</text>
+          <text class="badge-date">{{item.earnedDate}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Locked Section -->
+    <view wx:if="{{hasLocked}}" class="section">
+      <view class="section-header">
+        <text class="section-title">待解锁</text>
+        <text class="section-count">{{lockedBadges.length}}枚</text>
+      </view>
+      <view class="badge-grid">
+        <view
+          wx:for="{{lockedBadges}}"
+          wx:key="badgeKey"
+          class="badge-card badge-locked"
+        >
+          <view class="badge-icon locked-icon">
+            <view class="lock-shackle"></view>
+            <view class="lock-body"></view>
+          </view>
+          <text class="badge-name">{{item.badgeName}}</text>
+          <text class="badge-desc">{{item.description}}</text>
+          <view class="progress-bar">
+            <view
+              class="progress-fill"
+              style="width:{{item.progressPercent}}%"
+            ></view>
+          </view>
+          <text class="progress-text">{{item.progressText}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

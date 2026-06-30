@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "订单详情",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "order-card": "../../components/order-card/index",
+    "countdown-badge": "../../components/countdown-badge/index",
+    "loading-skeleton": "../../components/loading-skeleton/index"
+  }
+}

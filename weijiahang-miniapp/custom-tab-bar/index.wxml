@@ -1,0 +1,26 @@
+<!-- 为家航 · 自定义 TabBar -->
+<view class="tab-bar">
+  <view class="tab-bar-inner">
+    <view
+      class="tb-item {{selected === index ? 'on' : ''}}"
+      wx:for="{{list}}"
+      wx:key="pagePath"
+      data-index="{{index}}"
+      bindtap="switchTab"
+    >
+      <!-- Logo 图片（仅第一个 tab） -->
+      <image
+        wx:if="{{item.icon === 'logo'}}"
+        class="tb-logo-img"
+        src="/assets/icon-app.svg"
+        mode="aspectFit"
+      />
+      <!-- CSS 图标（其他 tab） -->
+      <view wx:else class="tb-icon-wrap">
+        <view class="tb-icon tb-icon-{{item.icon}} {{selected === index ? 'on' : ''}}"></view>
+      </view>
+      <text class="tb-text">{{item.text}}</text>
+    </view>
+  </view>
+  <view class="tb-safe"></view>
+</view>

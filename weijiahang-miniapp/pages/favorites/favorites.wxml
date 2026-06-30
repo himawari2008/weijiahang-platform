@@ -1,0 +1,72 @@
+<view class="page">
+  <!-- 顶部导航 -->
+  <view class="nav-bar">
+    <view class="nb-back" bindtap="onBack">
+      <text class="nbb-text">返回</text>
+    </view>
+    <text class="nb-title">我的收藏</text>
+    <view class="nb-placeholder"></view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="fav-tabs">
+    <view class="ft-item {{tab === 'shop' ? 'on' : ''}}" bindtap="onTabChange" data-tab="shop">收藏店铺</view>
+    <view class="ft-item {{tab === 'goods' ? 'on' : ''}}" bindtap="onTabChange" data-tab="goods">收藏商品</view>
+  </view>
+
+  <!-- ========== 收藏店铺 ========== -->
+  <view wx:if="{{tab === 'shop'}}">
+    <view class="empty-state" wx:if="{{!loading && shops.length === 0}}">
+      <view class="es-title">暂无收藏店铺</view>
+      <view class="es-desc">浏览店铺时点击收藏即可保存</view>
+      <view class="es-btn" bindtap="onGoExplore">去逛逛</view>
+    </view>
+
+    <view class="fav-list" wx:else>
+      <view class="fav-card" wx:for="{{shops}}" wx:key="id" bindtap="onTapShop" data-shop="{{item}}">
+        <view class="fc-left">
+          <view class="fc-thumb" style="background:{{item.bgColor || '#F8F9FA'}};">
+            <text class="fct-letter">{{item.name ? item.name.charAt(0) : '店'}}</text>
+          </view>
+          <view class="fc-info">
+            <view class="fc-name ellipsis">{{item.name}}</view>
+            <view class="fc-meta">
+              <text class="fcm-rating">{{item.rating || ''}}分</text>
+              <text class="fcm-addr">{{item.building || ''}} {{item.addr || ''}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="fc-del" catchtap="onRemoveShopFav" data-index="{{index}}">
+          <text>取消</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ========== 收藏商品 ========== -->
+  <view wx:if="{{tab === 'goods'}}">
+    <view class="empty-state" wx:if="{{!loading && goods.length === 0}}">
+      <view class="es-title">暂无收藏商品</view>
+      <view class="es-desc">浏览商品时点击收藏即可保存</view>
+      <view class="es-btn" bindtap="onGoExplore">去逛逛</view>
+    </view>
+
+    <view class="fav-goods-grid" wx:else>
+      <view class="fgg-card" wx:for="{{goods}}" wx:key="id"
+            bindtap="onTapGoods" data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}">
+        <view class="fggi-img" style="background:linear-gradient(180deg, #F8F9FA, #EEEFF1);"></view>
+        <view class="fggi-body">
+          <view class="fggi-name">{{item.name}}</view>
+          <view class="fggi-price-row">
+            <text class="fggi-price">¥{{item.price}}</text>
+            <text class="fggi-unit">/{{item.unit || '㎡'}}</text>
+          </view>
+          <view class="fggi-actions">
+            <view class="fggia-cart" catchtap="onQuickAddCart" data-id="{{item.id}}">加购</view>
+            <view class="fggia-del" catchtap="onRemoveGoodsFav" data-index="{{index}}">取消收藏</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

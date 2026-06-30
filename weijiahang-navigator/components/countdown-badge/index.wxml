@@ -1,0 +1,7 @@
+<!-- 倒计时角标 -->
+<view class="cd-badge {{isUrgent ? 'urgent' : ''}}">
+  <view class="cd-ring">
+    <view class="cd-ring-inner" style="--progress: {{progressPercent}}"></view>
+    <text class="cd-text">{{displayText}}</text>
+  </view>
+</view>

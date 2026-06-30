@@ -1,0 +1,88 @@
+page { background: #F0F1F3; height: 100vh; display: flex; flex-direction: column; }
+
+.chat-header {
+  display: flex; align-items: center; padding: 20rpx 30rpx;
+  background: #fff; border-bottom: 1rpx solid #eee;
+}
+.ch-back { font-size: 36rpx; margin-right: 16rpx; color: #333; }
+.ch-avatar {
+  width: 72rpx; height: 72rpx; border-radius: 16rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34rpx; font-weight: 600; color: #fff;
+  margin-right: 14rpx; flex-shrink: 0;
+}
+.ch-name { font-size: 30rpx; font-weight: 600; }
+.ch-desc { font-size: 22rpx; color: #52C41A; }
+
+.msg-area { flex: 1; padding: 20rpx 20rpx 0; }
+.c-msg { margin-bottom: 24rpx; display: flex; }
+.c-msg.me { justify-content: flex-end; }
+.cm-bubble {
+  max-width: 75%; padding: 18rpx 22rpx; border-radius: 16rpx;
+  font-size: 28rpx; line-height: 1.6; word-break: break-all;
+}
+.c-msg.other .cm-bubble { background: #fff; }
+.c-msg.me .cm-bubble { background: #FF6B35; color: #fff; }
+
+.order-card-inline {
+  margin-top: 12rpx; padding: 16rpx; background: #FFF8F0;
+  border-radius: 12rpx; border: 1rpx solid #FFD4BF;
+}
+.oci-title { font-size: 26rpx; font-weight: 600; }
+.oci-items { font-size: 24rpx; color: #666; margin: 6rpx 0; }
+.oci-price { font-size: 28rpx; color: #FF6B35; font-weight: 600; }
+.oci-status { font-size: 22rpx; color: #52C41A; margin-top: 4rpx; }
+
+.quick-actions {
+  display: flex; gap: 12rpx; padding: 12rpx 20rpx; background: #fff;
+  border-top: 1rpx solid #f0f0f0;
+}
+.qa-btn {
+  padding: 10rpx 20rpx; border-radius: 20rpx;
+  background: #F5F5F5; font-size: 24rpx; color: #666;
+}
+
+.input-bar {
+  display: flex; align-items: center; gap: 12rpx;
+  padding: 16rpx 20rpx; padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  background: #fff; border-top: 1rpx solid #eee;
+}
+.ib-btn {
+  font-size: 24rpx; color: #666; padding: 8rpx 12rpx;
+  flex-shrink: 0; border-radius: 8rpx;
+}
+.ib-btn:active { background: #F5F5F5; }
+.ib-input { flex: 1; background: #F5F5F5; border-radius: 40rpx; padding: 16rpx 24rpx; font-size: 28rpx; height: 68rpx; }
+.ib-send { padding: 14rpx 28rpx; border-radius: 24rpx; background: #DDD; color: #fff; font-size: 26rpx; }
+.ib-send.active { background: #FF6B35; }
+
+/* 图片消息 */
+.cm-image {
+  max-width: 300rpx; max-height: 300rpx;
+  border-radius: 12rpx; display: block;
+}
+
+/* 语音消息 */
+.cm-voice {
+  display: flex; align-items: center; gap: 8rpx;
+  padding: 14rpx 20rpx; min-width: 100rpx;
+}
+.cmv-icon { font-size: 28rpx; }
+.cmv-dur { font-size: 24rpx; color: #999; }
+
+/* 打字指示器 */
+.typing-bubble {
+  display: flex; align-items: center; gap: 6rpx;
+  padding: 14rpx 20rpx; min-width: 60rpx;
+}
+.typing-dot {
+  width: 12rpx; height: 12rpx; border-radius: 50%;
+  background: #BBB; display: inline-block;
+  animation: typingBounce 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8rpx); }
+}

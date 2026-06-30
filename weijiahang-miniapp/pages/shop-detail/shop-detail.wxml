@@ -1,0 +1,219 @@
+<!--
+  为家航 · 店铺详情页
+  对标淘宝/京东 — 完整 O2O 建材店铺体验
+-->
+<scroll-view scroll-y class="page" scroll-into-view="{{scrollToId}}" scroll-with-animation>
+
+  <!-- ═══ 1. 店铺头部 ═══ -->
+  <view class="shop-header">
+    <!-- 背景品牌条 -->
+    <view class="sh-banner">
+      <view class="shb-bg"></view>
+    </view>
+    <!-- 核心信息 -->
+    <view class="sh-main">
+      <view class="sh-logo-wrap">
+        <image class="sh-logo" src="{{shop.logo || ''}}" mode="aspectFill" />
+        <view class="shl-placeholder" wx:if="{{!shop.logo}}">{{shop.name ? shop.name.charAt(0) : '店'}}</view>
+      </view>
+      <view class="sh-info">
+        <view class="shi-name">{{shop.name}}</view>
+        <view class="shi-rating-row">
+          <view class="shi-stars">
+            <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+                  class="shis-star {{shop.rating >= item ? 'on' : (shop.rating >= item - 0.5 ? 'half' : '')}}">★</text>
+          </view>
+          <text class="shi-score">{{shop.rating}}</text>
+          <text class="shi-reviews">{{shop.reviewCount}}条评价</text>
+        </view>
+        <view class="shi-tags" wx:if="{{shop.tags && shop.tags.length}}">
+          <text class="shit-tag" wx:for="{{shop.tags}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+    </view>
+    <!-- 数据面板 -->
+    <view class="sh-stats">
+      <view class="shs-item">
+        <text class="shsi-num">{{shop.followers || 0}}</text>
+        <text class="shsi-label">粉丝</text>
+      </view>
+      <view class="shs-divider"></view>
+      <view class="shs-item">
+        <text class="shsi-num">{{shop.productCount || 0}}</text>
+        <text class="shsi-label">商品</text>
+      </view>
+      <view class="shs-divider"></view>
+      <view class="shs-item">
+        <text class="shsi-num">{{shop.rating || '-'}}</text>
+        <text class="shsi-label">评分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 2. 地址 & 电话 ═══ -->
+  <view class="contact-bar">
+    <view class="cb-addr" bindtap="onNavigate">
+      <text class="cba-icon">地址</text>
+      <text class="cba-text ellipsis">{{shop.address || shop.building + (shop.rowNo || '') + (shop.shopNo || '')}}</text>
+      <text class="cba-arrow">›</text>
+    </view>
+    <view class="cb-phone" bindtap="onCallPhone" wx:if="{{shop.phone}}">
+      <text class="cbp-icon">电话</text>
+      <text class="cbp-text">拨打电话</text>
+    </view>
+  </view>
+
+  <!-- ═══ 3. 店铺公告 ═══ -->
+  <view class="anno-bar" wx:if="{{shop.announcement}}">
+    <text class="ab-icon">公告</text>
+    <text class="ab-text ellipsis">{{shop.announcement}}</text>
+  </view>
+
+  <!-- ═══ 4. 已选商品条（记忆模式） ═══ -->
+  <view class="picked-bar" wx:if="{{pickedProduct}}" bindtap="onPickedTap">
+    <view class="pb-info">
+      <view class="pb-dot"></view>
+      <text class="pb-name ellipsis">{{pickedProduct.name}}</text>
+      <text class="pb-qty" wx:if="{{pickedProduct.qty > 0}}">×{{pickedProduct.qty}}</text>
+    </view>
+    <view class="pb-right">
+      <text class="pb-price" wx:if="{{pickedProduct.price}}">¥{{pickedProduct.price * (pickedProduct.qty || 1)}}</text>
+      <text class="pb-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- ═══ 5. 搜索 + 分类 + 排序 ═══ -->
+  <view class="filter-bar">
+    <!-- 搜索 -->
+    <view class="fb-search">
+      <text class="fbs-icon">搜</text>
+      <input class="fbs-input" placeholder="搜店内商品" bindinput="onSearch" value="{{keyword}}" confirm-type="search" />
+    </view>
+    <!-- 分类横滚 -->
+    <scroll-view scroll-x class="fb-cats" enhanced show-scrollbar="{{false}}">
+      <text class="fbc-item {{activeCat === '' ? 'on' : ''}}" bindtap="onCatTap" data-cat="">全部</text>
+      <text class="fbc-item {{activeCat === item ? 'on' : ''}}"
+            wx:for="{{categories}}" wx:key="*this"
+            bindtap="onCatTap" data-cat="{{item}}">{{item}}</text>
+    </scroll-view>
+    <!-- 排序 -->
+    <view class="fb-sort">
+      <text class="fbs-item {{sortBy === 'sales' ? 'on' : ''}}" bindtap="onSort" data-sort="sales">综合</text>
+      <text class="fbs-item {{sortBy === 'price_asc' ? 'on' : ''}}" bindtap="onSort" data-sort="price_asc">价格↑</text>
+      <text class="fbs-item {{sortBy === 'price_desc' ? 'on' : ''}}" bindtap="onSort" data-sort="price_desc">价格↓</text>
+    </view>
+  </view>
+
+  <!-- ═══ 6. 商品网格（双列） ═══ -->
+  <view class="goods-grid">
+    <view class="gg-card {{item.id === highlightedId ? 'gg-on' : ''}}"
+          wx:for="{{filteredProducts}}" wx:key="id" id="prod-{{item.id}}">
+      <!-- 商品图 -->
+      <view class="ggc-img-wrap" bindtap="onGoProductDetail"
+            data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}"
+            data-spec="{{item.spec}}" data-unit="{{item.unit}}"
+            data-category="{{item.category}}" data-sales="{{item.sales}}">
+        <image class="ggc-img" src="{{item.image || ''}}" mode="aspectFill" />
+        <view class="ggci-placeholder" wx:if="{{!item.image}}">
+          <text>商品</text>
+        </view>
+      </view>
+      <!-- 信息 -->
+      <view class="ggc-body">
+        <view class="ggcb-name ellipsis-2" bindtap="onGoProductDetail"
+              data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}"
+              data-spec="{{item.spec}}" data-unit="{{item.unit}}"
+              data-category="{{item.category}}" data-sales="{{item.sales}}">{{item.name}}</view>
+        <view class="ggcb-spec ellipsis" wx:if="{{item.spec}}">{{item.spec}}</view>
+        <view class="ggcb-price-row">
+          <view class="ggcb-price">
+            <text class="ggcbp-sym">¥</text>
+            <text class="ggcbp-num">{{item.price}}</text>
+            <text class="ggcbp-unit">/{{item.unit || '㎡'}}</text>
+          </view>
+          <text class="ggcb-sales" wx:if="{{item.sales}}">已售{{item.sales}}</text>
+        </view>
+        <!-- 选规格按钮（只有这一个操作入口） -->
+        <view class="ggcb-spec-btn" bindtap="onProductTap"
+              data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}"
+              data-spec="{{item.spec}}" data-unit="{{item.unit}}"
+              data-category="{{item.category}}" data-sales="{{item.sales}}">选规格</view>
+      </view>
+    </view>
+    <!-- 空态 -->
+    <view class="gg-empty" wx:if="{{filteredProducts.length === 0}}">
+      <text class="gge-icon">无</text>
+      <text class="gge-text">暂无匹配商品</text>
+    </view>
+  </view>
+
+  <view style="height:140rpx;"></view>
+</scroll-view>
+
+<!-- ═══ 7. 底部操作栏 ═══ -->
+<view class="bottom-bar">
+  <view class="bb-left">
+    <view class="bb-item {{isFavorited ? 'on' : ''}}" bindtap="onToggleFavorite">
+      <text>{{isFavorited ? '已收藏' : '收藏'}}</text>
+      <text class="bbi-label">收藏</text>
+    </view>
+    <view class="bb-item" bindtap="onChatMerchant">
+      <text>咨询</text>
+      <text class="bbi-label">咨询</text>
+    </view>
+    <view class="bb-item" bindtap="onCallPhone" wx:if="{{shop.phone}}">
+      <text>电话</text>
+    </view>
+  </view>
+  <view class="bb-right">
+    <view class="bbr-navi" bindtap="onBookNavigator">约领航员</view>
+    <view class="bbr-buy" bindtap="onBuyNow">立即购买</view>
+  </view>
+</view>
+
+<!-- ═══ 8. 规格/数量弹窗 ═══ -->
+<view class="sheet-mask {{showSheet ? 'show' : ''}}" catchtouchmove="noop" bindtap="onSheetClose"></view>
+<view class="sheet-panel {{showSheet ? 'show' : ''}}">
+  <!-- 商品概要 -->
+  <view class="sp-product">
+    <view class="spp-img" style="background:#F3F4F5;">
+      <text style="font-size:60rpx;line-height:120rpx;text-align:center;display:block;">商品</text>
+    </view>
+    <view class="spp-info">
+      <view class="spp-name">{{sheetProduct.name}}</view>
+      <view class="spp-spec" wx:if="{{sheetProduct.spec}}">{{sheetProduct.spec}}</view>
+      <view class="spp-price"><text class="spp-sym">¥</text>{{sheetProduct.price}}<text class="spp-unit">/{{sheetProduct.unit || '㎡'}}</text></view>
+    </view>
+    <view class="spp-close" bindtap="onSheetClose">X</view>
+  </view>
+
+  <!-- 数量选择 -->
+  <view class="sp-qty-row">
+    <text class="spq-label">数量</text>
+    <view class="spq-control">
+      <view class="spq-btn" bindtap="onSheetQtyMinus">−</view>
+      <input class="spq-input" type="digit" value="{{sheetQty}}" bindinput="onSheetQtyInput" />
+      <view class="spq-btn" bindtap="onSheetQtyPlus">+</view>
+    </view>
+    <text class="spq-unit">{{sheetProduct.unit || '㎡'}}</text>
+  </view>
+
+  <!-- 快捷数量 -->
+  <view class="sp-presets">
+    <view class="spp-item {{sheetQty === 30 ? 'on' : ''}}" bindtap="onSheetQtyPreset" data-v="{{30}}">30㎡</view>
+    <view class="spp-item {{sheetQty === 50 ? 'on' : ''}}" bindtap="onSheetQtyPreset" data-v="{{50}}">50㎡</view>
+    <view class="spp-item {{sheetQty === 80 ? 'on' : ''}}" bindtap="onSheetQtyPreset" data-v="{{80}}">80㎡</view>
+    <view class="spp-item {{sheetQty === 100 ? 'on' : ''}}" bindtap="onSheetQtyPreset" data-v="{{100}}">100㎡</view>
+  </view>
+
+  <!-- 预估 -->
+  <view class="sp-estimate" wx:if="{{sheetQty > 0 && sheetProduct.price}}">
+    预估：<text class="spe-amount">¥{{sheetQty * sheetProduct.price}}</text>（{{sheetQty}}{{sheetProduct.unit || '㎡'}} × ¥{{sheetProduct.price}}/{{sheetProduct.unit || '㎡'}}）
+  </view>
+
+  <!-- 确认按钮 -->
+  <view class="sp-buttons">
+    <view class="spb-cart" bindtap="onSheetAddCart">加入购物车</view>
+    <view class="spb-buy" bindtap="onSheetBuyNow">立即购买</view>
+  </view>
+</view>

@@ -1,0 +1,114 @@
+<view class="exam-page">
+  <!-- 顶部信息栏 -->
+  <view class="exam-header">
+    <text class="exam-header__title">考试：{{courseName}}</text>
+    <text class="exam-header__progress">第 {{currentIndex}}/{{totalCount}} 题</text>
+  </view>
+
+  <!-- 题目进度条 -->
+  <view class="exam-progress">
+    <view class="exam-progress__bar">
+      <view
+        class="exam-progress__fill"
+        style="width: {{currentIndex * 100 / totalCount}}%"
+      ></view>
+    </view>
+    <view class="exam-progress__dots">
+      <view
+        class="exam-progress__dot {{index + 1 === currentIndex ? 'exam-progress__dot--active' : ''}} {{item.selectedKey ? 'exam-progress__dot--done' : ''}}"
+        data-index="{{index + 1}}"
+        bindtap="onSwitchQuestion"
+        wx:for="{{questions}}"
+        wx:key="id"
+      >
+        <text class="exam-progress__dot-num">{{item.selectedKey ? '&#10003;' : index + 1}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 题目卡片 -->
+  <view class="exam-card">
+    <view class="exam-card__q">
+      <text class="exam-card__q-label">第 {{currentIndex}} 题</text>
+      <text class="exam-card__q-text">{{questions[currentIndex - 1].question}}</text>
+    </view>
+
+    <view class="exam-card__options">
+      <view
+        class="exam-card__option {{item.selected ? 'exam-card__option--selected' : ''}}"
+        data-qid="{{questions[currentIndex - 1].id}}"
+        data-key="{{item.key}}"
+        bindtap="onSelect"
+        wx:for="{{questions[currentIndex - 1].options}}"
+        wx:key="key"
+      >
+        <view class="exam-card__radio {{item.selected ? 'exam-card__radio--checked' : ''}}">
+          <view wx:if="{{item.selected}}" class="exam-card__radio-dot"></view>
+        </view>
+        <view class="exam-card__option-content">
+          <text class="exam-card__option-key">{{item.key}}</text>
+          <text class="exam-card__option-text">{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航区 -->
+  <view class="exam-footer">
+    <view class="exam-footer__nav">
+      <button
+        class="exam-footer__btn exam-footer__btn--prev {{currentIndex <= 1 ? 'exam-footer__btn--disabled' : ''}}"
+        disabled="{{currentIndex <= 1}}"
+        bindtap="onPrev"
+      >上一题</button>
+      <button
+        class="exam-footer__btn exam-footer__btn--next {{currentIndex >= totalCount ? 'exam-footer__btn--disabled' : ''}}"
+        disabled="{{currentIndex >= totalCount}}"
+        bindtap="onNext"
+      >下一题</button>
+    </view>
+    <button
+      class="exam-footer__submit {{!canSubmit ? 'exam-footer__submit--disabled' : ''}}"
+      disabled="{{!canSubmit}}"
+      loading="{{loading}}"
+      bindtap="onSubmit"
+    >提交答卷</button>
+  </view>
+
+  <!-- 结果弹窗遮罩 -->
+  <view
+    class="exam-mask {{showResult ? 'exam-mask--show' : ''}}"
+    bindtap="onCloseResult"
+  ></view>
+
+  <!-- 结果弹窗 -->
+  <view class="exam-result {{showResult ? 'exam-result--show' : ''}}">
+    <view class="exam-result__card {{passed ? 'exam-result__card--pass' : 'exam-result__card--fail'}}">
+      <view class="exam-result__icon">
+        <text class="exam-result__icon-text">{{passed ? '&#10003;' : '&#10007;'}}</text>
+      </view>
+      <text class="exam-result__title">{{passed ? '恭喜通过' : '考试未通过'}}</text>
+      <view class="exam-result__score">
+        <text class="exam-result__score-num">{{score}}</text>
+        <text class="exam-result__score-label">分</text>
+      </view>
+      <view class="exam-result__detail">
+        <text class="exam-result__detail-text">正确 {{correctCount}} / 共 {{totalCount}} 题</text>
+      </view>
+      <view class="exam-result__threshold">
+        <text class="exam-result__threshold-text">及格线：{{passed ? '已达标' : '80 分'}}</text>
+      </view>
+      <view class="exam-result__actions">
+        <button
+          class="exam-result__btn exam-result__btn--retry"
+          wx:if="{{!passed}}"
+          bindtap="onRetry"
+        >重新考试</button>
+        <button
+          class="exam-result__btn exam-result__btn--exit"
+          bindtap="onExit"
+        >{{passed ? '返回' : '离开'}}</button>
+      </view>
+    </view>
+  </view>
+</view>

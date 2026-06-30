@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "接单大厅",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "logo-icon": "../../components/logo/index",
+    "order-card": "../../components/order-card/index",
+    "countdown-badge": "../../components/countdown-badge/index",
+    "loading-skeleton": "../../components/loading-skeleton/index"
+  }
+}

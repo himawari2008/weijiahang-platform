@@ -1,0 +1,78 @@
+<view class="page">
+
+  <!-- 余额卡片 -->
+  <view class="earn-header">
+    <view class="eh-top">
+      <view class="eh-label">可提现余额</view>
+      <view class="eh-amount">
+        <text class="eha-symbol">¥</text>
+        <text class="eha-num">{{balanceText}}</text>
+      </view>
+      <view class="eh-withdraw" bindtap="onWithdraw">提现</view>
+    </view>
+  </view>
+
+  <!-- 统计摘要 -->
+  <view class="summary-row">
+    <view class="sr-item">
+      <text class="sr-val">¥{{totalEarnedText}}</text>
+      <text class="sr-lbl">累计收入</text>
+    </view>
+    <view class="sr-divider"></view>
+    <view class="sr-item">
+      <text class="sr-val">¥{{todayEarnText}}</text>
+      <text class="sr-lbl">今日收入</text>
+    </view>
+    <view class="sr-divider"></view>
+    <view class="sr-item">
+      <text class="sr-val">¥{{monthTotalText}}</text>
+      <text class="sr-lbl">本月收入</text>
+    </view>
+  </view>
+
+  <!-- 周收入柱状图 -->
+  <view class="section-card chart-card">
+    <view class="sc-title">本周收入趋势</view>
+    <view class="chart-row">
+      <view class="chart-bar" wx:for="{{weekData}}" wx:key="day" wx:for-item="item">
+        <view class="cb-bar-wrap">
+          <view class="cb-fill" style="height:{{item.pct}}%"></view>
+        </view>
+        <view class="cb-day">{{item.day}}</view>
+        <view class="cb-val">{{item.val}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收入记录 -->
+  <view class="section-card">
+    <view class="sc-title">收入记录</view>
+    <view wx:if="{{loading}}" class="empty-state">
+      <view class="es-icon loading-icon"></view>
+      <text class="es-text">加载中...</text>
+    </view>
+    <view wx:elif="{{apiError && records.length === 0}}" class="empty-state">
+      <view class="es-icon error-icon"></view>
+      <text class="es-text">网络异常，请下拉刷新重试</text>
+    </view>
+    <view wx:elif="{{records.length === 0}}" class="empty-state">
+      <view class="es-icon empty-icon"></view>
+      <text class="es-text">暂无收入记录</text>
+    </view>
+    <scroll-view wx:else scroll-y class="record-scroll">
+      <view class="tx-item" wx:for="{{records}}" wx:key="id" wx:for-item="item" data-id="{{item.id}}" bindtap="onRecordTap">
+        <view class="tx-icon-wrap">
+          <view class="tx-icon tx-icon-{{item.type === 'withdraw' ? 'out' : 'in'}}"></view>
+        </view>
+        <view class="tx-body">
+          <view class="tx-name">{{item.desc}}</view>
+          <view class="tx-time">{{item.time}}</view>
+        </view>
+        <view class="tx-amount tx-amount-{{item.type === 'withdraw' ? 'out' : 'in'}}">
+          {{item.amountText}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+</view>

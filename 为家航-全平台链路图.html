@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为家航 — 全平台架构链路图</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --orange: #FF6B35;
+    --blue: #1A365D;
+    --primary: #1677FF;
+    --green: #52C41A;
+    --gold: #FAAD14;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--blue) 0%, #0f2340 100%);
+    color: #fff;
+    padding: 32px 24px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+  }
+  .header h1 { font-size: 28px; margin-bottom: 6px; }
+  .header p { opacity: .75; font-size: 14px; }
+  .toc {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 16px 24px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .toc a {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #f5f5f5;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    transition: all .2s;
+  }
+  .toc a:hover { background: var(--orange); color: #fff; }
+  .container { max-width: 1100px; margin: 0 auto 40px; }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    margin: 20px 0;
+    padding: 24px 20px 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    overflow-x: auto;
+  }
+  .card h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h3 {
+    font-size: 16px;
+    margin: 16px 0 8px;
+    color: var(--blue);
+  }
+  .card .desc {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+    min-height: 40px;
+  }
+  .mermaid svg { max-width: 100%; height: auto; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .badge-e2e { background: #1A365D; }
+  .badge-c { background: #FF6B35; }
+  .badge-nav { background: #1677FF; }
+  .badge-merchant { background: #52C41A; }
+  .badge-admin { background: #FAAD14; color: #333; }
+  .badge-server { background: #8B5CF6; }
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+  }
+  @media (max-width: 768px) {
+    .header h1 { font-size: 20px; }
+    .card { padding: 16px 12px; margin: 12px 8px; }
+    .toc { margin: 12px 8px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏗️ 为家航 — 全平台架构链路图</h1>
+  <p>5子项目 · 12张可视化图表 · 可编辑Mermaid源码 | 最后更新 2026-06-25</p>
+</div>
+
+<div class="toc">
+  <a href="#e2e">📡 端到端汇总</a>
+  <a href="#c-routes">📱 C端页面路由</a>
+  <a href="#c-api">🔌 C端API调用链</a>
+  <a href="#c-fallback">🔄 数据降级策略</a>
+  <a href="#nav-routes">🏃 领航员页面路由</a>
+  <a href="#nav-ws">📶 WebSocket实时通信</a>
+  <a href="#nav-state">🔁 订单履约状态机</a>
+  <a href="#mer-routes">🏪 商户端路由+适配</a>
+  <a href="#admin-routes">⚙️ 管理后台19页</a>
+  <a href="#admin-api">🗄️ Admin API映射</a>
+  <a href="#server-topo">🖥️ 后端服务拓扑</a>
+  <a href="#server-req">🔐 请求生命周期</a>
+  <a href="#ws-events">📡 WebSocket事件流</a>
+  <a href="#seq-order">🛒 下单全链路</a>
+  <a href="#seq-review">✅ 商户审核流程</a>
+  <a href="#seq-nav">🗺️ 室内导航流程</a>
+  <a href="#seq-ai">🤖 AI对话计算流程</a>
+</div>
+
+<div class="container">
+
+<!-- ==================== 1. 端到端汇总 ==================== -->
+<div class="card" id="e2e">
+  <h2><span class="badge badge-e2e">E2E</span> 端到端汇总链路图</h2>
+  <p class="desc">5端 + 外部服务 + 硬件 + 数据库全连接视图</p>
+  <div class="mermaid">
+graph TB
+    subgraph EXT["🌐 外部服务"]
+        WX[微信开放平台<br/>登录/支付/通知]
+        TM[腾讯地图API<br/>室内导航/路径规划]
+        CLAUDE[Claude API<br/>AI对话/材料计算]
+        TYQW[通义千问<br/>备用AI引擎]
+        SMS[短信服务]
+    end
+    subgraph HW["📡 硬件层"]
+        BLE[BLE蓝牙信标<br/>室内定位3-5m]
+    end
+    subgraph BACKEND["🖥️ NestJS后端 :3001"]
+        GW[API网关<br/>限流/CSRF/CORS]
+        AUTH[认证模块<br/>JWT签发+验证]
+        MQ[WebSocket网关<br/>即时通讯+订单推送]
+        DB[(PostgreSQL 17 + PostGIS)]
+        REDIS[(Redis 5.0)]
+    end
+    subgraph C端["📱 C端·业主/采购商 30页"]
+        C1[商品浏览 6页]
+        C2[交易链路 8页]
+        C3[AI工具 2页]
+        C4[地图导航 2页]
+        C5[个人中心 7页]
+    end
+    subgraph NAV端["📱 领航员·服务人员 21页"]
+        N1[接单大厅 WebSocket]
+        N2[订单履约 到达→验货→完成]
+        N3[收益提现 等级勋章]
+        N4[培训考试 数据统计]
+    end
+    subgraph M端["💻 商户端 React 13页"]
+        M1[店铺·商品 CRUD]
+        M2[订单·评价 履约+回复]
+        M3[营销·推广 活动+广告]
+        M4[财务·分析 流水+报表]
+    end
+    subgraph A端["💻 管理后台 React 19页"]
+        A1[审核中心 商家/领航员/评价]
+        A2[运营管理 用户/市场/纠纷]
+        A3[营销体系 广告/活动/优惠券]
+        A4[交易管理 采购/结算]
+        A5[系统运维 财务/信标/审计]
+    end
+    WX <-->|OAuth2.0| AUTH
+    TM <-->|REST API| GW
+    CLAUDE -->|流式SSE| GW
+    TYQW -->|备用| GW
+    BLE -->|RSSI信号| C4
+    GW --> AUTH
+    GW --> MQ
+    AUTH --> DB
+    AUTH --> REDIS
+    C1 -->|HTTP| GW
+    C2 -->|HTTP| GW
+    C3 -->|SSE流式| GW
+    C4 -->|HTTP+BLE| GW
+    C5 -->|HTTP| GW
+    N1 -->|WebSocket| MQ
+    N1 -->|HTTP| GW
+    N2 -->|HTTP| GW
+    N3 -->|HTTP| GW
+    M1 -->|HTTP| GW
+    M2 -->|HTTP| GW
+    M3 -->|HTTP| GW
+    A1 -->|HTTP| GW
+    A2 -->|HTTP| GW
+    A3 -->|HTTP| GW
+    A4 -->|HTTP| GW
+    A5 -->|HTTP| GW
+    C2 -.->|下单触发| N1
+    N2 -.->|履约状态| C2
+    N2 -.->|到店确认| M1
+    A1 -.->|审核通过| N1
+    A1 -.->|审核通过| M1
+    A4 -.->|结算打款| N3
+  </div>
+</div>
+
+<!-- ==================== 2. C端页面路由 ==================== -->
+<div class="card" id="c-routes">
+  <h2><span class="badge badge-c">C端</span> 小程序页面路由全景 — 30页</h2>
+  <div class="mermaid">
+graph TB
+    SPLASH[splash 启动页] --> ONBOARD[onboarding 引导页]
+    SPLASH --> INDEX[index 🏠首页]
+
+    subgraph TAB["底部TabBar 5页"]
+        INDEX
+        AI[ai-chat 🤖AI助手]
+        MSG[messages 💬消息]
+        ORDERS[orders 📦订单]
+        MINE[mine 👤我的]
+    end
+
+    subgraph SHOPPING["🛍️ 商品浏览 6页"]
+        SHOP_LIST[shop-list 商品列表]
+        SHOP_DETAIL[shop-detail 店铺详情]
+        PROD_DETAIL[product-detail 商品详情]
+        MARKET_DETAIL[market-detail 市场详情]
+        FEED[feed 聚合页]
+        FAV[favorites 收藏夹]
+    end
+
+    subgraph TRADE["💳 交易链路 8页"]
+        CART[cart 购物车]
+        SETTLE[settle 结算页]
+        ORDER_CREATE[order-create 创建服务订单]
+        ORDER_DETAIL[order-detail 订单详情]
+        DISPUTE[dispute 售后纠纷]
+    end
+
+    subgraph AI_TOOLS["🧠 AI工具 2页"]
+        AI_CALC[ai-calc 材料计算]
+    end
+
+    subgraph MAPS["🗺️ 地图导航 2页"]
+        MAP[map 全屏地图]
+        CITY_SELECT[city-select 城市选择]
+    end
+
+    subgraph PROFILE["⚙️ 个人中心 7页"]
+        PROFILE_EDIT[profile-edit 资料编辑]
+        ADDR_LIST[address-list 地址列表]
+        ADDR_EDIT[address-edit 地址编辑]
+        SETTINGS[settings 设置]
+        SERVICE[service 客服帮助]
+        FEEDBACK[feedback 意见反馈]
+        COUPONS[coupons 优惠券]
+    end
+
+    INDEX --> SHOP_LIST
+    INDEX --> SHOP_DETAIL
+    INDEX --> MARKET_DETAIL
+    INDEX --> FEED
+    INDEX --> MAP
+    INDEX --> CITY_SELECT
+    SHOP_LIST --> SHOP_DETAIL
+    SHOP_DETAIL --> PROD_DETAIL
+    SHOP_DETAIL --> CART
+    MARKET_DETAIL --> SHOP_DETAIL
+    MARKET_DETAIL --> MAP
+    FEED --> PROD_DETAIL
+    FAV --> SHOP_DETAIL
+    CART --> SETTLE
+    SETTLE --> ORDER_CREATE
+    SETTLE --> ADDR_LIST
+    ADDR_LIST --> ADDR_EDIT
+    ORDER_CREATE --> ORDERS
+    ORDERS --> ORDER_DETAIL
+    ORDER_DETAIL --> DISPUTE
+    ORDER_DETAIL --> SERVICE
+    AI --> AI_CALC
+    AI --> SHOP_DETAIL
+    AI --> ORDER_CREATE
+    MINE --> PROFILE_EDIT
+    MINE --> ORDERS
+    MINE --> ADDR_LIST
+    MINE --> FAV
+    MINE --> AI_CALC
+    MINE --> COUPONS
+    MINE --> FEEDBACK
+    MINE --> SERVICE
+    MINE --> SETTINGS
+
+    style SPLASH fill:#1A365D,color:#fff
+    style TAB fill:#FF6B35,color:#fff,stroke:#FF6B35
+    style SHOPPING fill:#1677FF,color:#fff,stroke:#1677FF
+    style TRADE fill:#52C41A,color:#fff,stroke:#52C41A
+    style AI_TOOLS fill:#D97706,color:#fff,stroke:#D97706
+    style MAPS fill:#0099FF,color:#fff,stroke:#0099FF
+    style PROFILE fill:#8B5CF6,color:#fff,stroke:#8B5CF6
+  </div>
+</div>
+
+<!-- ==================== 3. C端API调用链 ==================== -->
+<div class="card" id="c-api">
+  <h2><span class="badge badge-c">C端</span> API调用链 — 页面→API→Controller→数据库表</h2>
+  <div class="mermaid">
+graph LR
+    subgraph PAGES["📱 页面组"]
+        P1[首页·商品浏览]
+        P2[交易结算]
+        P3[AI对话·计算]
+        P4[地图导航]
+        P5[个人中心]
+    end
+    subgraph API_LAYER["🔌 utils/api.js"]
+        A1[auth/profile]
+        A2[markets/shops/products]
+        A3[orders/product-orders]
+        A4[ai/chat + material-calc]
+        A5[navigation/beacons]
+        A6[users/addresses/favorites]
+        A7[reviews/coupons/pricing]
+    end
+    subgraph CTRL["🖥️ Controllers"]
+        S1[AuthController]
+        S2[Markets/Shops/Products]
+        S3[Orders/ProductOrder]
+        S4[AiController]
+        S5[NavigationController]
+        S6[UsersController]
+        S7[Reviews/Coupon/Pricing]
+    end
+    subgraph DB["🗄️ Tables"]
+        D1[(users)]
+        D2[(markets/shops/products)]
+        D3[(orders/product_orders)]
+        D4[(ai_chat_logs)]
+        D5[(beacons/nav_tracks)]
+        D6[(addresses/favorites)]
+        D7[(reviews/coupons/points)]
+    end
+    P1 --> A2 --> S2 --> D2
+    P2 --> A3 --> S3 --> D3
+    P2 --> A7 --> S7
+    P3 --> A4 --> S4 --> D4
+    P4 --> A5 --> S5 --> D5
+    P5 --> A6 --> S6 --> D6
+    P5 --> A7 --> S7 --> D7
+    P1 --> A1 --> S1 --> D1
+  </div>
+</div>
+
+<!-- ==================== 4. 降级策略 ==================== -->
+<div class="card" id="c-fallback">
+  <h2><span class="badge badge-c">C端</span> 数据降级策略 — API优先+静默Mock</h2>
+  <div class="mermaid">
+graph LR
+    REQ[页面请求数据] --> API_CALL{调用后端API}
+    API_CALL -->|成功| LIVE[展示真实数据]
+    API_CALL -->|失败/超时| FALLBACK[静默降级]
+    FALLBACK --> M1[utils/data.js<br/>20商品+6特惠+12灵感]
+    FALLBACK --> M2[utils/mock-data.js<br/>7市场+33店铺]
+    FALLBACK --> M3[页面内联Mock<br/>各页面自带兜底]
+    FALLBACK --> M4[wx.Storage缓存<br/>购物车/收藏/AI历史]
+    LIVE --> CACHE[更新本地缓存]
+    CACHE --> M4
+    style API_CALL fill:#FAAD14,color:#000
+    style FALLBACK fill:#FF6B35,color:#fff
+    style LIVE fill:#52C41A,color:#fff
+  </div>
+</div>
+
+<!-- ==================== 5. 领航员页面路由 ==================== -->
+<div class="card" id="nav-routes">
+  <h2><span class="badge badge-nav">领航员</span> 页面路由全景 — 21页</h2>
+  <div class="mermaid">
+graph TB
+    subgraph TAB2["📋 底部TabBar 4页"]
+        HALL[index 🎯接单大厅]
+        MY_ORDERS[my-orders 📋我的订单]
+        EARNINGS[earnings 💰收益]
+        MY[navigator-mine 👤我的]
+    end
+    subgraph FULFILL["🏃 订单履约流 5页"]
+        OD[order-detail 订单详情+操作]
+        INSPECT[inspection 验货拍照6项]
+        REGISTER[register 4步注册]
+    end
+    subgraph GROW["⭐ 成长体系 5页"]
+        TIER[tier-benefits 等级权益5级]
+        BADGES[badges 勋章墙]
+        LEADERBOARD[leaderboard 排行榜]
+        TRAINING[training 培训中心]
+        EXAM[exam 在线考试]
+    end
+    subgraph TOOLS["📊 数据工具 7页"]
+        DATA_STATS[data-stats 数据统计]
+        MONTHLY[monthly-report 月度报告]
+        NOTIF[notification 通知列表]
+        MARKET_MAP[market-map 市场地图]
+        PREF[listen-preferences 听单偏好]
+        HELP[help-feedback 帮助反馈]
+        PRIVACY[privacy 隐私协议]
+    end
+    HALL --> OD
+    HALL --> REGISTER
+    MY_ORDERS --> OD
+    OD --> INSPECT
+    MY --> TIER
+    MY --> BADGES
+    MY --> LEADERBOARD
+    MY --> TRAINING
+    TRAINING --> EXAM
+    MY --> DATA_STATS
+    MY --> MONTHLY
+    MY --> MARKET_MAP
+    MY --> PREF
+    MY --> NOTIF
+    MY --> HELP
+  </div>
+</div>
+
+<!-- ==================== 6. WebSocket实时通信 ==================== -->
+<div class="card" id="nav-ws">
+  <h2><span class="badge badge-nav">领航员</span> WebSocket 实时通信 — 序列图</h2>
+  <div class="mermaid">
+sequenceDiagram
+    participant NAV as 📱 领航员小程序
+    participant WS as WebSocket网关 /orders
+    participant SRV as 订单服务
+    participant DB as 数据库
+
+    NAV->>WS: 连接 ws://host/orders?type=navigator&id=X&token=Y
+    WS->>WS: JWT认证 WsJwtAuthGuard
+    WS-->>NAV: 连接成功
+    NAV->>WS: navigator:join_market {marketId}
+    WS->>WS: 加入市场房间
+
+    loop 每25秒心跳
+        NAV->>WS: navigator:heartbeat {timestamp}
+        WS-->>NAV: pong
+    end
+
+    SRV->>WS: 新订单产生
+    WS->>NAV: order:new {订单详情} 🔔
+
+    NAV->>WS: navigator:grab {orderId}
+    WS->>SRV: 抢单请求
+    SRV->>DB: 写入接单记录
+    WS-->>NAV: order:grab_result
+
+    alt 抢单成功
+        WS->>NAV: order:assigned
+    else 超时/被抢
+        WS->>NAV: order:timeout
+    end
+
+    alt 连续在线超过12小时
+        WS->>NAV: system:force_offline 疲劳提醒
+    end
+  </div>
+</div>
+
+<!-- ==================== 7. 订单履约状态机 ==================== -->
+<div class="card" id="nav-state">
+  <h2><span class="badge badge-nav">领航员</span> 订单履约状态机</h2>
+  <div class="mermaid">
+stateDiagram-v2
+    [*] --> 待接单: 用户下单
+    待接单 --> 已接单: 领航员抢单 WebSocket
+    待接单 --> 已过期: 15秒超时
+    已接单 --> 已到达: POST /arrive
+    已到达 --> 服务中: POST /start-serving
+    服务中 --> 已验货: POST /inspection 6项检查
+    已验货 --> 已完成: POST /complete
+    已接单 --> 转单中: POST /request-transfer
+    转单中 --> 待接单: 释放回池
+    已完成 --> [*]
+    已过期 --> [*]
+  </div>
+</div>
+
+<!-- ==================== 8. 商户端路由 ==================== -->
+<div class="card" id="mer-routes">
+  <h2><span class="badge badge-merchant">商户端</span> 页面路由 + 响应式适配 + 降级覆盖</h2>
+  <div class="mermaid">
+graph TB
+    LOGIN_M[Login 手机号+密码] --> DASH[Dashboard 数据看板]
+    subgraph CORE["🏪 核心经营 4页"]
+        DASH
+        SHOP[ShopManage 店铺管理]
+        PROD[ProductManage 商品管理]
+        ORDERS_M[Orders 订单管理]
+    end
+    subgraph CRM["👥 客户关系 2页"]
+        CUSTOMERS[Customers 客户管理]
+        REVIEWS_M[Reviews 评价管理]
+    end
+    subgraph MKT["📢 营销推广 2页"]
+        MARKETING_M[Marketing 营销中心]
+        PROMO[Promotions 推广中心]
+    end
+    subgraph DATA["📊 数据分析 4页"]
+        ANALYTICS_M[Analytics 经营分析]
+        HEALTH[ShopHealth 店铺体检]
+        FINANCE_M[Finance 财务管理]
+        CHAT[ServiceChat 客服消息]
+    end
+    DASH --> SHOP --> PROD --> ORDERS_M
+    ORDERS_M --> CUSTOMERS --> REVIEWS_M
+    REVIEWS_M --> MARKETING_M --> PROMO
+    PROMO --> ANALYTICS_M --> HEALTH
+    HEALTH --> FINANCE_M --> CHAT
+
+    subgraph LAYOUT["📐 响应式布局"]
+        DETECT[window.innerWidth]
+        PC[🖥️ ≥768px 左侧Sider+12项菜单]
+        MOBILE[📱 <768px 抽屉菜单+底TabBar5项]
+    end
+    DETECT --> PC
+    DETECT --> MOBILE
+
+    subgraph FALLBACK_M["✅ 降级覆盖 12/13页"]
+        F1[Dashboard/Products/Orders/Reviews]
+        F2[Customers/Marketing/Promotions]
+        F3[ShopHealth/Analytics/ServiceChat]
+        F4[ShopManage/Finance 需后端]
+    end
+    style F1 fill:#52C41A,color:#fff
+    style F2 fill:#52C41A,color:#fff
+    style F3 fill:#52C41A,color:#fff
+    style F4 fill:#FAAD14,color:#000
+  </div>
+</div>
+
+<!-- ==================== 9. 管理后台路由 ==================== -->
+<div class="card" id="admin-routes">
+  <h2><span class="badge badge-admin">管理后台</span> 19页路由全景 — 按功能域分组</h2>
+  <div class="mermaid">
+graph TB
+    LOGIN_A[App.jsx 内联登录<br/>admin/admin123 → JWT]
+
+    subgraph AUDIT_GROUP["✅ 审核中心 3页"]
+        SHOP_V[ShopVerify 商家审核]
+        NAV_V[NavigatorVerify 领航员审核]
+        REVIEW_A[ReviewModeration 评价审核]
+    end
+    subgraph OPS["📋 运营管理 3页"]
+        USER_M[UserManage 用户管理]
+        ORDER_A[OrderManage 订单纠纷]
+        MARKET_A[MarketManage 市场CRUD]
+    end
+    subgraph MKT_GROUP["📢 营销体系 4页"]
+        AD_M[AdManage 广告管理]
+        MKT_A[MarketingManage 营销活动]
+        COUPON_M[CouponManage 优惠券5种]
+        MSG_TPL[MessageTemplate 话术模板]
+    end
+    subgraph TRADE_GROUP["💳 交易管理 2页"]
+        PROD_ORD[ProductOrder 采购订单]
+        SETTLE_A[Settlement 结算审核]
+    end
+    subgraph DATA_GROUP["📊 数据运营 2页"]
+        DASH_A[Dashboard 运营大盘]
+        MKT_ANALY[MarketAnalytics 市场分析]
+    end
+    subgraph SYS["⚙️ 系统运维 5页"]
+        FINANCE_A[Finance 财务对账]
+        BEACON_M[BeaconManage 信标CRUD]
+        SYS_CFG[SystemConfig 系统配置]
+        AUDIT_LOG[AuditLog 审计日志]
+        CUST_SEG[CustomerSegment 客户分层]
+    end
+
+    LOGIN_A --> DASH_A
+    DASH_A --> SHOP_V & NAV_V & USER_M & ORDER_A & MARKET_A
+    DASH_A --> AD_M & MKT_A & COUPON_M & MSG_TPL
+    DASH_A --> PROD_ORD & SETTLE_A & REVIEW_A
+    DASH_A --> BEACON_M & CUST_SEG & FINANCE_A & SYS_CFG & AUDIT_LOG & MKT_ANALY
+
+    style LOGIN_A fill:#1A365D,color:#fff
+    style AUDIT_GROUP fill:#FF6B35,color:#fff,stroke:#FF6B35
+    style OPS fill:#1677FF,color:#fff,stroke:#1677FF
+    style MKT_GROUP fill:#52C41A,color:#fff,stroke:#52C41A
+    style TRADE_GROUP fill:#FAAD14,color:#000,stroke:#FAAD14
+    style DATA_GROUP fill:#D97706,color:#fff,stroke:#D97706
+    style SYS fill:#8B5CF6,color:#fff,stroke:#8B5CF6
+  </div>
+</div>
+
+<!-- ==================== 10. Admin API映射 ==================== -->
+<div class="card" id="admin-api">
+  <h2><span class="badge badge-admin">管理后台</span> API → Controller → Entity 映射</h2>
+  <div class="mermaid">
+graph LR
+    subgraph FE["services/api.js 46端点"]
+        FA[19组API函数]
+    end
+    subgraph AC["AdminController @Controller('admin')"]
+        ADMC[50+ 端点<br/>聚合+代理+管理专属]
+    end
+    subgraph PROXY["🔗 代理模块"]
+        MC2[MarketsController]
+        BC2[BeaconsController]
+        CC2[CouponController]
+        POC2[ProductOrderController]
+        CTC2[CustomerTierController]
+        PMC2[PlatformMessageController]
+    end
+    subgraph TBS["🗄️ 核心表"]
+        T1[(admin_users)]
+        T2[(shops/navigators/users)]
+        T3[(orders/settlements)]
+        T4[(reviews/ads/marketing)]
+        T5[(beacons/coupons/product_orders)]
+        T6[(customer_tiers/message_templates)]
+        T7[(system_configs/audit_logs)]
+        T8[(merchant_withdraw_records)]
+    end
+    FA --> ADMC
+    ADMC --> T1 & T2 & T3 & T4 & T7 & T8
+    ADMC --> MC2 --> T2
+    ADMC --> BC2 --> T5
+    ADMC --> CC2 --> T5
+    ADMC --> POC2 --> T5
+    ADMC --> CTC2 --> T6
+    ADMC --> PMC2 --> T6
+    style FE fill:#FF6B35,color:#fff
+    style AC fill:#1A365D,color:#fff
+    style PROXY fill:#1677FF,color:#fff
+    style TBS fill:#52C41A,color:#000
+  </div>
+</div>
+
+<!-- ==================== 11. 后端服务拓扑 ==================== -->
+<div class="card" id="server-topo">
+  <h2><span class="badge badge-server">后端</span> 服务拓扑 — 32模块+安全中间件</h2>
+  <div class="mermaid">
+graph TB
+    subgraph CORE2["🏗️ 核心基础设施"]
+        APP_M[AppModule 根模块]
+        TYPEORM[TypeORM 37Entity]
+        CONFIG_M[ConfigModule 环境变量]
+        SCHEDULE_M[ScheduleModule 定时任务]
+    end
+    subgraph SEC["🛡️ 10层安全中间件链"]
+        direction LR
+        S1[Helmet] --> S2[CORS白名单] --> S3[三级限流] --> S4[CSRF HMAC] --> S5[SanitizePipe XSS净化] --> S6[ValidationPipe DTO验证] --> S7[JwtAuthGuard 全局守卫] --> S8[RolesGuard 角色权限] --> S9[AuditInterceptor 审计] --> S10[TransformInterceptor 统一响应]
+    end
+    subgraph BIZ["📦 32个业务模块 按域分组"]
+        B1[auth/users 认证用户]
+        B2[shops/products/markets 店铺商品市场]
+        B3[orders/product-order/dispatch 订单派单]
+        B4[navigators/tier/training/gamification 领航员]
+        B5[reviews/ads/marketing/coupon 内容营销]
+        B6[ai/navigation/beacons AI导航信标]
+        B7[pricing/dynamic-pricing/settlement 定价结算]
+        B8[analytics/audit-log/notification 数据分析]
+        B9[customer-tier/loyalty/platform-message 客户积分]
+        B10[merchant-crm/finance/shop-health 商户工具]
+        B11[fatigue/admin/circuit-breaker 管理运维]
+    end
+    subgraph EXT_DB["🔌 外部存储"]
+        PG[(PostgreSQL 17 + PostGIS 3.6)]
+        REDIS_S[(Redis 5.0)]
+        SQLITE_F[(SQLite 开发)]
+    end
+    APP_M --> TYPEORM --> PG
+    TYPEORM -.->|开发| SQLITE_F
+    APP_M --> CONFIG_M
+    APP_M --> SCHEDULE_M
+    APP_M --> SEC
+    APP_M --> BIZ
+    B1 --> REDIS_S
+    B6 --> REDIS_S
+    style SEC fill:#FF6B35,color:#fff
+    style BIZ fill:#1677FF,color:#fff
+  </div>
+</div>
+
+<!-- ==================== 12. 请求生命周期 ==================== -->
+<div class="card" id="server-req">
+  <h2><span class="badge badge-server">后端</span> 请求生命周期 — 10层安全中间件链</h2>
+  <div class="mermaid">
+sequenceDiagram
+    participant C as 客户端(四端)
+    participant CORS as CORS白名单
+    participant RATE as 三级限流器
+    participant CSRF_M as CSRF中间件
+    participant SAN as SanitizePipe XSS
+    participant VAL as ValidationPipe DTO
+    participant JWT as JwtAuthGuard
+    participant ROLE as RolesGuard
+    participant CTRL as Controller
+    participant SVC as Service
+    participant DB as TypeORM→PostgreSQL
+    participant AUD as AuditInterceptor
+    participant TF as TransformInterceptor
+
+    C->>CORS: HTTP请求 + Origin
+    CORS->>RATE: 来源通过
+    RATE->>CSRF_M: 未超限
+    CSRF_M->>SAN: CSRF Token有效
+    SAN->>VAL: HTML标签已剥离
+
+    alt DTO验证失败
+        VAL-->>C: 400 {code, errorCode, message}
+    end
+
+    VAL->>JWT: DTO通过
+    alt @Public()路由
+        JWT->>CTRL: 跳过认证
+    else 需认证
+        JWT->>JWT: 验证Bearer Token
+        alt Token无效
+            JWT-->>C: 401
+        end
+        JWT->>ROLE: Token有效
+        ROLE->>CTRL: 角色权限通过
+    end
+
+    CTRL->>SVC: 执行业务逻辑
+    SVC->>DB: TypeORM查询
+    DB-->>SVC: 返回结果
+    SVC-->>CTRL: 业务结果
+
+    alt 写操作 POST/PUT/PATCH/DELETE
+        CTRL->>AUD: 记录操作 用户/路径/耗时
+    end
+
+    CTRL->>TF: 原始响应
+    TF-->>C: {code:200, data, message, timestamp}
+  </div>
+</div>
+
+<!-- ==================== 13. WebSocket事件流 ==================== -->
+<div class="card" id="ws-events">
+  <h2><span class="badge badge-server">后端</span> WebSocket 事件流</h2>
+  <div class="mermaid">
+graph TB
+    subgraph GW_WS["WebSocketGateway /orders"]
+        WS1[userSockets Map 用户连接]
+        WS2[navigatorSockets Map 领航员连接]
+        WS3[marketRooms Map 市场房间]
+    end
+    subgraph PUSH["📤 服务器→客户端 9事件"]
+        E1[order:new 新订单]
+        E2[order:assigned 订单已分配]
+        E3[order:timeout 超时]
+        E4[order:status 状态变更]
+        E5[order:location 位置更新]
+        E6[order:merge 订单合并]
+        E7[system:fatigue 疲劳预警]
+        E8[system:force_offline 强制下线]
+        E9[system:announce 系统公告]
+    end
+    subgraph RECV["📥 客户端→服务器 6事件"]
+        E10[navigator:join_market]
+        E11[navigator:leave_market]
+        E12[navigator:location]
+        E13[navigator:heartbeat]
+        E14[order:bind_user]
+        E15[navigator:bind_order]
+    end
+    WS1 --> E1 & E4
+    WS2 --> E1 & E2 & E3 & E5 & E7 & E8
+    WS3 --> E1 & E6
+    E10 --> WS3
+    E11 --> WS3
+    E12 --> WS2
+    E13 --> WS2
+    E14 --> WS1
+    E15 --> WS2
+    style GW_WS fill:#1A365D,color:#fff
+    style PUSH fill:#FF6B35,color:#fff
+    style RECV fill:#1677FF,color:#fff
+  </div>
+</div>
+
+<!-- ==================== 14. 下单全链路 ==================== -->
+<div class="card" id="seq-order">
+  <h2><span class="badge badge-e2e">业务流</span> 用户下单全链路 — 跨C端/领航员/商户/管理后台</h2>
+  <div class="mermaid">
+sequenceDiagram
+    participant U as 🏠 业主 C端
+    participant N as 🏃 领航员
+    participant S as 🏪 商户
+    participant A as ⚙️ 管理后台
+    participant API as 后端API
+    participant WS as WebSocket
+    participant DB as 数据库
+
+    Note over U,DB: === 阶段1: 浏览选品 ===
+    U->>API: GET /markets?city=佛山
+    API->>DB: 查询市场列表
+    API-->>U: 7个市场+经纬度
+
+    U->>API: GET /shops?marketId=X&category=陶瓷
+    API->>DB: 查询店铺+商品
+    API-->>U: 店铺列表+商品
+
+    U->>U: 加入购物车 localStorage
+
+    Note over U,DB: === 阶段2: 创建订单 ===
+    U->>API: POST /orders {shopId, items, needNavigator:true}
+    API->>DB: 创建订单 status=pending
+    API->>WS: 触发订单广播
+
+    WS->>N: order:new {订单详情+15秒倒计时}
+
+    Note over U,DB: === 阶段3: 领航员接单 ===
+    N->>WS: navigator:grab {orderId}
+    WS->>API: 抢单请求
+    API->>DB: 更新订单 navigatorId+status=accepted
+    WS-->>N: order:grab_result {success}
+    WS->>U: order:assigned {领航员信息}
+
+    Note over U,DB: === 阶段4: 履约 ===
+    N->>API: POST /orders/{id}/arrive
+    API-->>U: 领航员已到达
+
+    N->>API: POST /orders/{id}/start-serving
+    API-->>U: 开始选品服务
+
+    N->>API: POST /orders/{id}/inspection 6项验货+照片
+    API->>DB: 保存验货记录
+
+    N->>API: POST /orders/{id}/complete
+    API->>DB: 订单完成→触发结算
+
+    Note over U,DB: === 阶段5: 评价+结算 ===
+    U->>API: POST /reviews {shopId, navId, rating}
+    API->>DB: 保存评价
+    API-->>S: 新评价通知
+
+    A->>API: POST /admin/settlements/batch-pay
+    API->>DB: 结算完成
+    API-->>N: 收益到账通知
+  </div>
+</div>
+
+<!-- ==================== 15. 商户审核流程 ==================== -->
+<div class="card" id="seq-review">
+  <h2><span class="badge badge-e2e">业务流</span> 商户入驻审核流程</h2>
+  <div class="mermaid">
+sequenceDiagram
+    participant S as 🏪 商户
+    participant API as 后端API
+    participant A as ⚙️ 管理后台
+    participant DB as 数据库
+    participant WX as 微信通知
+
+    S->>API: POST /auth/merchant-login {phone, password}
+    API->>DB: 验证手机号+密码
+    API-->>S: {token, shopId}
+
+    S->>API: PUT /shops/mine {店铺信息+营业执照+身份证}
+    API->>DB: 更新店铺 status=pending_review
+    API-->>S: 保存成功·待审核
+
+    A->>API: GET /admin/shops/pending
+    API->>DB: 查询待审核店铺
+    API-->>A: 列表含证照图片
+
+    A->>A: 审核证照+信息完整性
+
+    alt 审核通过
+        A->>API: PUT /admin/shops/{id}/verify status:approved
+        API->>DB: shops.status = active
+        API->>WX: 发送审核通过模板消息
+        WX-->>S: 📱 您的店铺已通过审核
+        S->>S: 解锁全部功能
+    else 审核驳回
+        A->>API: PUT /admin/shops/{id}/verify status:rejected + reason
+        API->>DB: shops.status = rejected + 驳回理由
+        API->>WX: 发送驳回通知含理由
+        WX-->>S: 📱 审核未通过,请修改后重新提交
+        S->>API: PUT /shops/mine 修正信息
+    end
+  </div>
+</div>
+
+<!-- ==================== 16. 室内导航流程 ==================== -->
+<div class="card" id="seq-nav">
+  <h2><span class="badge badge-e2e">业务流</span> 室内导航流程 — BLE信标+腾讯地图+三角定位</h2>
+  <div class="mermaid">
+sequenceDiagram
+    participant U as 📱 C端用户
+    participant BLE as 📡 BLE信标
+    participant API as 后端API
+    participant TMAP as 🗺️ 腾讯地图
+    participant DB as 数据库
+
+    U->>API: GET /markets/{id}
+    API->>DB: 查询市场含楼层+店铺分布
+    API-->>U: 市场详情+楼层信息
+
+    U->>U: 点击"导航到店"
+
+    U->>API: GET /navigation/map/{marketId}?floor=1F
+    API->>DB: 查询楼层地图+店铺坐标
+    API-->>U: 楼层平面图+店铺标注
+
+    U->>API: GET /navigation/beacons/{marketId}?floor=1F
+    API->>DB: 查询该楼层所有信标
+    API-->>U: 信标列表 MAC地址+坐标
+
+    loop 实时定位 每秒1次
+        U->>BLE: 扫描周边信标RSSI
+        BLE-->>U: {beaconId, RSSI: -65dBm}
+        U->>U: RSSI→距离转换<br/>三角定位 trilateration
+        U->>API: POST /navigation/position {x, y, floor}
+        U->>U: 更新地图蓝点位置
+    end
+
+    U->>API: GET /navigation/route/{marketId}?from=x1,y1&to=x2,y2&floor=1F
+    API->>TMAP: 室内路径规划
+    TMAP-->>API: 路径 拐点序列+距离+预估时间
+    API-->>U: 路径结果
+
+    U->>U: 渲染导航线+方向指引<br/>实时更新位置+方向箭头
+    U->>U: 🎉 到达目标店铺!
+  </div>
+</div>
+
+<!-- ==================== 17. AI对话+材料计算 ==================== -->
+<div class="card" id="seq-ai">
+  <h2><span class="badge badge-e2e">业务流</span> AI对话 + 材料计算 — 三级降级链</h2>
+  <div class="mermaid">
+sequenceDiagram
+    participant U as 📱 C端用户
+    participant API as 后端API
+    participant CLAUDE as 🧠 Claude API
+    participant TYQW as 🤖 通义千问 备用
+    participant LOCAL as 📦 本地计算引擎
+    participant DB as 数据库
+
+    Note over U,DB: === AI对话 ===
+    U->>API: POST /ai/chat {messages, context}
+    API->>CLAUDE: 转发对话 含建材System Prompt
+
+    alt Claude可用
+        CLAUDE-->>API: SSE流式响应
+        API-->>U: 逐token流式展示
+    else Claude不可用
+        API->>TYQW: 备用AI引擎
+        TYQW-->>API: 流式响应
+        API-->>U: 流式展示 备用引擎
+    end
+
+    API->>DB: 保存对话日志 ai_chat_logs
+
+    alt AI推荐商品/店铺
+        U->>U: 解析回复中的商品ID/店铺ID
+        U->>U: 渲染商品卡片+加购按钮
+    end
+
+    Note over U,DB: === AI材料计算 ===
+    U->>API: POST /ai/material-calc {mode, rooms, area, style}
+
+    alt Claude可用
+        API->>CLAUDE: 材料计算请求
+        CLAUDE-->>API: {materials: [{name, qty, unit, price}]}
+    else 全部不可用
+        API-->>U: 503 降级标记
+        U->>LOCAL: 激活本地计算引擎
+        LOCAL->>LOCAL: 10场景规则引擎<br/>全屋/厨卫/阳台等
+        LOCAL-->>U: 材料清单 本地计算
+    end
+
+    API-->>U: 材料清单 品类/数量/单价/小计
+    U->>U: 展示材料清单<br/>可调整数量/替换品类
+    U->>U: 一键加入购物车<br/>或查找对应店铺
+  </div>
+</div>
+
+</div><!-- .container -->
+
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'default',
+  securityLevel: 'loose',
+  flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+  sequence: { useMaxWidth: true, showSequenceNumbers: false },
+  state: { useMaxWidth: true }
+});
+</script>
+
+</body>
+</html>

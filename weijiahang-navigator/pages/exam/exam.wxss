@@ -1,0 +1,428 @@
+/* exam.wxss - 在线考试页面样式 */
+
+.exam-page {
+  min-height: 100vh;
+  background-color: var(--bg, #f5f5f5);
+  padding-bottom: 180rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== 顶部信息栏 ========== */
+.exam-header {
+  padding: 28rpx 32rpx 16rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exam-header__title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--text, #1a1a1a);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exam-header__progress {
+  font-size: 28rpx;
+  color: var(--primary, #FF6B35);
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+/* ========== 进度条 ========== */
+.exam-progress {
+  padding: 0 32rpx 24rpx;
+}
+
+.exam-progress__bar {
+  height: 8rpx;
+  background-color: var(--border, #e8e8e8);
+  border-radius: 4rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.exam-progress__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary, #FF6B35), #FF8F5E);
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+}
+
+.exam-progress__dots {
+  display: flex;
+  gap: 16rpx;
+}
+
+.exam-progress__dot {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background-color: var(--card, #ffffff);
+  border: 2rpx solid var(--border, #e8e8e8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 88rpx;
+  min-height: 88rpx;
+  box-sizing: border-box;
+}
+
+.exam-progress__dot--active {
+  border-color: var(--primary, #FF6B35);
+  background-color: rgba(255, 107, 53, 0.08);
+}
+
+.exam-progress__dot--done {
+  border-color: var(--success, #52c41a);
+  background-color: rgba(82, 196, 26, 0.08);
+}
+
+.exam-progress__dot-num {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--text2, #666);
+}
+
+.exam-progress__dot--active .exam-progress__dot-num {
+  color: var(--primary, #FF6B35);
+}
+
+.exam-progress__dot--done .exam-progress__dot-num {
+  color: var(--success, #52c41a);
+}
+
+/* ========== 题目卡片 ========== */
+.exam-card {
+  margin: 0 32rpx;
+  background-color: var(--card, #ffffff);
+  border-radius: 20rpx;
+  padding: 36rpx 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.exam-card__q {
+  margin-bottom: 32rpx;
+}
+
+.exam-card__q-label {
+  display: inline-block;
+  font-size: 24rpx;
+  color: var(--primary, #FF6B35);
+  background-color: rgba(255, 107, 53, 0.1);
+  padding: 6rpx 20rpx;
+  border-radius: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.exam-card__q-text {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 500;
+  color: var(--text, #1a1a1a);
+  line-height: 1.6;
+}
+
+/* ========== 选项列表 ========== */
+.exam-card__options {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.exam-card__option {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  border: 2rpx solid var(--border, #e8e8e8);
+  border-radius: 16rpx;
+  min-height: 88rpx;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.exam-card__option--selected {
+  border-color: var(--primary, #FF6B35);
+  background-color: rgba(255, 107, 53, 0.06);
+}
+
+/* ========== 单选圆圈 ========== */
+.exam-card__radio {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--border, #d0d0d0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  margin-right: 24rpx;
+}
+
+.exam-card__radio--checked {
+  border-color: var(--primary, #FF6B35);
+  background-color: var(--primary, #FF6B35);
+}
+
+.exam-card__radio-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+.exam-card__option-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.exam-card__option-key {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text2, #666);
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  width: 36rpx;
+  text-align: center;
+}
+
+.exam-card__option--selected .exam-card__option-key {
+  color: var(--primary, #FF6B35);
+}
+
+.exam-card__option-text {
+  font-size: 30rpx;
+  color: var(--text, #1a1a1a);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* ========== 底部导航区 ========== */
+.exam-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background-color: var(--card, #ffffff);
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.exam-footer__nav {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.exam-footer__btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  border-radius: 12rpx;
+  padding: 0;
+  background-color: var(--card, #ffffff);
+  color: var(--text, #1a1a1a);
+  border: 2rpx solid var(--border, #d0d0d0);
+}
+
+.exam-footer__btn--disabled {
+  opacity: 0.4;
+  color: var(--text3, #999);
+}
+
+.exam-footer__btn--prev::after {
+  border: none;
+}
+
+.exam-footer__btn--next::after {
+  border: none;
+}
+
+.exam-footer__submit {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 600;
+  border-radius: 12rpx;
+  padding: 0;
+  background: linear-gradient(135deg, var(--primary, #FF6B35), #FF8F5E);
+  color: #ffffff;
+  border: none;
+}
+
+.exam-footer__submit--disabled {
+  background: var(--border, #e0e0e0);
+  color: var(--text3, #bbb);
+}
+
+.exam-footer__submit::after {
+  border: none;
+}
+
+/* ========== 结果弹窗遮罩 ========== */
+.exam-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.exam-mask--show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ========== 结果弹窗 ========== */
+.exam-result {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 201;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.exam-result--show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.exam-result__card {
+  width: 560rpx;
+  background-color: var(--card, #ffffff);
+  border-radius: 28rpx;
+  padding: 48rpx 40rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15);
+}
+
+.exam-result__icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+
+.exam-result__icon-text {
+  font-size: 64rpx;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.exam-result__card--pass .exam-result__icon {
+  background: linear-gradient(135deg, var(--success, #52c41a), #73d13d);
+}
+
+.exam-result__card--fail .exam-result__icon {
+  background: linear-gradient(135deg, var(--danger, #ff4d4f), #ff7875);
+}
+
+.exam-result__title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--text, #1a1a1a);
+  margin-bottom: 16rpx;
+}
+
+.exam-result__score {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 20rpx;
+}
+
+.exam-result__score-num {
+  font-size: 80rpx;
+  font-weight: 700;
+  color: var(--primary, #FF6B35);
+  line-height: 1;
+}
+
+.exam-result__score-label {
+  font-size: 32rpx;
+  color: var(--text2, #666);
+  margin-left: 8rpx;
+}
+
+.exam-result__detail {
+  margin-bottom: 12rpx;
+}
+
+.exam-result__detail-text {
+  font-size: 30rpx;
+  color: var(--text2, #666);
+}
+
+.exam-result__threshold {
+  margin-bottom: 36rpx;
+}
+
+.exam-result__threshold-text {
+  font-size: 28rpx;
+  color: var(--text3, #999);
+}
+
+.exam-result__actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.exam-result__btn {
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 12rpx;
+  padding: 0;
+  width: 100%;
+}
+
+.exam-result__btn::after {
+  border: none;
+}
+
+.exam-result__btn--retry {
+  background: linear-gradient(135deg, var(--primary, #FF6B35), #FF8F5E);
+  color: #ffffff;
+}
+
+.exam-result__btn--exit {
+  background-color: var(--card, #ffffff);
+  color: var(--text2, #666);
+  border: 2rpx solid var(--border, #e0e0e0);
+}

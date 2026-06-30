@@ -1,0 +1,34 @@
+<map
+  class="map-view"
+  latitude="{{latitude}}"
+  longitude="{{longitude}}"
+  scale="{{scale}}"
+  markers="{{markers}}"
+  show-location
+  bindmarkertap="onMarkerTap"
+  bindregionchange="onRegionChange"
+></map>
+
+<!-- 底部市场信息卡 -->
+<view class="bottom-bar">
+  <view class="bb-market-select" bindtap="onSwitchMarket">
+    <text class="bb-market-name">{{selectedMarketName}}</text>
+    <text class="bb-arrow">▼</text>
+  </view>
+
+  <view wx:if="{{selectedMarket}}" class="bb-info">
+    <view class="bb-info-row">
+      <text class="bb-label">店铺数</text>
+      <text class="bb-value">{{selectedMarket.shops}} 家</text>
+    </view>
+    <view class="bb-info-row">
+      <text class="bb-label">简介</text>
+      <text class="bb-value">{{selectedMarket.description}}</text>
+    </view>
+    <view class="bb-nav-btn" bindtap="onNavigateTo">导航到这里</view>
+  </view>
+
+  <view wx:else class="bb-hint">
+    <text>选择一个市场查看详情</text>
+  </view>
+</view>

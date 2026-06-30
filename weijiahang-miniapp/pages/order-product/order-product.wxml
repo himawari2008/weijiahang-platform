@@ -1,0 +1,80 @@
+<view class="page">
+  <view class="header">在线下单 · {{shop.name || ''}}</view>
+
+  <!-- Step 1: 搜索并选择商品 -->
+  <view class="step-section">
+    <view class="step-title">1. 勾选商品并填写数量</view>
+    <view class="search-bar"><text>搜索</text><input placeholder="在店内搜索商品" value="{{keyword}}" bindinput="onSearch" /></view>
+    <scroll-view scroll-y class="goods-pool">
+      <view class="gp-item {{item.selected ? 'on' : ''}}" wx:for="{{poolProducts}}" wx:key="id">
+        <view class="gpi-check {{item.selected ? 'picked' : ''}}" bindtap="onTogglePick" data-id="{{item.id}}">{{item.selected ? '✓' : ''}}</view>
+        <view class="gpi-info" bindtap="onTogglePick" data-id="{{item.id}}">
+          <view class="gpi-name">{{item.name}}</view>
+          <view class="gpi-spec" wx:if="{{item.spec}}">{{item.spec}}</view>
+          <view class="gpi-price">参考价 {{item.price}}/{{item.unit || '㎡'}}</view>
+        </view>
+        <input class="gpi-qty" wx:if="{{item.selected}}" type="digit" placeholder="数量" value="{{item.qty}}" data-id="{{item.id}}" bindinput="onQty" />
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 已选清单 -->
+  <view class="selected-summary" wx:if="{{selectedItems.length > 0}}">
+    <view class="ss-title">已选 {{selectedItems.length}} 种</view>
+    <view class="ss-item" wx:for="{{selectedItems}}" wx:key="id">
+      <text class="ss-name ellipsis">{{item.name}}</text>
+      <text class="ss-qty">{{item.qty}}{{item.unit}}</text>
+      <text class="ss-sub">{{item.price * item.qty}}元</text>
+    </view>
+    <view class="ss-row">
+      <text>商品小计</text>
+      <text class="ss-val">{{totalEstimate}}元</text>
+    </view>
+    <view class="ss-row" wx:if="{{deliveryFee > 0}}">
+      <text>预估配送费</text>
+      <text class="ss-val">{{deliveryFee}}元</text>
+    </view>
+    <view class="ss-total">
+      <text>预估总价</text>
+      <text class="ss-total-val">{{totalEstimate + deliveryFee}}元</text>
+    </view>
+  </view>
+
+  <!-- Step 2: 配送方式 -->
+  <view class="step-section" wx:if="{{selectedItems.length > 0}}">
+    <view class="step-title">2. 配送方式</view>
+    <view class="d-row">
+      <view class="d-opt {{delivery === 'pickup' ? 'on' : ''}}" bindtap="onDelivery" data-type="pickup">自提（免运费）</view>
+      <view class="d-opt {{delivery === 'delivery' ? 'on' : ''}}" bindtap="onDelivery" data-type="delivery">送货上门（约50元）</view>
+    </view>
+    <input wx:if="{{delivery === 'delivery'}}" class="addr-inp" placeholder="收货地址" value="{{address}}" bindinput="onAddr" />
+    <textarea class="note-inp" placeholder="备注（选填）" value="{{note}}" bindinput="onNote" maxlength="150" />
+  </view>
+
+  <!-- Step 3: 支付说明 -->
+  <view class="step-section pay-flow" wx:if="{{selectedItems.length > 0}}">
+    <view class="step-title">3. 支付流程</view>
+    <view class="flow-steps">
+      <view class="flow-item">
+        <view class="flow-num">1</view>
+        <view class="flow-text">提交订单 → 商家确认实际价格</view>
+      </view>
+      <view class="flow-arrow">↓</view>
+      <view class="flow-item">
+        <view class="flow-num">2</view>
+        <view class="flow-text">商家确认后 → 你收到通知并支付</view>
+      </view>
+      <view class="flow-arrow">↓</view>
+      <view class="flow-item">
+        <view class="flow-num">3</view>
+        <view class="flow-text">支付完成 → 商家安排发货/备货</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Submit -->
+  <button class="submit-btn" wx:if="{{selectedItems.length > 0}}" bindtap="onSubmit">
+    提交订单（预估 {{totalEstimate + deliveryFee}} 元）
+  </button>
+  <view class="empty-hint" wx:if="{{selectedItems.length === 0}}">选择商品并填写数量后继续</view>
+</view>

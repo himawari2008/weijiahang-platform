@@ -1,0 +1,257 @@
+/* ========================================
+   为家航 — 全局设计系统
+   Brand: 航橙 #FF6B35 | 深蓝 #1A3A4A
+   理念: 航线感 + 家温度 + 建材感 + 信任感
+   ======================================== */
+
+page {
+  /* ── 品牌色板 ── */
+  --brand:        #FF6B35;    /* 航橙 — 主品牌色 */
+  --brand-dark:   #E55A2B;    /* 深橙 — 按压态 */
+  --brand-light:  #FFF0EB;    /* 浅橙 — 标签背景 */
+  --brand-warm:   #FFF8F5;    /* 暖橙 — 大背景 */
+  --deep-blue:    #1A3A4A;    /* 深蓝 — 文字/图标底 */
+  --success:      #2D8B4A;    /* 翠绿 — 验货确认/保障 */
+  --warning:      #FAAD14;    /* 黄 — 评分星 */
+  --danger:       #FF4D4F;    /* 红 — 警告 */
+  --text-0:       #1A1A1A;    /* 主文字 */
+  --text-1:       #333333;    /* 次文字 */
+  --text-2:       #666666;    /* 辅助文字 */
+  --text-3:       #999999;    /* 提示文字 */
+  --text-4:       #CCCCCC;    /* 占位文字 */
+  --border:       #EEEEEE;    /* 边框 */
+  --border-light: #F5F5F5;    /* 浅边框 */
+  --bg:           #F8F9FA;    /* 页面背景 */
+  --white:        #FFFFFF;
+
+  /* ── 间距系统 (rpx) ── */
+  --sp-xxs:  4rpx;
+  --sp-xs:   8rpx;
+  --sp-sm:   12rpx;
+  --sp-md:   16rpx;
+  --sp-lg:   20rpx;
+  --sp-xl:   24rpx;
+  --sp-2xl:  32rpx;
+  --sp-3xl:  40rpx;
+
+  /* ── 圆角系统 ── */
+  --r-sm:   8rpx;    /* 小标签/徽章 */
+  --r-md:   12rpx;   /* 卡片 */
+  --r-lg:   16rpx;   /* 大卡片/面板 */
+  --r-xl:   24rpx;   /* 按钮 */
+  --r-full: 100rpx;  /* 胶囊 */
+
+  /* ── 阴影系统（Y:Blur ≈ 1:3，京东风格悬浮感）── */
+  --shadow-sm:  0 2rpx 6rpx  rgba(0,0,0,0.06);
+  --shadow-md:  0 4rpx 12rpx rgba(0,0,0,0.08);
+  --shadow-lg:  0 6rpx 18rpx rgba(0,0,0,0.10);
+  --shadow-card: 0 3rpx 9rpx rgba(0,0,0,0.07);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  color: var(--text-1);
+  background-color: var(--bg);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========================================
+   通用原子类
+   ======================================== */
+
+/* ── 品牌按钮 ── */
+.btn-brand {
+  background: var(--brand);
+  color: #fff; border: none;
+  border-radius: var(--r-xl);
+  padding: 18rpx 36rpx;
+  font-size: 28rpx; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.btn-brand:active { background: var(--brand-dark); transform: scale(0.97); }
+.btn-brand.disabled { background: #CCC; pointer-events: none; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--brand);
+  border: 2rpx solid var(--brand);
+  border-radius: var(--r-xl);
+  padding: 16rpx 36rpx;
+  font-size: 28rpx; font-weight: 500;
+}
+.btn-outline:active { background: var(--brand-light); }
+
+.btn-ghost {
+  background: transparent; color: var(--brand);
+  border: none; padding: 10rpx 20rpx;
+  font-size: 26rpx;
+}
+
+/* ── 品牌卡片 ── */
+.card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: var(--sp-xl);
+  margin: var(--sp-sm) var(--sp-md);
+  box-shadow: var(--shadow-sm);
+}
+.card-highlight {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: var(--sp-xl);
+  margin: var(--sp-sm) var(--sp-md);
+  box-shadow: var(--shadow-md);
+  border: 1rpx solid var(--border);
+}
+
+/* ── 品牌标签 ── */
+.tag-brand {
+  display: inline-block;
+  background: var(--brand-light);
+  color: var(--brand-dark);
+  padding: 4rpx 14rpx;
+  border-radius: var(--r-sm);
+  font-size: 20rpx; font-weight: 500;
+}
+.tag-green {
+  display: inline-block;
+  background: #EBFFF0;
+  color: var(--success);
+  padding: 4rpx 14rpx;
+  border-radius: var(--r-sm);
+  font-size: 20rpx; font-weight: 500;
+}
+
+/* ── Flex 工具 ── */
+.flex { display: flex; align-items: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-1 { flex: 1; }
+
+/* ── 文字 ── */
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.text-brand { color: var(--brand); }
+.text-muted { color: var(--text-3); }
+.text-xs { font-size: 20rpx; }
+.text-sm { font-size: 24rpx; }
+.text-md { font-size: 28rpx; }
+.text-lg { font-size: 32rpx; }
+.text-xl { font-size: 36rpx; }
+.text-bold { font-weight: 600; }
+
+/* ── 评分星 ── */
+.stars { color: var(--warning); font-size: 22rpx; letter-spacing: 2rpx; }
+
+/* ── 分割线 ── */
+.divider { height: 1rpx; background: var(--border); margin: var(--sp-md) 0; }
+.divider-thick { height: 12rpx; background: var(--border-light); }
+
+/* ── 平台保障条（各页共用） ── */
+.guarantee-strip {
+  display: flex; align-items: center; gap: 10rpx;
+  padding: 14rpx 20rpx;
+  background: linear-gradient(135deg, #FFF8F5, #EBFFF0);
+  border-radius: var(--r-md);
+  margin: var(--sp-sm) var(--sp-md);
+}
+.gs-icon {
+  width: 44rpx; height: 44rpx; border-radius: 50%;
+  background: var(--success); color: #fff;
+  font-size: 24rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.gs-text { font-size: 22rpx; color: var(--text-2); flex: 1; }
+.gs-text .b { color: var(--success); font-weight: 600; }
+
+/* ========================================
+   指南针加载动画（品牌Loading）
+   用法：<view class="compass-loader"><view class="cl-ring"></view><view class="cl-needle"></view></view>
+   ======================================== */
+.compass-loader {
+  width: 80rpx; height: 80rpx; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.cl-ring {
+  width: 72rpx; height: 72rpx; border-radius: 50%;
+  border: 4rpx solid #EEE;
+  border-top-color: var(--brand);
+  animation: clRingSpin 0.8s linear infinite;
+}
+.cl-needle {
+  position: absolute; width: 4rpx; height: 28rpx;
+  background: var(--brand); border-radius: 2rpx;
+  top: 8rpx; transform-origin: bottom center;
+  animation: clNeedleWobble 1.2s ease-in-out infinite;
+}
+@keyframes clRingSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes clNeedleWobble {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+}
+
+/* 全屏加载遮罩 */
+.loading-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.92);
+}
+.loading-overlay .lo-text {
+  margin-top: 20rpx; font-size: 26rpx; color: var(--text-3);
+}
+
+/* 下拉刷新品牌动画 */
+.pull-compass {
+  width: 60rpx; height: 60rpx; margin: 20rpx auto;
+}
+.pull-compass .cl-ring {
+  width: 54rpx; height: 54rpx; border-width: 3rpx;
+}
+
+/* ========================================
+   页面进入动画（品牌转场）
+   给页面根节点加 .page-enter 即可触发
+   ======================================== */
+.page-enter {
+  animation: pageFadeSlideIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+@keyframes pageFadeSlideIn {
+  from { opacity: 0; transform: translateY(24rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 页面间共享的卡片进入动画（用于列表项） */
+.card-enter {
+  animation: cardPopIn 0.3s ease-out both;
+}
+@keyframes cardPopIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* 从底部弹出的面板动画 */
+.sheet-rise {
+  animation: sheetRise 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+@keyframes sheetRise {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* 数字跳动动画 */
+.num-pop {
+  animation: numPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes numPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}

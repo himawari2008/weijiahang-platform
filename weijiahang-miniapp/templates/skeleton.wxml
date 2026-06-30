@@ -1,0 +1,42 @@
+<!--
+  为家航 · 骨架屏加载模板
+  用于首页、列表等页面的首屏加载过渡
+  用法：<import src="/templates/skeleton.wxml" />
+        <template is="sk-home" />
+-->
+<template name="sk-home">
+  <view class="sk-wrap">
+    <!-- 品类骨架 -->
+    <view class="sk-cate-row">
+      <view class="sk-cate" wx:for="{{[1,2,3,4,5,6,7,8]}}" wx:key="index">
+        <view class="sk-circle sk-anim"></view>
+        <view class="sk-line sk-anim" style="width:60rpx;"></view>
+      </view>
+    </view>
+    <!-- Banner骨架 -->
+    <view class="sk-banner sk-anim"></view>
+    <!-- 商品骨架 -->
+    <view class="sk-goods-grid">
+      <view class="sk-goods" wx:for="{{[1,2,3,4]}}" wx:key="index">
+        <view class="sk-gimg sk-anim"></view>
+        <view class="sk-gname sk-anim" style="width:80%;"></view>
+        <view class="sk-gname sk-anim" style="width:60%;"></view>
+        <view class="sk-gprice sk-anim" style="width:45%;"></view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<!-- 列表骨架 -->
+<template name="sk-list">
+  <view class="sk-wrap">
+    <view class="sk-list-item" wx:for="{{[1,2,3,4,5]}}" wx:key="index">
+      <view class="sk-avatar sk-anim"></view>
+      <view class="sk-content">
+        <view class="sk-line sk-anim" style="width:70%;"></view>
+        <view class="sk-line sk-anim" style="width:90%;margin-top:12rpx;"></view>
+        <view class="sk-line sk-anim" style="width:40%;margin-top:8rpx;"></view>
+      </view>
+    </view>
+  </view>
+</template>

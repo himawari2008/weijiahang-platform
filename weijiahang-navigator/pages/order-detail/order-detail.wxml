@@ -1,0 +1,195 @@
+<view class="page">
+
+  <!-- ====== 加载态 ====== -->
+  <view class="load-mask" wx:if="{{loading}}">
+    <view class="load-spinner"></view>
+    <text class="load-text">加载中...</text>
+  </view>
+
+  <!-- ====== 错误态 ====== -->
+  <view class="err-state" wx:elif="{{loadError}}">
+    <view class="err-icon-box">
+      <view class="err-circle">
+        <text class="err-exclaim">!</text>
+      </view>
+    </view>
+    <text class="err-text">{{errorMsg}}</text>
+    <button class="btn btn-primary err-btn" bindtap="onRefresh">重新加载</button>
+  </view>
+
+  <!-- ====== 主内容 ====== -->
+  <block wx:else>
+
+    <!-- ====== 订单头部 ====== -->
+    <view class="order-header status-{{order.status}}">
+      <view class="oh-bar">
+        <text class="oh-order-no">订单号 #{{order.orderNo}}</text>
+        <view class="oh-type-tag type-{{order.type}}">
+          <view class="ott-icon"></view>
+          <text class="ott-text">{{order.typeLabel}}</text>
+        </view>
+      </view>
+      <view class="oh-price">
+        <text class="oh-amount">服务费 ¥{{order.amount}}</text>
+        <text class="oh-income">到手 ¥{{order.income}}</text>
+      </view>
+      <text class="oh-time" wx:if="{{order.createdAt}}">{{order.createdAt}}</text>
+    </view>
+
+    <!-- ====== 状态步骤条 ====== -->
+    <view class="steps-bar">
+      <view class="step-col" wx:for="{{statusSteps}}" wx:for-item="step" wx:key="step.key">
+        <view class="step-dot-row">
+          <view class="step-dot step-dot-{{step.status}}">
+            <view class="step-check-icon" wx:if="{{step.status === 'completed'}}"></view>
+          </view>
+          <view class="step-line {{step.rightLineClass}}" wx:if="{{index < statusSteps.length - 1}}"></view>
+        </view>
+        <text class="step-label step-label-{{step.status}}">{{step.label}}</text>
+      </view>
+    </view>
+
+    <!-- ====== 店铺信息卡片 ====== -->
+    <view class="card shop-card">
+      <view class="sc-row">
+        <view class="sc-name">{{order.shopName}}</view>
+        <view class="sc-tag" wx:if="{{order.category}}">{{order.category}}</view>
+      </view>
+      <view class="sc-address" wx:if="{{order.shopAddress}}">
+        <view class="sc-addr-icon"></view>
+        <text>{{order.shopAddress}}</text>
+      </view>
+      <view class="sc-desc" wx:if="{{order.description}}">
+        <text class="sc-desc-label">需求描述</text>
+        <text class="sc-desc-text">{{order.description}}</text>
+      </view>
+      <view class="sc-remark" wx:if="{{order.remark}}">
+        <text class="sc-desc-label">备注</text>
+        <text class="sc-desc-text">{{order.remark}}</text>
+      </view>
+    </view>
+
+    <!-- ====== 地图组件 ====== -->
+    <view class="map-section" bindtap="onOpenMap">
+      <map class="order-map"
+           latitude="{{mapLat}}"
+           longitude="{{mapLng}}"
+           markers="{{markers}}"
+           polyline="{{polyline}}"
+           show-location="{{true}}"
+           scale="16"
+           binderror="onMapError">
+      </map>
+      <view class="map-overlay">
+        <view class="map-expand-icon"></view>
+        <text class="map-hint">点击打开全屏导航</text>
+      </view>
+    </view>
+
+    <!-- ====== 服务详情卡片 ====== -->
+    <view class="card service-card">
+      <view class="srv-title">费用明细</view>
+      <view class="fee-row" wx:for="{{order.feeDetail}}" wx:for-item="fee" wx:key="fee.label">
+        <text class="fee-label">{{fee.label}}</text>
+        <text class="fee-amount">¥{{fee.amount}}</text>
+      </view>
+      <view class="fee-row fee-total">
+        <text class="fee-label">合计</text>
+        <text class="fee-total-val">¥{{order.amount}}</text>
+      </view>
+
+      <!-- 验货报告（已提交时显示） -->
+      <view class="insp-section" wx:if="{{order.inspectionReport}}">
+        <view class="insp-divider"></view>
+        <view class="insp-head">
+          <text class="insp-title">验货报告</text>
+          <view class="insp-badge">
+            <view class="ib-dot"></view>
+            <text>已提交</text>
+          </view>
+        </view>
+        <text class="insp-summary" wx:if="{{order.inspectionReport.summary}}">{{order.inspectionReport.summary}}</text>
+        <scroll-view class="insp-images" scroll-x="{{true}}" wx:if="{{order.inspectionReport.images && order.inspectionReport.images.length > 0}}">
+          <image class="insp-img" wx:for="{{order.inspectionReport.images}}" wx:for-item="img" wx:key="*this" src="{{img}}" mode="aspectFill" />
+        </scroll-view>
+      </view>
+    </view>
+
+    <!-- ====== 底部操作按钮 ====== -->
+    <view class="action-bar" wx:if="{{canArrive || canServe || canComplete || canCallUser}}">
+      <button class="action-btn btn-primary" wx:if="{{canArrive}}" bindtap="onArrive">
+        <view class="ab-icon ab-icon-arrive"></view>
+        <text>已到达</text>
+      </button>
+      <button class="action-btn btn-primary" wx:if="{{canServe}}" bindtap="onStartService">
+        <view class="ab-icon ab-icon-serve"></view>
+        <text>开始验货</text>
+      </button>
+      <button class="action-btn btn-outline" wx:if="{{canCallUser && !canArrive && !canServe && !canComplete}}" bindtap="onCallUser">
+        <view class="ab-icon ab-icon-call"></view>
+        <text>联系客户</text>
+      </button>
+      <button class="action-btn btn-outline call-btn" wx:if="{{canCallUser && (canArrive || canServe)}}" bindtap="onCallUser">
+        <view class="ab-icon ab-icon-call"></view>
+        <text>联系客户</text>
+      </button>
+      <button class="action-btn btn-outline transfer-btn" wx:if="{{order.status === 'accepted' || order.status === 'arrived' || order.status === 'serving'}}" bindtap="onShowTransfer">
+        <view class="ab-icon ab-icon-transfer"></view>
+        <text>转单</text>
+      </button>
+      <button class="action-btn btn-complete" wx:if="{{canComplete}}" bindtap="onComplete">
+        <view class="ab-icon ab-icon-done"></view>
+        <text>完成服务</text>
+      </button>
+    </view>
+
+    <!-- ====== 完成态 ====== -->
+    <view class="done-section" wx:if="{{order.status === 'completed'}}">
+      <view class="done-check-circle">
+        <view class="dcc-check"></view>
+      </view>
+      <text class="done-title">订单已完成</text>
+      <text class="done-income">¥{{order.income}} 已计入收益</text>
+      <button class="btn btn-outline done-back" bindtap="onCallUser" wx:if="{{order.customerPhone}}">
+        <view class="ab-icon ab-icon-call"></view>
+        <text>联系客户</text>
+      </button>
+    </view>
+
+    <!-- ====== 底部占位 ====== -->
+    <view class="bottom-spacer" wx:if="{{canArrive || canServe || canComplete}}"></view>
+
+    <!-- ====== 转单 Modal ====== -->
+    <view class="transfer-mask" wx:if="{{showTransferModal}}" bindtap="onHideTransfer">
+      <view class="transfer-dialog" catchtap="">
+        <view class="td-header">
+          <text class="td-title">申请转单</text>
+          <view class="td-close" bindtap="onHideTransfer"></view>
+        </view>
+        <view class="td-body">
+          <text class="td-label">请选择转单原因</text>
+          <view class="td-reason-list">
+            <view
+              class="td-reason {{transferReason === item ? 'selected' : ''}}"
+              wx:for="{{transferReasons}}"
+              wx:for-item="item"
+              wx:key="*this"
+              data-reason="{{item}}"
+              bindtap="onSelectTransferReason"
+            >
+              <view class="tdr-check">
+                <view class="tdrc-dot" wx:if="{{transferReason === item}}"></view>
+              </view>
+              <text>{{item}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="td-footer">
+          <button class="td-btn cancel" bindtap="onHideTransfer">取消</button>
+          <button class="td-btn confirm" bindtap="onConfirmTransfer" loading="{{transferring}}" disabled="{{!transferReason}}">确认转单</button>
+        </view>
+      </view>
+    </view>
+
+  </block>
+</view>

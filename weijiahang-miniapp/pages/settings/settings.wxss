@@ -1,0 +1,16 @@
+page { background: #F5F5F5; min-height: 100vh; }
+.section-title { font-size: 26rpx; color: #999; padding: 28rpx 32rpx 12rpx; }
+.section { background: #fff; }
+.row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28rpx 32rpx; border-bottom: 1rpx solid #F0F0F0;
+}
+.row-label { font-size: 30rpx; color: #333; }
+.row-right { display: flex; align-items: center; gap: 8rpx; color: #999; font-size: 28rpx; }
+.row-arrow { font-size: 32rpx; color: #CCC; }
+.row-value { color: #999; font-size: 28rpx; }
+.logout-btn {
+  margin: 60rpx 24rpx; background: #fff; color: #FF4D4F;
+  text-align: center; padding: 24rpx 0; border-radius: 16rpx;
+  font-size: 32rpx; font-weight: 500; border: 1rpx solid #FFCCCC;
+}

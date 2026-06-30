@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "验货拍照",
+  "usingComponents": {
+    "loading-skeleton": "../../components/loading-skeleton/index"
+  }
+}

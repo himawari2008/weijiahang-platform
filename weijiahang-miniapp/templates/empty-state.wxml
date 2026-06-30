@@ -1,0 +1,72 @@
+<!--
+  为家航 · 空状态模板
+  航小匠品牌IP贯穿所有空状态场景
+  使用方式：<import src="/templates/empty-state.wxml" />
+            <template is="empty-cart" data="{{}}" />
+-->
+
+<!-- ═══ 购物车为空 ═══ -->
+<template name="empty-cart">
+  <view class="empty-wrap">
+    <view class="empty-figure">
+      <image class="ef-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+      <view class="ef-bubble">还没选好料...</view>
+    </view>
+    <view class="empty-title">购物车是空的</view>
+    <view class="empty-desc">让航小匠带你去市场逛逛</view>
+    <view class="empty-cta" bindtap="onGoHome">去首页选建材</view>
+  </view>
+</template>
+
+<!-- ═══ 暂无订单 ═══ -->
+<template name="empty-order">
+  <view class="empty-wrap">
+    <view class="empty-figure">
+      <image class="ef-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+      <view class="ef-bubble">时刻准备着！</view>
+    </view>
+    <view class="empty-title">暂无订单</view>
+    <view class="empty-desc">选好建材，领航员帮你把关验货</view>
+    <view class="empty-cta" bindtap="onGoHome">去逛逛</view>
+  </view>
+</template>
+
+<!-- ═══ 搜索无结果 ═══ -->
+<template name="empty-search">
+  <view class="empty-wrap">
+    <view class="empty-figure">
+      <image class="ef-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+      <view class="ef-bubble">这个还没收录...</view>
+    </view>
+    <view class="empty-title">没找到相关内容</view>
+    <view class="empty-desc">试试换个关键词，或告诉航小匠帮你找</view>
+    <view class="empty-actions">
+      <view class="ea-btn" bindtap="onAIHelp">🧭 让AI帮你找</view>
+    </view>
+  </view>
+</template>
+
+<!-- ═══ 暂无收藏 ═══ -->
+<template name="empty-favorite">
+  <view class="empty-wrap">
+    <view class="empty-figure">
+      <image class="ef-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+      <view class="ef-bubble">收藏起来好找！</view>
+    </view>
+    <view class="empty-title">还没有收藏店铺</view>
+    <view class="empty-desc">逛到靠谱的店铺，点个收藏下次好找</view>
+  </view>
+</template>
+
+<!-- ═══ 材料清单为空 ═══ -->
+<template name="empty-material">
+  <view class="empty-wrap">
+    <view class="empty-figure">
+      <image class="ef-mascot" src="/assets/mascot-hangxiaocraft.svg" mode="aspectFit" />
+      <view class="ef-bubble">先算一算！</view>
+    </view>
+    <view class="empty-title">暂无材料清单</view>
+    <view class="empty-desc">用AI材料计算器，一键算出你家要买多少材料</view>
+    <view class="empty-cta" bindtap="onGoAI">免费计算</view>
+  </view>
+</template>

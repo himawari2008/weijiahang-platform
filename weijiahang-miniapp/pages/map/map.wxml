@@ -1,0 +1,177 @@
+<!--
+  为家航 · 市场导航页
+  设计参考：高德全屏地图 + 美团底部抽屉列表 + 滴滴定位按钮
+  核心理念：地图即界面，列表不抢地图
+-->
+<view class="page">
+
+  <!-- ═══ 1. 全屏地图 ═══ -->
+  <map
+    id="navMap"
+    class="nav-map"
+    latitude="{{mapCenter.lat}}"
+    longitude="{{mapCenter.lng}}"
+    scale="{{mapScale}}"
+    markers="{{markers}}"
+    circles="{{circles}}"
+    show-location="{{true}}"
+    enable-zoom="{{true}}"
+    enable-scroll="{{true}}"
+    enable-rotate="{{false}}"
+    bindmarkertap="onMarkerTap"
+    bindregionchange="onRegionChange"
+    bindupdated="onMapUpdated"
+  />
+
+  <!-- ═══ 2. 浮动控件层 ═══ -->
+
+  <!-- 2a. 返回按钮 -->
+  <view class="float-back" bindtap="onBack">
+    <text class="fb-arrow">‹</text>
+  </view>
+
+  <!-- 2b. 搜索条（毛玻璃效果，高德风格） -->
+  <view class="float-search" bindtap="onToggleSearch">
+    <view class="fs-icon"></view>
+    <text class="fs-placeholder">{{showSearch ? '输入店铺名称搜索…' : '搜市场内店铺'}}</text>
+    <text class="fs-cancel" wx:if="{{showSearch}}" catchtap="onCancelSearch">取消</text>
+  </view>
+
+  <!-- 2c. 市场信息卡片（左上角，点击进入市场详情页） -->
+  <view class="float-info" wx:if="{{activeMarket}}" bindtap="onMarketInfoTap">
+    <view class="fi-name">{{activeMarket.name}}</view>
+    <view class="fi-meta">{{activeMarket.storeCount || shops.length}}家店铺 · {{activeMarket.floors.length}}层</view>
+    <view class="fi-hint">查看市场详情 ›</view>
+  </view>
+
+  <!-- 2d. 定位按钮（右下角，滴滴风格） -->
+  <view class="float-locate" bindtap="onLocateMe">
+    <view class="fl-dot"></view>
+  </view>
+
+  <!-- ═══ 3. 搜索浮层 ═══ -->
+  <view class="search-layer {{showSearch ? 'show' : ''}}" wx:if="{{showSearch}}">
+    <input
+      class="sl-input"
+      placeholder="输入店铺名称…"
+      value="{{keyword}}"
+      bindinput="onSearchInput"
+      focus="{{showSearch}}"
+      confirm-type="search"
+    />
+    <scroll-view scroll-y class="sl-results" wx:if="{{searchResults.length > 0}}">
+      <view class="sl-item" wx:for="{{searchResults}}" wx:key="id"
+            bindtap="onSelectShop" data-shop="{{item}}">
+        <view class="sli-left">
+          <view class="sli-name">{{item.name}}</view>
+          <view class="sli-addr">{{item.addr}}</view>
+        </view>
+        <view class="sli-rating">评分{{item.rating}}</view>
+      </view>
+    </scroll-view>
+    <view class="sl-empty" wx:if="{{keyword && searchResults.length === 0}}">
+      <text>未找到匹配店铺</text>
+    </view>
+  </view>
+
+  <!-- ═══ 4. 底部抽屉面板（美团风格） ═══ -->
+  <view class="drawer-mask {{drawerExpanded ? 'show' : ''}}" bindtap="onCollapseDrawer"></view>
+
+  <view class="bottom-drawer {{drawerExpanded ? 'expanded' : ''}}">
+
+    <!-- 拖拽手柄 -->
+    <view class="bd-handle" bindtap="onExpandDrawer">
+      <view class="bdh-bar"></view>
+      <view class="bdh-label" wx:if="{{!drawerExpanded}}">
+        {{activeMarket ? activeMarket.name : '附近市场'}}
+        <text class="bdhl-count">{{shops.length}}家店铺</text>
+      </view>
+    </view>
+
+    <!-- 抽屉内容区 -->
+    <scroll-view scroll-y class="bd-body" enhanced show-scrollbar="{{false}}">
+
+      <!-- 4a. 楼层切换 chips -->
+      <view class="bd-floors" wx:if="{{floors.length > 0}}">
+        <scroll-view scroll-x class="bdf-scroll" enhanced show-scrollbar="{{false}}">
+          <view class="bdf-chip {{currentFloor === f ? 'on' : ''}}"
+                wx:for="{{floors}}" wx:key="*this"
+                bindtap="onFloorChange" data-floor="{{f}}">{{f}}F</view>
+        </scroll-view>
+      </view>
+
+      <!-- 4b. 市场切换（多市场模式） -->
+      <view class="bd-market-tabs" wx:if="{{allMarkets.length > 1 && !activeMarket}}">
+        <scroll-view scroll-x class="bdf-scroll" enhanced show-scrollbar="{{false}}">
+          <view class="bdmt-chip {{currentMarketId === item.id ? 'on' : ''}}"
+                wx:for="{{allMarkets}}" wx:key="id"
+                bindtap="onSwitchMarket" data-id="{{item.id}}">{{item.name}}</view>
+        </scroll-view>
+      </view>
+
+      <!-- 4c. 店铺列表行（去卡片化：无阴影，细线分隔） -->
+      <view class="bd-shops">
+        <block wx:for="{{shops}}" wx:key="id">
+          <view class="bds-item {{selectedShopId === item.id ? 'active' : ''}}"
+                bindtap="onShopTap" data-shop="{{item}}">
+            <view class="bdsi-num">{{index + 1}}</view>
+            <view class="bdsi-icon" style="background:{{item.bgColor || '#EBF5FF'}};">
+              <view class="bdsi-dot"></view>
+            </view>
+            <view class="bdsi-body">
+              <view class="bdsib-name">{{item.name}}</view>
+              <view class="bdsib-addr">{{item.addr}}</view>
+              <view class="bdsib-tags" wx:if="{{item.tags && item.tags.length}}">
+                <text class="bdsibt-tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="t">{{t}}</text>
+              </view>
+            </view>
+            <view class="bdsi-right">
+              <view class="bdsir-rating">评分{{item.rating}}</view>
+              <view class="bdsir-dist" wx:if="{{item.distance}}">{{item.distance}}m</view>
+              <text class="bdsir-arrow">›</text>
+            </view>
+          </view>
+        </block>
+
+        <!-- 空态 -->
+        <view class="bds-empty" wx:if="{{shops.length === 0}}">
+          <view class="bdse-dot"></view>
+          <text class="bdse-text">{{currentFloor ? currentFloor + '楼暂无店铺' : '暂无店铺数据'}}</text>
+        </view>
+      </view>
+
+      <!-- 4d. 市场精选好货（横滑商品卡片，单市场模式） -->
+      <view class="bd-goods" wx:if="{{marketGoods.length > 0}}">
+        <view class="bdg-head">
+          <text class="bdg-title">本市场精选好货</text>
+          <text class="bdg-more" bindtap="onAllGoods">全部 ›</text>
+        </view>
+        <scroll-view scroll-x class="bdg-scroll" enhanced show-scrollbar="{{false}}">
+          <view class="bdg-card" wx:for="{{marketGoods}}" wx:key="id"
+                bindtap="onMarketGoodsTap" data-id="{{item.id}}">
+            <view class="bdgc-img" style="background:{{item.bgColor || '#F3F4F5'}};">
+              <view class="bdgc-dot" style="background:{{item.bgColor || '#F3F4F5'}};"></view>
+              <view class="bdgc-tag" wx:if="{{item.tag}}">{{item.tag}}</view>
+            </view>
+            <view class="bdgc-body">
+              <view class="bdgc-name ellipsis-2">{{item.name}}</view>
+              <view class="bdgc-price-row">
+                <text class="bdgcp-sym">¥</text>
+                <text class="bdgcp-num">{{item.price}}</text>
+                <text class="bdgcp-unit">/{{item.unit || '㎡'}}</text>
+              </view>
+              <view class="bdgc-shop ellipsis">{{item.shopName}}</view>
+            </view>
+          </view>
+          <view class="bdg-card bdg-more-card" bindtap="onAllGoods">
+            <view class="bdg-more-text">查看全部<br/>好货 ›</view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 底部安全区 -->
+      <view class="bd-safe"></view>
+    </scroll-view>
+  </view>
+
+</view>

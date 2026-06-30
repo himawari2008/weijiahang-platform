@@ -1,0 +1,110 @@
+<import src="/templates/empty-state.wxml" />
+
+<!--
+  为家航 · 订单
+  品牌调性：掌控感、安心感
+-->
+<view class="page">
+
+  <!-- ===== 购物车入口 ===== -->
+  <view class="cart-entry" bindtap="onGoCart">
+    <view class="ce-left">
+      <view class="ce-icon-wrap">
+        <view class="ce-icon-css"></view>
+      </view>
+      <view class="ce-info">
+        <view class="ce-title">购物车</view>
+        <view class="ce-desc" wx:if="{{cartCount > 0}}">{{cartCount}}件商品 · 预估{{cartTotal}}元</view>
+        <view class="ce-desc" wx:if="{{cartCount === 0}}">去逛逛，选好建材</view>
+      </view>
+    </view>
+    <view class="ce-right">
+      <view class="ce-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</view>
+      <text class="ce-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- ===== 订单Tab ===== -->
+  <view class="tab-bar">
+    <view class="tab {{activeTab === 'all' ? 'on' : ''}}" bindtap="onTab" data-tab="all">全部</view>
+    <view class="tab {{activeTab === 'pending' ? 'on' : ''}}" bindtap="onTab" data-tab="pending">待接单</view>
+    <view class="tab {{activeTab === 'accepted' ? 'on' : ''}}" bindtap="onTab" data-tab="accepted">进行中</view>
+    <view class="tab {{activeTab === 'completed' ? 'on' : ''}}" bindtap="onTab" data-tab="completed">已完成</view>
+  </view>
+
+  <!-- ===== 订单列表 ===== -->
+  <scroll-view scroll-y class="order-scroll" refresher-enabled
+               refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh"
+               enhanced show-scrollbar="{{false}}">
+    <!-- 空状态 -->
+    <template wx:if="{{orders.length === 0 && !loading}}" is="empty-order" />
+
+    <view class="order-list" wx:else>
+      <view class="order-card" wx:for="{{orders}}" wx:key="id" bindtap="onDetail" data-id="{{item.id}}">
+        <!-- 头部 -->
+        <view class="oc-top">
+          <view class="oc-service">
+            <text class="ocs-icon">{{item.isNavi ? '领航员' : '自取'}}</text>
+            <text class="ocs-type">{{item.serviceLabel}}</text>
+          </view>
+          <text class="oc-status" style="color:{{item.statusColor}};">{{item.statusLabel}}</text>
+        </view>
+        <!-- 商品简述 -->
+        <view class="oc-goods ellipsis">{{item.description || '商品明细'}}</view>
+        <!-- 底栏 -->
+        <view class="oc-bottom">
+          <view class="ocb-left">
+            <text class="oc-price">¥{{item.amount}}</text>
+            <text class="oc-time">{{item.time}}</text>
+          </view>
+          <view class="ocb-actions">
+            <!-- 待接单：取消订单 -->
+            <text class="oca-btn" wx:if="{{item.status === 'pending'}}"
+                  catchtap="onCancelOrder" data-id="{{item.id}}">取消</text>
+            <!-- 进行中：联系领航员 + 确认收货 -->
+            <text class="oca-btn" wx:if="{{item.status === 'accepted' || item.status === 'arrived' || item.status === 'serving'}}"
+                  catchtap="onContactNavi" data-id="{{item.id}}">联系领航员</text>
+            <text class="oca-btn primary" wx:if="{{item.status === 'serving'}}"
+                  catchtap="onConfirmReceive" data-id="{{item.id}}">确认收货</text>
+            <!-- 已完成：再来一单 + 售后 -->
+            <text class="oca-btn" wx:if="{{item.status === 'completed'}}"
+                  catchtap="onRefund" data-id="{{item.id}}">售后</text>
+            <text class="oca-btn primary" wx:if="{{item.status === 'completed'}}"
+                  catchtap="onRebuy" data-id="{{item.id}}">再来一单</text>
+            <!-- 退款中：查看进度 -->
+            <text class="oca-btn primary" wx:if="{{item.status === 'refunding'}}"
+                  catchtap="onDetail" data-id="{{item.id}}">查看进度</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-hint">加载中…</view>
+  </scroll-view>
+
+  <!-- ===== 平台保障 ===== -->
+  <view class="guarantee-strip">
+    <text class="gs-icon">保</text>
+    <view class="gs-text">
+      <text class="b">交易保障</text> · 货不对板，平台先行赔付
+    </view>
+  </view>
+
+  <!-- ===== 取消订单弹窗 ===== -->
+  <view class="modal-mask" wx:if="{{showCancelModal}}" bindtap="onCloseCancelModal">
+    <view class="cancel-modal" catchtap="">
+      <view class="cm-header">取消订单</view>
+      <view class="cm-body">
+        <view class="cm-label">请选择取消原因：</view>
+        <view class="cm-reason {{cancelIndex === index ? 'selected' : ''}}"
+              wx:for="{{cancelReasons}}" wx:key="*this" wx:for-index="index"
+              bindtap="onSelectReason" data-index="{{index}}">{{item}}</view>
+      </view>
+      <view class="cm-footer">
+        <view class="cmf-btn cancel" bindtap="onCloseCancelModal">再想想</view>
+        <view class="cmf-btn confirm" bindtap="onConfirmCancel">确认取消</view>
+      </view>
+    </view>
+  </view>
+</view>

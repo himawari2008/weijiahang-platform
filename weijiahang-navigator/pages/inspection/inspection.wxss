@@ -1,0 +1,300 @@
+/* ============================================
+   为家航领航员 — 验货拍照确认页样式
+   ============================================ */
+
+/* 页面容器 */
+.page {
+  min-height: 100vh;
+  background: #F5F7FA;
+  padding-bottom: 240rpx;
+}
+
+/* 头部标题 */
+.header {
+  background: linear-gradient(135deg, #1A365D 0%, #2D5A8E 100%);
+  padding: 48rpx 32rpx 40rpx;
+}
+.header-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+.header-desc {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.75);
+  margin-top: 12rpx;
+}
+
+/* 区块卡片 */
+.section {
+  background: #FFFFFF;
+  margin: 24rpx 24rpx 0;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A365D;
+  margin-bottom: 24rpx;
+  padding-left: 12rpx;
+  border-left: 6rpx solid #FF6B35;
+}
+
+/* 拍照清单项 */
+.cl-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+  position: relative;
+}
+.cl-item:last-child {
+  border-bottom: none;
+}
+.cl-item-done {
+  background: #F6FFED;
+  margin: 0 -32rpx;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+}
+
+/* 编号圆圈 */
+.cli-badge {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+.cli-badge-pending {
+  background: #F0F0F0;
+  color: #999999;
+}
+.cli-badge-done {
+  background: #52C41A;
+  color: #FFFFFF;
+}
+.cli-badge-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 勾号图标（CSS绘制） */
+.icon-check {
+  width: 16rpx;
+  height: 28rpx;
+  border: 4rpx solid #FFFFFF;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+  margin-top: -4rpx;
+}
+
+/* 中间内容区 */
+.cli-content {
+  flex: 1;
+  margin-left: 16rpx;
+  min-width: 0;
+}
+.cli-label {
+  font-size: 28rpx;
+  color: #333333;
+  display: block;
+  line-height: 1.4;
+}
+.cli-sub-label {
+  font-size: 22rpx;
+  color: #52C41A;
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* 缩略图 */
+.cli-thumb {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 12rpx;
+  margin-left: 12rpx;
+  flex-shrink: 0;
+  border: 2rpx solid #E8E8E8;
+}
+
+/* 拍照/重拍按钮 */
+.cli-btn-wrap {
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+.cli-btn {
+  width: 128rpx;
+  height: 88rpx;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  box-sizing: border-box;
+}
+.cli-btn-photo {
+  border: 2rpx dashed #FF6B35;
+  background: #FFF8F0;
+  color: #FF6B35;
+}
+.cli-btn-done {
+  border: 2rpx solid #52C41A;
+  background: #F6FFED;
+  color: #52C41A;
+}
+.cli-btn-icon {
+  width: 32rpx;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rpx;
+}
+
+/* 相机图标（CSS绘制） */
+.icon-camera {
+  width: 28rpx;
+  height: 22rpx;
+  border: 3rpx solid #FF6B35;
+  border-radius: 4rpx;
+  position: relative;
+  background: transparent;
+}
+.icon-camera::before {
+  content: '';
+  position: absolute;
+  top: -7rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12rpx;
+  height: 8rpx;
+  background: #FF6B35;
+  border-radius: 2rpx 2rpx 0 0;
+}
+.icon-camera::after {
+  content: '';
+  position: absolute;
+  top: 2rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12rpx;
+  height: 12rpx;
+  border: 2rpx solid #FF6B35;
+  border-radius: 50%;
+  background: transparent;
+}
+
+/* 勾号圆圈图标（CSS绘制） */
+.icon-check-circle {
+  width: 28rpx;
+  height: 28rpx;
+  border: 3rpx solid #52C41A;
+  border-radius: 50%;
+  position: relative;
+}
+.icon-check-circle::after {
+  content: '';
+  position: absolute;
+  top: 4rpx;
+  left: 8rpx;
+  width: 8rpx;
+  height: 14rpx;
+  border: 3rpx solid #52C41A;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* 备注输入框 */
+.notes-textarea {
+  width: 100%;
+  min-height: 160rpx;
+  background: #F5F7FA;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: #333333;
+  box-sizing: border-box;
+  border: 2rpx solid transparent;
+}
+.notes-textarea:focus {
+  border-color: #FF6B35;
+}
+.notes-textarea::placeholder {
+  color: #BBBBBB;
+}
+
+/* 底部固定区域 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  padding: 20rpx 32rpx 40rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.06);
+  z-index: 100;
+}
+
+/* 进度条 */
+.footer-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.progress-bar-bg {
+  flex: 1;
+  height: 12rpx;
+  background: #F0F0F0;
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B35, #FF8F5E);
+  border-radius: 6rpx;
+  transition: width 0.3s;
+}
+.progress-text {
+  font-size: 24rpx;
+  color: #888888;
+  margin-left: 16rpx;
+  white-space: nowrap;
+}
+
+/* 提交按钮 */
+.btn-submit {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  background: linear-gradient(135deg, #1A365D 0%, #2D5A8E 100%);
+  color: #FFFFFF;
+  font-size: 34rpx;
+  font-weight: 600;
+  border-radius: 16rpx;
+  padding: 0;
+  border: none;
+}
+.btn-submit.btn-submit-disabled {
+  background: #CCCCCC;
+  color: #FFFFFF;
+}
+.btn-submit::after {
+  border: none;
+}
+.btn-submit:not(.btn-submit-disabled):active {
+  opacity: 0.85;
+}
